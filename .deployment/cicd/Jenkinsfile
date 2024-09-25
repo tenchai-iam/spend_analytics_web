@@ -189,7 +189,7 @@ podTemplate(cloud: 'kubernetes', containers: [
                         error ex.getMessage()
                     }
 
-                    def helmNamespace = 'postway'
+                    def helmNamespace = 'cardinal'
                     def helmValue = ''
 
                     // if else with split by mode name
