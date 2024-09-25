@@ -7,5 +7,5 @@ RUN chmod -R +x /usr/share/nginx/html
 RUN chown -R root:root /usr/share/nginx/html
 RUN ls -la
 
-COPY .kaniko/nginx/nginx.conf /etc/nginx/nginx.conf
-COPY .kaniko/nginx/conf.d/ /etc/nginx/conf.d/
+COPY .kaniko/web/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY .kaniko/web/nginx/conf.d/ /etc/nginx/conf.d/
