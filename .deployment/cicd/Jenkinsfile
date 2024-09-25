@@ -178,77 +178,77 @@ podTemplate(cloud: 'kubernetes', containers: [
         }
 
         stage('deploy') {
-            // ansiColor('xterm') {
-            //     script {
-            //         try {
-            //             dir('.chart') {
-            //                 sh "echo ${kubeCred} | base64 -d -w 0 >> config.yaml"
-            //             }
-            //         } catch (ex) {
-            //             cleanWs()
-            //             error ex.getMessage()
-            //         }
+            ansiColor('xterm') {
+                script {
+                    try {
+                        dir('.chart') {
+                            sh "echo ${kubeCred} | base64 -d -w 0 >> config.yaml"
+                        }
+                    } catch (ex) {
+                        cleanWs()
+                        error ex.getMessage()
+                    }
 
-            //         def helmNamespace = 'postway'
-            //         def helmValue = ''
+                    def helmNamespace = 'postway'
+                    def helmValue = ''
 
-            //         // if else with split by mode name
-            //         if (mode == 'develop') {
-            //             helmNamespace = "${helmNamespace}-dev"
-            //             helmValue = "values-web-dev.yaml"
-            //         } else if (mode == 'staging') {
-            //             helmNamespace = "${helmNamespace}-stg"
-            //             helmValue = "values-web-stg.yaml"
-            //         } else if (mode == 'production') {
-            //             helmNamespace = "${helmNamespace}"
-            //             helmValue = "values-web.yaml"
-            //         }
+                    // if else with split by mode name
+                    if (mode == 'develop') {
+                        helmNamespace = "${helmNamespace}-dev"
+                        helmValue = "values-web-dev.yaml"
+                    } else if (mode == 'staging') {
+                        helmNamespace = "${helmNamespace}-stg"
+                        helmValue = "values-web-stg.yaml"
+                    } else if (mode == 'production') {
+                        helmNamespace = "${helmNamespace}"
+                        helmValue = "values-web.yaml"
+                    }
 
-            //         container('helm') {
-            //             try {
-            //                 dir('.chart') {
-            //                     // upgrade config and value
-            //                     cmd = [
-            //                         "apply",
-            //                         "-f namespace-secret.yaml",
-            //                         "--kubeconfig=config.yaml",
-            //                         "--context ${kubeContextName}",
-            //                     ].join(' ')
-            //                     sh "kubectl ${cmd}"
+                    container('helm') {
+                        try {
+                            dir('.chart') {
+                                // upgrade config and value
+                                cmd = [
+                                    "apply",
+                                    "-f namespace-secret.yaml",
+                                    "--kubeconfig=config.yaml",
+                                    "--context ${kubeContextName}",
+                                ].join(' ')
+                                sh "kubectl ${cmd}"
 
-            //                     // helm upgrade kube
-            //                     cmd = [
-            //                         'upgrade',
-            //                         '--install',
-            //                         "--kubeconfig=config.yaml",
-            //                         "--kube-context ${kubeContextName}",
-            //                         "--namespace ${helmNamespace}",
-            //                         "--set image.tag=${tag}",
-            //                         "-f ${helmValue}",
-            //                         "web ."
-            //                     ].join(' ')
-            //                     sh "helm3 ${cmd}"
+                                // helm upgrade kube
+                                cmd = [
+                                    'upgrade',
+                                    '--install',
+                                    "--kubeconfig=config.yaml",
+                                    "--kube-context ${kubeContextName}",
+                                    "--namespace ${helmNamespace}",
+                                    "--set image.tag=${tag}",
+                                    "-f ${helmValue}",
+                                    "analytic-spend-web ."
+                                ].join(' ')
+                                sh "helm3 ${cmd}"
 
-            //                     // delete app by selector instance
-            //                     if (mode != 'production') {
-            //                         cmd = [
-            //                             'delete',
-            //                             'pod',
-            //                             "--kubeconfig=config.yaml",
-            //                             "--context ${kubeContextName}",
-            //                             "--namespace ${helmNamespace}",
-            //                             "--selector=app.kubernetes.io/instance=web",
-            //                         ].join(' ')
-            //                         sh "kubectl ${cmd}"
-            //                     }
-            //                 }
-            //             } catch (ex) {
-            //                 // cleanWs()
-            //                 error ex.getMessage()
-            //             }
-            //         }
-            //     }
-            // }
+                                // delete app by selector instance
+                                if (mode != 'production') {
+                                    cmd = [
+                                        'delete',
+                                        'pod',
+                                        "--kubeconfig=config.yaml",
+                                        "--context ${kubeContextName}",
+                                        "--namespace ${helmNamespace}",
+                                        "--selector=app.kubernetes.io/instance=analytic-spend-web",
+                                    ].join(' ')
+                                    sh "kubectl ${cmd}"
+                                }
+                            }
+                        } catch (ex) {
+                            // cleanWs()
+                            error ex.getMessage()
+                        }
+                    }
+                }
+            }
         }
     }
 }
