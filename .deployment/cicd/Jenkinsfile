@@ -161,7 +161,7 @@ podTemplate(cloud: 'kubernetes', containers: [
                             }
 
                             cmd = [
-                                "--dockerfile ${workspace}/.kaniko/Dockerfile",
+                                "--dockerfile ${workspace}/.kaniko/web/Dockerfile",
                                 "--context ${workspace}",
                                 "--destination=${image}:${tag}",
                                 "--compressed-caching=false",
