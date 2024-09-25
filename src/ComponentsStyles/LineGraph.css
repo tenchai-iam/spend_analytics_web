@@ -1,0 +1,37 @@
+/* LineGraph.css */
+
+/* Styling the SVG container */
+svg {
+    font-family: 'Arial', sans-serif;
+  }
+  
+  /* Styling the line */
+  .line {
+    fill: none;
+    stroke: #0077cc;
+    stroke-width: 2;
+  }
+  
+  /* Styling the grid lines */
+  .grid line {
+    stroke: #e0e0e0;
+    stroke-opacity: 0.7;
+    shape-rendering: crispEdges;
+  }
+  
+  .grid path {
+    stroke-width: 0;
+  }
+  
+  /* Styling the axes */
+  .axis path, .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+  }
+  
+  /* X and Y axis labels */
+  .axis-label {
+    font-size: 12px;
+    fill: #333;
+  }

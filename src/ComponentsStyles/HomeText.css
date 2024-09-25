@@ -1,0 +1,33 @@
+/* HomeText.css */
+
+.text-container {
+  position: relative; /* Make sure it stays in normal flow */
+  z-index: 15; /* Higher z-index to ensure it appears on top */
+  color: #fff; /* Text color */
+  font-size: 1.5rem; /* Text size */
+  text-align: left; /* Align text to the left */
+  margin: 0 auto; /* Add margin to create space around the text */
+  padding-left: 40px; /* Padding for left alignment */
+  padding-top: 10%;
+  padding-bottom: 40px;
+  box-sizing: border-box; /* Ensure padding does not affect width */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1280px) {
+  .text-container {
+    padding-left: 10px; /* Adjust padding for smaller screens */
+    font-size: 1.2rem; /* Adjust text size */
+    padding-top: 10%;
+  }
+}
+
+@media (max-width: 768px) {
+  .text-container {
+    padding-left: 5px; /* Further reduce padding */
+    font-size: 1rem; /* Smaller text size */
+    margin: 10px 0; /* Adjust margins */
+    padding-top: 60px;
+    padding-bottom: 20px;
+  }
+}

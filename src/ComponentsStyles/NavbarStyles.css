@@ -1,0 +1,27 @@
+/* NavbarStyles.css */
+
+/* Navbar Styling */
+.gradient-navbar {
+  background: linear-gradient(
+    90deg,
+    #5b0e7b,
+    #a456b1
+  ); /* Replace with desired purple gradient colors */
+  color: white;
+  border: none;
+  font-family: "Sarabun", sans-serif;
+  width: 100%;
+  z-index: 100;
+  padding: 10px 0;
+}
+
+.navbar-brand,
+.navbar-nav .nav-link {
+  color: #ebd3f8 !important; /* Ensure links are white */
+  font-family: "Sarabun", sans-serif;
+  font-weight: 400;
+}
+
+.navbar-brand img {
+  filter: brightness(0) invert(1); /* Ensure logo looks good on dark background */
+}

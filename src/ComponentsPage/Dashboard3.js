@@ -1,0 +1,119 @@
+import React, { useState } from "react";
+import "../ComponentsStyles/Dashboard3.css"; // Updated to use Dashboard3.css
+import BarChart from "./BarChart"; // Import the BarChart component
+import BackgroundComponent from "../BackgroundComponent";
+import YearDropdown from "./YearDropdown";
+import NavbarComponent from "../NavbarComponent";
+import { Dropdown } from "react-bootstrap";
+
+const Dashboard3 = () => {
+  // Dummy data for charts
+  const data1 = [
+    { name: "กราฟที่ 1 - หมวด 1", value: 130 },
+    { name: "กราฟที่ 1 - หมวด 2", value: 80 },
+    { name: "กราฟที่ 1 - หมวด 3", value: 120 },
+  ];
+
+  const data2 = [
+    { name: "กราฟที่ 2 - หมวด 1", value: 90 },
+    { name: "กราฟที่ 2 - หมวด 2", value: 60 },
+    { name: "กราฟที่ 2 - หมวด 3", value: 150 },
+  ];
+
+  // State to toggle between the charts
+  const [showFirstChart, setShowFirstChart] = useState(true);
+
+  const toggleChart = () => {
+    setShowFirstChart(!showFirstChart); // Toggle between true and false
+  };
+
+  return (
+    <div>
+      <NavbarComponent />
+      <BackgroundComponent />
+      <div className="dashboard3-container">
+        {/* Left Container */}
+        <div className="top-container">
+          <h3>เปรียบเทียบราคาจัดซื้อพัสดุส่วนกลาง vs. หน้างาน</h3>
+          <div className="dropdown-group">
+            <YearDropdown />
+            <label>เลือกรายการพัสดุที่ต้องการดูราคา</label>
+            <select>
+              <option value="102 สายไฟและ">102 สายไฟและ</option>
+              {/* Additional options */}
+            </select>
+            <select>
+              <option value="1020010009 COND.">1020010009 COND.,</option>
+              {/* Additional options */}
+            </select>
+          </div>
+        </div>
+
+        {/* Right Container */}
+        <div className="bottom-container">
+          <h3>เปรียบเทียบราคาจัดซื้อ (บาท)</h3>
+
+          {/* Toggle Button */}
+          <button className="chart-button" onClick={toggleChart}>
+            {showFirstChart ? "แยกตามการไฟฟ้า" : "แยกตามเขต"}
+          </button>
+
+          {/* Chart Container */}
+
+          {showFirstChart ? (
+            <div>
+              <div className="price-summary">
+                <div>
+                  <p>ราคาต่ำสุด: 100,000 บาท</p>
+                </div>
+                <div>
+                  <p>ราคาเฉลี่ย: 128,614 บาท</p>
+                </div>
+                <div>
+                  <p>ราคาสูงสุด: 140,000 บาท</p>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div>
+              <div className="dropdown-group">
+                <label>เลือกเขตที่ต้องการแสดง</label>
+                <select>
+                  <option value="102 สายไฟและ">กฟส.1</option>
+                  {/* Additional options */}
+                </select>
+              </div>
+              <div className="price-summary">
+                <div>
+                  <p>ราคาต่ำสุด: 100,000 บาท</p>
+                </div>
+                <div>
+                  <p>ราคาเฉลี่ย: 128,614 บาท</p>
+                </div>
+                <div>
+                  <p>ราคาสูงสุด: 140,000 บาท</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="chart-container">
+            {showFirstChart ? (
+              <div>
+                <label>ราคาตามการเขต</label>
+                <BarChart data={data1} />
+              </div>
+            ) : (
+              <div>
+                <label>ราคาตามการไฟฟ้า</label>
+                <BarChart data={data2} />
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Dashboard3;

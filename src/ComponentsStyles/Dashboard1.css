@@ -1,0 +1,120 @@
+.dashboard1-container {
+  position: relative;
+  display: flex;
+  flex-direction: row; /* Default to row layout */
+  gap: 20px;
+  width: 100%;
+  margin: 0 auto;
+  flex-wrap: wrap; /* Allow wrapping for responsiveness */
+  margin-top: 20px;
+}
+
+.year-dropdown-container {
+  display: flex;
+  justify-content: flex-end; /* This moves the dropdown to the right */
+  padding-right: 20px; /* Optional: adjust padding as per your needs */
+  margin-top: 20px;
+  color: white;
+}
+
+.top-grid-container {
+  display: grid;
+  grid-template-columns: repeat(
+    2,
+    1fr
+  ); /* Two columns for the two text items */
+  gap: 10px; /* Space between text items */
+  margin-bottom: 20px; /* Margin below to separate from cards */
+  justify-items: center; /* Center align the text items */
+  padding: 5px; /* Padding around the container */
+  width: 100%;
+}
+
+.top-left-grid-container {
+  display: grid;
+  grid-template-columns: repeat(
+    2,
+    1fr
+  ); /* Two columns for the two text items */
+  gap: 10px; /* Space between text items */
+  margin-bottom: 20px; /* Margin below to separate from cards */
+  justify-items: center; /* Center align the text items */
+  padding: 5px; /* Padding around the container */
+  width: 100%;
+}
+
+.top-right-grid-container {
+  display: grid;
+  grid-template-columns: repeat(
+    1,
+    1fr
+  ); /* Two columns for the two text items */
+  gap: 10px; /* Space between text items */
+  margin-bottom: 20px; /* Margin below to separate from cards */
+  justify-items: center; /* Center align the text items */
+  padding: 5px; /* Padding around the container */
+  width: 100%;
+}
+
+.left {
+  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  border-radius: 12px; /* Rounded corners */
+  padding: 20px; /* Padding inside the container */
+  width: 100%;
+  margin-top: 0 auto;
+  display: flex;
+  flex-direction: row; /* Default to row layout */
+}
+
+.middle {
+  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  border-radius: 12px; /* Rounded corners */
+  padding: 20px; /* Padding inside the container */
+  width: 100%;
+  margin-top: 0 auto;
+  display: flex;
+  flex-direction: row; /* Default to row layout */
+}
+
+.right {
+  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  border-radius: 12px; /* Rounded corners */
+  padding: 20px; /* Padding inside the container */
+  width: 100%;
+  margin-top: 0 auto;
+  display: flex;
+  flex-direction: row; /* Default to row layout */
+}
+
+.middle-grid-container {
+  display: grid;
+  grid-template-columns: repeat(
+    2,
+    1fr
+  ); /* Two columns for the two text items */
+  gap: 10px; /* Space between text items */
+  margin-bottom: 20px; /* Margin below to separate from cards */
+  justify-items: center; /* Center align the text items */
+  padding: 5px; /* Padding around the container */
+  width: 100%;
+}
+
+.donut-graph-container {
+  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  border-radius: 12px; /* Rounded corners */
+  padding: 20px; /* Padding inside the container */
+  width: 100%;
+  margin-top: 0 auto;
+  display: flex;
+  flex-direction: row; /* Default to row layout */
+}
+
+.map-graph-container {
+  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  border-radius: 12px; /* Rounded corners */
+  padding: 20px; /* Padding inside the container */
+  width: 100%;
+  margin-top: 0 auto;
+  display: flex;
+  flex-direction: row; /* Default to row layout */
+}

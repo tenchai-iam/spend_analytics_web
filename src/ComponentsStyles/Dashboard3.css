@@ -1,0 +1,89 @@
+.dashboard3-container {
+  position: relative;
+  display: flex;
+  flex-direction: row; /* Default to row layout */
+  gap: 20px;
+  padding: 20px;
+  width: 100%;
+  margin: 0 auto;
+  flex-wrap: wrap; /* Allow wrapping for responsiveness */
+}
+
+.top-container {
+  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  border-radius: 8px;
+  padding: 20px;
+  flex: 1 1 25%; /* Flex basis 25% for normal case */
+  max-width: 100%; /* Maximum width set to 25% */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-sizing: border-box; /* Ensure padding is included in width */
+  display: block;
+  margin: 0 auto;
+}
+
+.bottom-container {
+  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  border-radius: 8px;
+  padding: 20px;
+  flex: 1 1 75%; /* Flex basis 75% for normal case */
+  max-width: 100%; /* Maximum width set to 75% */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-sizing: border-box; /* Ensure padding is included in width */
+}
+
+.dropdown-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dropdown-group label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.price-summary {
+  padding-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.chart-container {
+  background-color: #fff; /* Example background for the chart */
+  height: 90%; /* Adjust height as needed */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Example shadow */
+}
+
+.chart-button {
+  background-color: #4a0072;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 50%; /* Make the button full width on small screens */
+  display: block;
+  margin: 0 auto;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .spend-analytics-container {
+    flex-direction: column; /* Stack containers vertically */
+  }
+
+  .left-container,
+  .right-container {
+    max-width: 100%; /* Allow full width for both containers */
+    flex: 1 1 100%; /* Flex basis 100% */
+  }
+}

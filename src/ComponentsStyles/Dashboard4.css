@@ -1,0 +1,180 @@
+.dashboard4-container {
+  position: relative;
+  display: flex;
+  flex-direction: row; /* Default to row layout */
+  gap: 20px;
+  width: 100%;
+  margin: 0 auto;
+  flex-wrap: wrap; /* Allow wrapping for responsiveness */
+}
+
+.btn-container-L1 {
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  box-sizing: border-box; /* Ensure padding is included in width */
+  margin: 0 auto;
+  width: 100%;
+}
+
+.btn-container-L1 > * {
+  flex: 1 1 calc(33.33% - 30px);
+  max-width: calc(33.33% -30px);
+  box-sizing: border-box;
+}
+
+.dropdown-group {
+  flex: 1 1 calc(70% - 30px);
+  max-width: calc(70%-30px);
+  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-sizing: border-box; /* Ensure padding is included in width */
+  color: black;
+}
+
+.dropdown-group label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.lead-time {
+  flex: 1 1 calc(15% - 30px);
+  max-width: calc(15%-30px);
+  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-sizing: border-box; /* Ensure padding is included in width */
+  margin: 0 auto;
+  color: black;
+}
+
+.demand-time {
+  flex: 1 1 calc(15% - 30px);
+  max-width: calc(15%-30px);
+  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-sizing: border-box; /* Ensure padding is included in width */
+  margin: 0 auto;
+  color: black;
+}
+
+.button-group button {
+  cursor: pointer;
+  background-color: #4a0072;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  flex: 1;
+  transition: background-color 0.3s ease; /* Smooth hover transition */
+  min-width: 100px;
+  max-width: 300px;
+}
+
+.summary-container-L1 {
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  box-sizing: border-box; /* Ensure padding is included in width */
+  margin: 0 auto;
+  width: 100%;
+}
+
+.donutChart {
+  flex: 1 1 calc(40% - 30px);
+  max-width: calc(40%-30px);
+  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-sizing: border-box; /* Ensure padding is included in width */
+  color: black;
+}
+
+.text-summary {
+  flex: 1 1 calc(20% - 30px);
+  max-width: calc(20%-30px);
+  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-sizing: border-box; /* Ensure padding is included in width */
+  color: black;
+}
+
+.table-summary {
+  flex: 1 1 calc(40% - 30px);
+  max-width: calc(40%-30px);
+  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-sizing: border-box; /* Ensure padding is included in width */
+  color: black;
+}
+
+.table-container-L1 {
+  padding: 20px;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 20px;
+  box-sizing: border-box; /* Ensure padding is included in width */
+  margin: 0 auto;
+  width: 100%;
+}
+
+.table-compare {
+  flex: 1 1 60%;
+  max-width: 60%;
+  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-sizing: border-box; /* Ensure padding is included in width */
+  color: black;
+}
+
+.CostSavings {
+  flex: 1 1 40%;
+  max-width: 40%;
+  font: 1.5rem;
+  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-sizing: border-box; /* Ensure padding is included in width */
+  color: black;
+}
+
+@media (max-width: 768px) {
+  .btn-container-L1 > * {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+  .summary-container-L1 > * {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+}

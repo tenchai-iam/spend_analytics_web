@@ -1,0 +1,139 @@
+.dashboard2-container {
+  position: relative;
+  display: flex;
+  flex-direction: row; /* Default to row layout */
+  gap: 20px;
+  padding: 20px;
+  width: 100%;
+  margin: 0 auto;
+  flex-wrap: wrap; /* Allow wrapping for responsiveness */
+}
+
+.btn-menu {
+  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  border-radius: 12px; /* Rounded corners */
+  padding: 20px; /* Padding inside the container */
+  width: 100%;
+  margin-top: 0 auto;
+  display: flex;
+  flex-direction: row; /* Default to row layout */
+}
+
+.card-chart-menu {
+  position: relative;
+  margin-top: 20px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.button-group button {
+  cursor: pointer;
+  background-color: #4a0072;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  flex: 1;
+  transition: background-color 0.3s ease; /* Smooth hover transition */
+  min-width: 100px;
+  max-width: 300px;
+}
+
+.button-group button:hover {
+  background-color: #ad49e1; /* Hover color */
+}
+
+/* Style for the Donut Chart and Tree Map Container */
+.chart-wrapper {
+  display: flex; /* Flexbox layout to place charts side by side */
+  gap: 20px; /* Gap between charts */
+  width: 100%;
+  flex-wrap: wrap; /* Allow wrapping for smaller screens */
+}
+
+/* Individual Chart Item */
+.chart-item {
+  background-color: #fff; /* White background */
+  border-radius: 12px; /* Rounded corners */
+  padding: 20px; /* Padding inside the container */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  width: 100%;
+  max-width: 600px; /* Limit the width for better layout */
+  flex: 1; /* Allow flex to control the size */
+  text-align: center; /* Center-align content inside */
+}
+
+/* Title Style */
+.chart-title {
+  font-size: 20px; /* Adjust for better responsiveness */
+  color: #4a0072; /* Title color */
+  margin-bottom: 20px; /* Space below the title */
+  text-align: left; /* Align the title to the left */
+}
+
+.text-grid-container {
+  display: grid;
+  grid-template-columns: repeat(
+    2,
+    1fr
+  ); /* Two columns for the two text items */
+  gap: 0px; /* Space between text items */
+  margin-bottom: 20px; /* Margin below to separate from cards */
+  justify-items: center; /* Center align the text items */
+  padding: 5px; /* Padding around the container */
+  width: 100%;
+}
+
+.text-grid-item {
+  border-radius: 8px; /* Rounded corners */
+  padding: 10px 15px; /* Padding inside the text items */
+  text-align: center; /* Center the text */
+  font-size: 1.2rem; /* Font size for the text */
+  background-color: #4a0072; /* Title color */
+  color: white;
+}
+
+.charts-grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Default 3 columns */
+  gap: 20px; /* Gap between the charts */
+  margin: 20px 0; /* Margin for spacing */
+  width: 100%; /* Full width */
+  padding: 10px; /* Padding around the grid */
+}
+
+.switch-button {
+  background-color: #4a0072;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 50%; /* Make the button full width on small screens */
+  display: block;
+  margin: 0 auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .button-group {
+    justify-content: center;
+  }
+  .button-group button {
+    flex: 1 1 100%;
+    margin-botton: 10px;
+  }
+  .charts-grid-container {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns for medium screens */
+  }
+}
+
+@media (max-width: 768px) {
+  .charts-grid-container {
+    grid-template-columns: repeat(1, 1fr); /* 1 column for small screens */
+  }
+}

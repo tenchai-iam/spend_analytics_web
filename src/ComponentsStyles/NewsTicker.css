@@ -1,0 +1,23 @@
+.news-ticker-container {
+    position: fixed; /* Fixed to the bottom of the page */
+    bottom: 0;
+    width: 100%;
+    background-color: #f3f3f3; /* Background color */
+    padding: 10px 0;
+    overflow: hidden; /* Hide overflow */
+    border-top: 1px solid #d3d3d3; /* Top border */
+    z-index: 1000; /* Ensure it's above other elements */
+  }
+  
+  .news-ticker {
+    display: flex; /* Display as flexbox for horizontal layout */
+    white-space: nowrap; /* Prevent line breaks */
+    transform: translateX(100%); /* Start off-screen to the right */
+    transition: transform 0.1s linear; /* Smooth scrolling */
+  }
+  
+  .news-item {
+    margin-right: 50px; /* Spacing between news items */
+    font-size: 16px; /* Font size */
+    color: #333; /* Text color */
+  }
