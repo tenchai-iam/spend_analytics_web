@@ -138,9 +138,117 @@ podTemplate(cloud: 'kubernetes', containers: [
         }
 
         stage('build by kaniko') {
+            container('kaniko') {
+                ansiColor('xterm') {
+                    script {
+                        try {
+                            def image = ''
+                            def preImage = "harbor.thepostway.com/cardinal/spend-analytic/web"
+                            def tagName = 'latest'
+
+                            if (mode == 'develop') {
+                                image = "${preImage}/dev"
+                                tag = tagName
+                            } else if (mode == 'staging') {
+                                image = "${preImage}/stg"
+                                tag = tagName
+                            } else if (mode == 'production') {
+                                image = "${preImage}/prod"
+                                tag = tag
+                            } else {
+                                image = "${preImage}/dev"
+                                tag = tagName
+                            }
+
+                            cmd = [
+                                "--dockerfile ${workspace}/.kaniko/Dockerfile",
+                                "--context ${workspace}",
+                                "--destination=${image}:${tag}",
+                                "--compressed-caching=false",
+                                "--snapshot-mode=redo"
+                            ].join(' ')
+                            sh "/kaniko/executor ${cmd}"
+                        } catch (ex) {
+                            cleanWs()
+                            error ex.getMessage()
+                        }
+                    }
+                }
+            }
         }
 
         stage('deploy') {
+            // ansiColor('xterm') {
+            //     script {
+            //         try {
+            //             dir('.chart') {
+            //                 sh "echo ${kubeCred} | base64 -d -w 0 >> config.yaml"
+            //             }
+            //         } catch (ex) {
+            //             cleanWs()
+            //             error ex.getMessage()
+            //         }
+
+            //         def helmNamespace = 'postway'
+            //         def helmValue = ''
+
+            //         // if else with split by mode name
+            //         if (mode == 'develop') {
+            //             helmNamespace = "${helmNamespace}-dev"
+            //             helmValue = "values-web-dev.yaml"
+            //         } else if (mode == 'staging') {
+            //             helmNamespace = "${helmNamespace}-stg"
+            //             helmValue = "values-web-stg.yaml"
+            //         } else if (mode == 'production') {
+            //             helmNamespace = "${helmNamespace}"
+            //             helmValue = "values-web.yaml"
+            //         }
+
+            //         container('helm') {
+            //             try {
+            //                 dir('.chart') {
+            //                     // upgrade config and value
+            //                     cmd = [
+            //                         "apply",
+            //                         "-f namespace-secret.yaml",
+            //                         "--kubeconfig=config.yaml",
+            //                         "--context ${kubeContextName}",
+            //                     ].join(' ')
+            //                     sh "kubectl ${cmd}"
+
+            //                     // helm upgrade kube
+            //                     cmd = [
+            //                         'upgrade',
+            //                         '--install',
+            //                         "--kubeconfig=config.yaml",
+            //                         "--kube-context ${kubeContextName}",
+            //                         "--namespace ${helmNamespace}",
+            //                         "--set image.tag=${tag}",
+            //                         "-f ${helmValue}",
+            //                         "web ."
+            //                     ].join(' ')
+            //                     sh "helm3 ${cmd}"
+
+            //                     // delete app by selector instance
+            //                     if (mode != 'production') {
+            //                         cmd = [
+            //                             'delete',
+            //                             'pod',
+            //                             "--kubeconfig=config.yaml",
+            //                             "--context ${kubeContextName}",
+            //                             "--namespace ${helmNamespace}",
+            //                             "--selector=app.kubernetes.io/instance=web",
+            //                         ].join(' ')
+            //                         sh "kubectl ${cmd}"
+            //                     }
+            //                 }
+            //             } catch (ex) {
+            //                 // cleanWs()
+            //                 error ex.getMessage()
+            //             }
+            //         }
+            //     }
+            // }
         }
     }
 }
