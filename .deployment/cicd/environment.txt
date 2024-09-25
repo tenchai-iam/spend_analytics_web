@@ -2,4 +2,4 @@ gitUrl=https://gitlab.com/simpitec/spend_analytics/web.git
 gitCred=gitlab-guide2korawit-userpass
 gitBranch=develop
 
-kubeContextName=postway
+kubeContextName=pw
