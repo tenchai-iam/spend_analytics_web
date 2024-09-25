@@ -1,0 +1,87 @@
+podTemplate(cloud: 'kubernetes', containers: [
+    containerTemplate(
+        args: '9999999', 
+        command: 'sleep', 
+        image: 'bitnami/git', 
+        livenessProbe: containerLivenessProbe(execArgs: '', failureThreshold: 0, initialDelaySeconds: 0, periodSeconds: 0, successThreshold: 0, timeoutSeconds: 0), 
+        name: 'git', 
+        resourceLimitCpu: '', 
+        resourceLimitEphemeralStorage: '', 
+        resourceLimitMemory: '', 
+        resourceRequestCpu: '', 
+        resourceRequestEphemeralStorage: '',
+        resourceRequestMemory: '', 
+        workingDir: '/home/jenkins/agent'), 
+    containerTemplate(
+        args: '9999999', 
+        command: 'sleep', 
+        image: 'node:18.20-alpine', 
+        livenessProbe: containerLivenessProbe(execArgs: '', failureThreshold: 0, initialDelaySeconds: 0, periodSeconds: 0, successThreshold: 0, timeoutSeconds: 0), 
+        name: 'node', 
+        resourceLimitCpu: '', 
+        resourceLimitEphemeralStorage: '', 
+        resourceLimitMemory: '', 
+        resourceRequestCpu: '', 
+        resourceRequestEphemeralStorage: '',
+        resourceRequestMemory: '', 
+        workingDir: '/home/jenkins/agent'), 
+    containerTemplate(
+        args: '9999999', 
+        command: 'sleep', 
+        image: 'harbor.thepostway.com/google/kaniko-project/executor:v1.23.2-debug', 
+        livenessProbe: containerLivenessProbe(execArgs: '', failureThreshold: 0, initialDelaySeconds: 0, periodSeconds: 0, successThreshold: 0, timeoutSeconds: 0), 
+        name: 'kaniko', 
+        resourceLimitCpu: '', 
+        resourceLimitEphemeralStorage: '', 
+        resourceLimitMemory: '', 
+        resourceRequestCpu: '', 
+        resourceRequestEphemeralStorage: '', 
+        resourceRequestMemory: '', 
+        workingDir: '/home/jenkins/agent'),
+    containerTemplate(
+        args: '9999999', 
+        command: 'sleep', 
+        image: 'fluxcd/helm-operator:1.4.4', 
+        livenessProbe: containerLivenessProbe(execArgs: '', failureThreshold: 0, initialDelaySeconds: 0, periodSeconds: 0, successThreshold: 0, timeoutSeconds: 0), 
+        name: 'helm', 
+        resourceLimitCpu: '', 
+        resourceLimitEphemeralStorage: '', 
+        resourceLimitMemory: '', 
+        resourceRequestCpu: '', 
+        resourceRequestEphemeralStorage: '', 
+        resourceRequestMemory: '', 
+        workingDir: '/home/jenkins/agent')
+    ], 
+    inheritFrom: ' ', 
+    namespace: 'cicd', 
+    volumes: [
+        secretVolume(defaultMode: '', mountPath: '/kaniko/.docker', optional: false, secretName: 'kaniko-secret')
+    ]) {
+    node(POD_LABEL) {
+
+        stage("git clone") {
+            container("git") {
+                script {
+                    git branch: 'develop', credentialsId: 'gitlab-guide2korawit-userpass', url: 'https://gitlab.com/simpitec/spend_analytics/web.git'
+                    sh "ls -la"
+                }
+            }
+        }
+
+        stage("build") {
+            container("node") {
+                script {
+                    sh "npm install"
+                    sh "npm run build"
+                    sh "ls -la"
+                }
+            }
+        }
+
+        stage('build by kaniko') {
+        }
+
+        stage('deploy') {
+        }
+    }
+}
