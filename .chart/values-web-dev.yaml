@@ -81,10 +81,10 @@ autoscaling:
   targetCPUUtilizationPercentage: 50
   targetMemoryUtilizationPercentage: 80
 
-nodeSelector: {}
+# nodeSelector: {}
 
-# nodeSelector: 
-#   kubernetes.io/hostname: vm2
+nodeSelector: 
+  build: true
 
 tolerations: []
 
