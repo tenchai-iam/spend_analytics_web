@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import "../ComponentsStyles/NewsTicker.css"; // Import CSS styles
 
-const NewsTicker = ({ newsItems }) => {
+const NewsTicker = ({ data }) => {
   const tickerRef = useRef(null);
 
   useEffect(() => {
@@ -30,7 +30,7 @@ const NewsTicker = ({ newsItems }) => {
   return (
     <div className="news-ticker-container">
       <div className="news-ticker" ref={tickerRef}>
-        {newsItems.map((item, index) => (
+        {data.map((item, index) => (
           <span key={index} className="news-item">
             {item}
           </span>

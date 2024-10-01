@@ -31,13 +31,17 @@ const Dashboard3 = () => {
     <div>
       <NavbarComponent />
       <BackgroundComponent />
+      <div className="year-dropdown-container">
+        <YearDropdown />
+      </div>
       <div className="dashboard3-container">
         {/* Left Container */}
         <div className="top-container">
-          <h3>เปรียบเทียบราคาจัดซื้อพัสดุส่วนกลาง vs. หน้างาน</h3>
+          <h1 className="text-title">
+            เปรียบเทียบราคาจัดซื้อพัสดุส่วนกลาง vs. หน้างาน
+          </h1>
           <div className="dropdown-group">
-            <YearDropdown />
-            <label>เลือกรายการพัสดุที่ต้องการดูราคา</label>
+            <p className="text-subtitle">เลือกรายการพัสดุที่ต้องการดูราคา</p>
             <select>
               <option value="102 สายไฟและ">102 สายไฟและ</option>
               {/* Additional options */}
@@ -51,7 +55,7 @@ const Dashboard3 = () => {
 
         {/* Right Container */}
         <div className="bottom-container">
-          <h3>เปรียบเทียบราคาจัดซื้อ (บาท)</h3>
+          <h1 className="text-title">เปรียบเทียบราคาจัดซื้อ (บาท)</h1>
 
           {/* Toggle Button */}
           <button className="chart-button" onClick={toggleChart}>
@@ -64,20 +68,20 @@ const Dashboard3 = () => {
             <div>
               <div className="price-summary">
                 <div>
-                  <p>ราคาต่ำสุด: 100,000 บาท</p>
+                  <p className="text-subtitle">ราคาต่ำสุด: 100,000 บาท</p>
                 </div>
                 <div>
-                  <p>ราคาเฉลี่ย: 128,614 บาท</p>
+                  <p className="text-subtitle">ราคาเฉลี่ย: 128,614 บาท</p>
                 </div>
                 <div>
-                  <p>ราคาสูงสุด: 140,000 บาท</p>
+                  <p className="text-subtitle">ราคาสูงสุด: 140,000 บาท</p>
                 </div>
               </div>
             </div>
           ) : (
             <div>
               <div className="dropdown-group">
-                <label>เลือกเขตที่ต้องการแสดง</label>
+                <p className="text-subtitle">เลือกเขตที่ต้องการแสดง</p>
                 <select>
                   <option value="102 สายไฟและ">กฟส.1</option>
                   {/* Additional options */}
@@ -85,13 +89,13 @@ const Dashboard3 = () => {
               </div>
               <div className="price-summary">
                 <div>
-                  <p>ราคาต่ำสุด: 100,000 บาท</p>
+                  <p className="text-subtitle">ราคาต่ำสุด: 100,000 บาท</p>
                 </div>
                 <div>
-                  <p>ราคาเฉลี่ย: 128,614 บาท</p>
+                  <p className="text-subtitle">ราคาเฉลี่ย: 128,614 บาท</p>
                 </div>
                 <div>
-                  <p>ราคาสูงสุด: 140,000 บาท</p>
+                  <p className="text-subtitle">ราคาสูงสุด: 140,000 บาท</p>
                 </div>
               </div>
             </div>
@@ -100,13 +104,19 @@ const Dashboard3 = () => {
           <div className="chart-container">
             {showFirstChart ? (
               <div>
-                <label>ราคาตามการเขต</label>
-                <BarChart data={data1} />
+                <h1 className="chart-title">ข้อมูลราคาตามการเขต</h1>
+                <BarChart
+                  style={{ width: "100%", height: "100%" }}
+                  data={data1}
+                />
               </div>
             ) : (
               <div>
-                <label>ราคาตามการไฟฟ้า</label>
-                <BarChart data={data2} />
+                <h1 className="chart-title">ข้อมูลราคาตามการไฟฟ้า</h1>
+                <BarChart
+                  style={{ width: "100%", height: "100%" }}
+                  data={data2}
+                />
               </div>
             )}
           </div>

@@ -115,44 +115,6 @@
   }
 }
 
-/* Particle Animation */
-.particle {
-  position: absolute;
-  width: 5px;
-  height: 5px;
-  background-color: rgba(255, 255, 255, 0.7);
-  border-radius: 50%;
-  animation: moveParticle 20s linear infinite;
-}
-
-.particle:nth-child(1) {
-  left: 25%;
-  top: 70%;
-  animation-duration: 25s;
-}
-.particle:nth-child(2) {
-  left: 50%;
-  top: 30%;
-  animation-duration: 18s;
-}
-.particle:nth-child(3) {
-  left: 80%;
-  top: 80%;
-  animation-duration: 22s;
-}
-
-@keyframes moveParticle {
-  0% {
-    transform: translate(0, 0);
-  }
-  50% {
-    transform: translate(100px, -100px);
-  }
-  100% {
-    transform: translate(0, 0);
-  }
-}
-
 /* Mobile Optimizations */
 @media (max-width: 768px) {
   .responsive-background {

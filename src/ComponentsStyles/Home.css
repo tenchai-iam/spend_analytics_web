@@ -11,13 +11,59 @@
   margin: 0 auto;
 }
 
-.home-sections-container {
+.year-dropdown-container {
+  display: flex;
+  justify-content: flex-end; /* This moves the dropdown to the right */
+  padding-right: 20px; /* Optional: adjust padding as per your needs */
+  margin-top: 20px;
+  color: white;
+}
+
+.text-container {
+  display: grid;
+  grid-template-rows: repeat(2, 1fr); /* Two columns for the two text items */
+  gap: 10px; /* Space between text items */
+  justify-items: center; /* Center align the text items */
+  padding: 30px 20px 10px 20px; /* Padding around the container */
+  width: 40%;
+}
+
+.text-top {
+  display: grid;
+  grid-template-columns: repeat(
+    2,
+    1fr
+  ); /* Two columns for the two text items */
+  gap: 10px; /* Space between text items */
+  justify-items: left; /* Center align the text items */
+  width: 100%;
+}
+
+.text-bottom {
+  display: grid;
+  grid-template-columns: repeat(
+    2,
+    1fr
+  ); /* Two columns for the two text items */
+  gap: 10px; /* Space between text items */
+  justify-items: left; /* Center align the text items */
+  width: 100%;
+}
+
+.text {
+  color: white;
+  font-size: 1.1rem;
+  text-shadow: 1px 1px 2px rgba (0, 0, 0, 0.2);
+}
+
+.nav-container {
   display: flex; /* Use Flexbox */
   gap: 20px; /* Space between sections */
   flex-wrap: wrap; /* Wrap sections on smaller screens */
+  padding: 20px;
 }
 
-.home-section {
+.nav-section {
   background-color: #fff;
   padding: 30px;
   margin-bottom: 20px;
@@ -26,6 +72,18 @@
   flex: 1; /* Allow sections to grow equally */
   min-width: 300px; /* Minimum width for each section */
   opacity: 75%;
+}
+
+.nav-title {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: black;
+}
+
+.nav-subtitle {
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: black;
 }
 
 .menu-grid {
@@ -73,18 +131,6 @@
   margin-top: 10px;
 }
 
-.home-title {
-  font-size: 24px;
-  margin-bottom: 10px;
-  color: black;
-}
-
-.home-subtitle {
-  font-size: 18px;
-  margin-bottom: 20px;
-  color: black;
-}
-
 @media (max-width: 1200px) {
   .menu-grid {
     grid-template-columns: repeat(3, 1fr); /* 3 columns for medium screens */
@@ -94,6 +140,12 @@
 @media (max-width: 900px) {
   .menu-grid {
     grid-template-columns: repeat(2, 1fr); /* 2 columns for small screens */
+  }
+  .text {
+    font-size: 1rem;
+  }
+  .text-container {
+    width: 80%;
   }
 }
 

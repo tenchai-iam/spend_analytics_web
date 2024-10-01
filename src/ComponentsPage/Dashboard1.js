@@ -2,11 +2,12 @@ import React from "react";
 import NavbarComponent from "../NavbarComponent.js";
 import BackgroundComponent from "../BackgroundComponent.js";
 import BubbleChart from "./BubbleChart.js";
-import LineGraph from "./LineGraph.js";
+import BarChart from "./BarChart.js";
+import DonutChart from "./DonutChart.js";
+import LineChart from "./LineChart.js";
 import "../ComponentsStyles/Dashboard1.css"; // Updated to use Dashboard1.css
-import "../ComponentsStyles/LineGraph.css";
-import YearDropDown from "./YearDropdown";
 import YearDropdown from "./YearDropdown";
+import MapChart from "./MapChart.js";
 
 const Dashboard1 = () => {
   const dataBubble = [
@@ -26,6 +27,19 @@ const Dashboard1 = () => {
     { date: new Date(2024, 4, 1), value: 67 },
   ];
 
+  const dataBar1 = [
+    { name: "กราฟที่ 1 - หมวด 1", value: 130 },
+    { name: "กราฟที่ 1 - หมวด 2", value: 80 },
+  ];
+
+  const sampleData = [
+    { x: 1, y: 30 },
+    { x: 2, y: 40 },
+    { x: 3, y: 50 },
+    { x: 4, y: 60 },
+    { x: 5, y: 70 },
+  ];
+
   return (
     <div>
       <NavbarComponent />
@@ -35,24 +49,63 @@ const Dashboard1 = () => {
       </div>
       <div className="dashboard1-container">
         <div className="top-grid-container">
-          <div className="top-left-grid-container">
-            <div className="left"></div>
-            <div className="middle"></div>
-            <div className="left"></div>
-            <div className="middle"></div>
-            <div className="left"></div>
-            <div className="middle"></div>
+          <div className="top-1-grid-container">
+            <div className="left">
+              <h1 className="text-title">ค่าใช้จ่าย ล้านบาท</h1>
+              <LineChart data={sampleData} />
+            </div>
+            <div className="right">
+              <h1 className="text-title">ค่าใช้จ่ายทั้งหมด (ล้านบาท)</h1>
+              <BarChart data={dataBar1} />
+            </div>
           </div>
-          <div className="top-right-grid-container">
-            <div className="left"></div>
+          <div className="top-2-grid-container">
+            <div className="left">
+              <h1 className="text-title">จำนวนรายการ PO</h1>
+              <LineChart data={sampleData} />
+            </div>
+            <div className="right">
+              <h1 className="text-title">จำนวน PO ทั้งหมด (รายการ)</h1>
+              <BarChart data={dataBar1} />
+            </div>
+          </div>
+          <div className="top-3-grid-container">
+            <div className="left">
+              <h1 className="text-title">จำนวนคู่ค้า ราย</h1>
+              <LineChart data={sampleData} />
+            </div>
+            <div className="right">
+              <h1 className="text-title">จำนวนคู่ค้าทั้งหมด (ราย)</h1>
+              <BarChart data={dataBar1} />
+            </div>
           </div>
         </div>
-        <div className="middle-grid-container">
-          <div className="donut-graph-container"></div>
-          <div className="map-graph-container"></div>
+        <div className="middle-D1-container">
+          <div className="bubble-graph">
+            <h1 className="text-title">ประเภทพัสดุตามมูลค่าจัดซื้อ (บาท)</h1>
+            <BubbleChart
+              style={{ width: "100%", height: "100%" }}
+              data={dataBubble}
+            />
+          </div>
+          <div className="bar-graph">
+            <h1 className="text-title">สัดส่วน PO เฉพาะเจาะจง</h1>
+            <BarChart
+              style={{ width: "100%", height: "100%" }}
+              data={dataBar1}
+            />
+          </div>
         </div>
-        <div>
-          <div></div>
+        <div className="bottom-D1-container">
+          <div className="donut-Graph">
+            <h1 className="text-title">ค่าใช้จ่ายพัสดุตามหน่วยงาน (บาท)</h1>
+            <DonutChart style={{ width: "100%", height: "100%" }} />
+          </div>
+          <div className="map-wrapper">
+            <div className="map-container">
+              <MapChart />
+            </div>
+          </div>
         </div>
       </div>
     </div>

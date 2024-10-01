@@ -1,7 +1,14 @@
-import React from 'react';
+import React from "react";
+import NavbarComponent from "../NavbarComponent";
+import BackgroundComponent from "../BackgroundComponent";
 
 const Upload = () => {
-  return <h1>Upload</h1>;
+  return (
+    <div>
+      <NavbarComponent />
+      <BackgroundComponent />
+    </div>
+  );
 };
 
 export default Upload;

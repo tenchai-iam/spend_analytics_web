@@ -8,6 +8,26 @@
   flex-wrap: wrap; /* Allow wrapping for responsiveness */
 }
 
+.text-title {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: black;
+}
+
+.text-subtitle {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: black;
+}
+
+.year-dropdown-container {
+  display: flex;
+  justify-content: flex-end; /* This moves the dropdown to the right */
+  padding-right: 20px; /* Optional: adjust padding as per your needs */
+  margin-top: 20px;
+  color: white;
+}
+
 .btn-container-L1 {
   padding: 20px;
   display: flex;
@@ -103,19 +123,26 @@
   gap: 20px;
   box-sizing: border-box; /* Ensure padding is included in width */
   color: black;
+  align-items: center;
 }
 
 .text-summary {
   flex: 1 1 calc(20% - 30px);
-  max-width: calc(20%-30px);
+  max-width: calc(20% - 30px); /* Corrected spacing for calc */
   background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
   border-radius: 8px;
   padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  box-sizing: border-box; /* Ensure padding is included in width */
+  box-sizing: border-box;
   color: black;
+  display: flex; /* Make the container a flexbox */
+  flex-direction: column; /* Stack the text vertically */
+  justify-content: center; /* Center items vertically */
+  align-items: center; /* Center items horizontally */
+}
+
+.text-label {
+  font-size: 2rem;
+  text-align: center;
 }
 
 .table-summary {
@@ -129,6 +156,7 @@
   gap: 20px;
   box-sizing: border-box; /* Ensure padding is included in width */
   color: black;
+  align-items: center;
 }
 
 .table-container-L1 {
@@ -152,12 +180,12 @@
   gap: 20px;
   box-sizing: border-box; /* Ensure padding is included in width */
   color: black;
+  align-items: center;
 }
 
-.CostSavings {
+.BarGraphV {
   flex: 1 1 40%;
   max-width: 40%;
-  font: 1.5rem;
   background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
   border-radius: 8px;
   padding: 20px;
@@ -166,6 +194,7 @@
   gap: 20px;
   box-sizing: border-box; /* Ensure padding is included in width */
   color: black;
+  align-items: center;
 }
 
 @media (max-width: 768px) {

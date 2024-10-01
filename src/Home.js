@@ -1,14 +1,14 @@
 import React from "react";
 import MenuCard from "./MenuCard";
 import "./ComponentsStyles/Home.css"; // Import CSS styles
-import HomeText from "./HomeText";
 import BackgroundComponent from "./BackgroundComponent";
-import NewsTicker from "./ComponentsPage/NewsTicker.js"; // Import NewsTicker component
-import D1 from "./pic/D1_1.png";
-import D2 from "./pic/D2_1.png";
-import D3 from "./pic/D3_1.png";
-import D4 from "./pic/D4_1.png";
 import NavbarComponent from "./NavbarComponent";
+import YearDropdown from "./ComponentsPage/YearDropdown";
+import NewsTicker from "./ComponentsPage/NewsTicker.js"; // Import NewsTicker component
+import D1 from "./pic/01 - Spend.png";
+import D2 from "./pic/02 - Supplier.png";
+import D3 from "./pic/03 - Price.png";
+import D4 from "./pic/04 - Procurement.png";
 
 const Home = () => {
   // Example news items for the ticker
@@ -20,19 +20,28 @@ const Home = () => {
   ];
 
   return (
-    <div className="home-container">
-      <BackgroundComponent />
+    <div>
       <NavbarComponent />
-      {/* Add a container with relative positioning */}
-      <div className="home-content">
-        {/* New content wrapper */}
-        <HomeText />
-        {/* Flexbox Container for Two Sections */}
-        <div className="home-sections-container">
+      <BackgroundComponent />
+      <div className="year-dropdown-container">
+        <YearDropdown />
+      </div>
+      <div className="text-container">
+        <div className="text-top">
+          <label className="text">ยอดจัดซื้อทั้งหมด</label>
+          <label className="text">000000000000</label>
+        </div>
+        <div className="text-bottom">
+          <label className="text">จำนวนใบสั่งซื้อ</label>
+          <label className="text">000000000000</label>
+        </div>
+      </div>
+      <div>
+        <div className="nav-container">
           {/* First Section */}
-          <div className="home-section">
-            <h1 className="home-title">Management</h1>
-            <p className="home-subtitle">Dashboard สำหรับผู้บริหาร</p>
+          <div className="nav-section">
+            <h1 className="nav-title">Management</h1>
+            <p className="nav-subtitle">Dashboard สำหรับผู้บริหาร</p>
             <div className="menu-grid">
               <MenuCard
                 image={D1} // Replace with relevant images
@@ -48,11 +57,9 @@ const Home = () => {
               />
             </div>
           </div>
-
-          {/* Second Section */}
-          <div className="home-section">
-            <h1 className="home-title">Procurement</h1>
-            <p className="home-subtitle">Dashboard สำหรับกองวางแผน</p>
+          <div className="nav-section">
+            <h1 className="nav-title">Procurement</h1>
+            <p className="nav-subtitle">Dashboard สำหรับกองวางแผน</p>
             <div className="menu-grid">
               <MenuCard
                 image={D3}
@@ -70,9 +77,7 @@ const Home = () => {
           </div>
         </div>
       </div>
-
-      {/* Add NewsTicker at the bottom of the page */}
-      <NewsTicker newsItems={newsItems} />
+      <NewsTicker data={newsItems} />
     </div>
   );
 };

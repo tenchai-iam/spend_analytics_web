@@ -1,19 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
-import "../ComponentsStyles/BubbleChart.css"; // Import the CSS
+import "../ComponentsStyles/BubbleChart.css"; // Import the CSS file
 
 const BubbleChart = ({ data }) => {
   const svgRef = useRef();
   const containerRef = useRef();
   const [dimensions, setDimensions] = useState({ width: 600, height: 600 });
 
-  // Resize chart based on container size
+  // Update chart dimensions based on container size
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
       if (!entries || entries.length === 0) return;
       const { width, height } = entries[0].contentRect;
       setDimensions({ width, height });
     });
+
     if (containerRef.current) {
       resizeObserver.observe(containerRef.current);
     }
@@ -21,6 +22,8 @@ const BubbleChart = ({ data }) => {
   }, []);
 
   useEffect(() => {
+    if (!data || data.length === 0) return;
+
     const svg = d3
       .select(svgRef.current)
       .attr("width", dimensions.width)
@@ -29,63 +32,98 @@ const BubbleChart = ({ data }) => {
     // Remove old chart elements before drawing new ones
     svg.selectAll("*").remove();
 
-    // Create a scale for bubble size
+    // Calculate the maximum radius based on container dimensions
+    const maxRadius = Math.min(dimensions.width, dimensions.height) / 10;
+
+    // Create a size scale for bubble radius
     const sizeScale = d3
       .scaleSqrt()
-      .domain([0, d3.max(data, (d) => d.value)]) // adjust domain based on data range
-      .range([10, 50]); // Bubble size range (min, max)
+      .domain([0, d3.max(data, (d) => d.value)])
+      .range([maxRadius / 4, maxRadius]); // Bubble size range relative to container
 
-    // Create a force simulation to position the bubbles
+    // Create a color scale for the bubbles
+    const colorScale = d3.scaleOrdinal(d3.schemeTableau10);
+
+    // Force Simulation Setup
     const simulation = d3
       .forceSimulation(data)
-      .force("x", d3.forceX(dimensions.width / 2).strength(0.05)) // Center based on width
-      .force("y", d3.forceY(dimensions.height / 2).strength(0.05)) // Center based on height
+      .force("x", d3.forceX(dimensions.width / 2).strength(0.05))
+      .force("y", d3.forceY(dimensions.height / 2).strength(0.05))
       .force(
         "collision",
         d3.forceCollide((d) => sizeScale(d.value) + 5)
-      ) // Prevent bubbles from overlapping
+      )
       .on("tick", ticked);
 
-    // Draw bubbles
-    const bubble = svg
-      .selectAll(".bubble")
+    // Draw groups for each bubble
+    const bubbleGroup = svg
+      .selectAll(".bubble-group")
       .data(data)
       .enter()
+      .append("g")
+      .attr("class", "bubble-group")
+      .attr("transform", (d) => `translate(${d.x},${d.y})`);
+
+    // Draw the bubbles
+    bubbleGroup
       .append("circle")
       .attr("class", "bubble")
       .attr("r", (d) => sizeScale(d.value))
-      .attr("fill", "#69b3a2")
-      .attr("stroke", "black")
-      .attr("stroke-width", 1.5)
-      .style("cursor", "pointer")
-      .on("mouseover", function () {
-        d3.select(this)
-          .attr("fill", "#ff5722") // Change color on hover
-          .attr("r", (d) => sizeScale(d.value) + 10); // Enlarge bubble on hover
-      })
-      .on("mouseout", function () {
-        d3.select(this)
-          .attr("fill", "#69b3a2") // Return to original color
-          .attr("r", (d) => sizeScale(d.value)); // Return to original size
-      });
+      .attr("fill", (d) => colorScale(d.group))
+      .attr("stroke", "black");
 
-    // Add text labels inside bubbles
-    const text = svg
-      .selectAll(".text")
-      .data(data)
-      .enter()
+    // Add a tooltip title for hover
+    bubbleGroup.append("title").text((d) => `${d.name}: ${d.value}`);
+
+    // Add labels inside each bubble
+    const labels = bubbleGroup
       .append("text")
-      .attr("class", "bubble-text")
-      .style("text-anchor", "middle")
-      .style("font-size", "12px")
-      .attr("dy", ".35em")
+      .attr("class", "bubble-label") // Use CSS class for styling
+      .style("pointer-events", "none")
+      .attr("text-anchor", "middle") // Center align text
+      .attr("dy", "-0.5em") // Position label text slightly above center
+      .style("font-size", (d) => calculateFontSize(d, sizeScale(d.value))) // Dynamic font size
       .text((d) => d.name);
 
-    // Update positions on each tick
-    function ticked() {
-      bubble.attr("cx", (d) => d.x).attr("cy", (d) => d.y);
+    // Add the value as a separate tspan element below the text
+    labels
+      .append("tspan")
+      .attr("class", "bubble-value") // Use CSS class for value styling
+      .attr("x", 0)
+      .attr("dy", "1.2em") // Position value text below the label
+      .text((d) => d.value);
 
-      text.attr("x", (d) => d.x).attr("y", (d) => d.y);
+    // Update positions on each tick of the simulation
+    function ticked() {
+      bubbleGroup.attr("transform", (d) => `translate(${d.x},${d.y})`);
+    }
+
+    // Calculate the font size to fit within the bubble radius
+    function calculateFontSize(d, radius) {
+      const defaultFontSize = 12;
+      const maxFontSize = Math.min(defaultFontSize, radius / 3); // Calculate max font size based on bubble size
+      let fontSize = maxFontSize;
+
+      // Create a temporary SVG text element to measure text width
+      const tempText = svg
+        .append("text")
+        .attr("class", "bubble-label-temp")
+        .style("font-size", `${fontSize}px`)
+        .style("visibility", "hidden")
+        .text(d.name);
+
+      let textWidth = tempText.node().getBBox().width;
+
+      // Decrease the font size if text width is larger than the bubble diameter
+      while (textWidth > radius * 1.8 && fontSize > 6) {
+        // Keep reducing font size until it fits or reaches a minimum
+        fontSize -= 1;
+        tempText.style("font-size", `${fontSize}px`);
+        textWidth = tempText.node().getBBox().width;
+      }
+
+      tempText.remove(); // Remove the temporary text element
+      return `${fontSize}px`;
     }
   }, [data, dimensions]);
 

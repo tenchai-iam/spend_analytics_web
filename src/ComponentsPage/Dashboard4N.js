@@ -6,7 +6,7 @@ import YearDropdown from "./YearDropdown";
 import Table4 from "./Table4.js";
 import DonutChart from "./DonutChart.js";
 import TableD42 from "./TableD42.js";
-import CostSavingsChart from "./CostSavingsChart.js";
+import BarChart from "./BarChart";
 
 const Dashboard4 = () => {
   const data4 = [
@@ -136,8 +136,8 @@ const Dashboard4 = () => {
   ];
 
   const chartData = [
-    { name: "ค่าใช้จ่ายของงบซื้อที่เตรียมทั้งหมด", value: 300000000 },
-    { name: "ค่าใช้จ่ายตามแผนการจัดสรรใหม่", value: 250000000 },
+    { name: "กราฟที่ 1 - หมวด 1", value: 130 },
+    { name: "กราฟที่ 1 - หมวด 2", value: 80 },
   ];
 
   const savings = 50000000; // ค่าใช้จ่ายที่ลดได้
@@ -146,12 +146,14 @@ const Dashboard4 = () => {
     <div>
       <NavbarComponent />
       <BackgroundComponent />
+      <div className="year-dropdown-container">
+        <YearDropdown />
+      </div>
       <div className="dashboard4-container">
         {/*----------------------------------------------------------------*/}
         <div className="btn-container-L1">
           <div className="dropdown-group">
-            <YearDropdown />
-            <label>เลือกรายการพัสดุที่ต้องการดูราคา</label>
+            <p className="text-subtitle">เลือกรายการพัสดุที่ต้องการดูราคา</p>
             <select>
               <option value="102 สายไฟและ">102 สายไฟและ</option>
               {/* Additional options */}
@@ -163,7 +165,7 @@ const Dashboard4 = () => {
           </div>
           {/*-------------------------------------------------------.*/}
           <div className="lead-time">
-            <label>ระยะเวลาจัดซื้อโดยส่วนกลาง</label>
+            <p className="text-subtitle">ระยะเวลาจัดซื้อโดยส่วนกลาง</p>
 
             <div className="button-group button">
               <button onClick={() => console.log("Button 1 clicked")}>
@@ -179,7 +181,7 @@ const Dashboard4 = () => {
           </div>
           {/*-------------------------------------------------------.*/}
           <div className="demand-time">
-            <label>ระยะเวลาที่ต้องการใช้พัสดุ</label>
+            <p className="text-subtitle">ระยะเวลาที่ต้องการใช้พัสดุ</p>
 
             <div className="button-group button">
               <button onClick={() => console.log("Button 1 clicked")}>
@@ -197,23 +199,30 @@ const Dashboard4 = () => {
         {/*----------------------------------------------------------------*/}
         <div className="summary-container-L1">
           <div className="donutChart">
+            <h1 className="text-title">ภาพรวมสถานะพัสดุ</h1>
             <DonutChart />
           </div>
           <div className="text-summary">
-            <h1>รายพัสดุที่ต้องจัดสรรเพิ่มเติม</h1>
-            <h1>20 รายการ</h1>
+            <h1 className="text-label">รายพัสดุที่ต้องจัดสรรเพิ่มเติม</h1>
+            <h1 className="text-label">20 รายการ</h1>
           </div>
           <div className="table-summary">
+            <h1 className="text-title">ตารางข้อมูล</h1>
             <TableD42 data={dataD42} />
           </div>
         </div>
         {/*----------------------------------------------------------------*/}
         <div className="table-container-L1">
           <div className="table-compare">
+            <h1 className="text-title">ตารางจำลองแผนจัดสรรเพิ่มเติม</h1>
             <Table4 data={data4} />
           </div>
-          <div className="CostSavings">
-            <CostSavingsChart data={chartData} savings={savings} />
+          <div className="BarGraphV">
+            <h1 className="text-title">ประมาณการ Value</h1>
+            <BarChart
+              style={{ width: "100%", height: "100%" }}
+              data={chartData}
+            />
           </div>
         </div>
 

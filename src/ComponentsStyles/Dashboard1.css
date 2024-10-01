@@ -6,7 +6,6 @@
   width: 100%;
   margin: 0 auto;
   flex-wrap: wrap; /* Allow wrapping for responsiveness */
-  margin-top: 20px;
 }
 
 .year-dropdown-container {
@@ -18,103 +17,148 @@
 }
 
 .top-grid-container {
-  display: grid;
-  grid-template-columns: repeat(
-    2,
-    1fr
-  ); /* Two columns for the two text items */
-  gap: 10px; /* Space between text items */
-  margin-bottom: 20px; /* Margin below to separate from cards */
-  justify-items: center; /* Center align the text items */
-  padding: 5px; /* Padding around the container */
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  box-sizing: border-box; /* Ensure padding is included in width */
   width: 100%;
 }
 
-.top-left-grid-container {
+.top-1-grid-container {
   display: grid;
-  grid-template-columns: repeat(
-    2,
-    1fr
-  ); /* Two columns for the two text items */
-  gap: 10px; /* Space between text items */
-  margin-bottom: 20px; /* Margin below to separate from cards */
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
   justify-items: center; /* Center align the text items */
-  padding: 5px; /* Padding around the container */
   width: 100%;
 }
 
-.top-right-grid-container {
+.top-2-grid-container {
   display: grid;
-  grid-template-columns: repeat(
-    1,
-    1fr
-  ); /* Two columns for the two text items */
-  gap: 10px; /* Space between text items */
-  margin-bottom: 20px; /* Margin below to separate from cards */
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
   justify-items: center; /* Center align the text items */
-  padding: 5px; /* Padding around the container */
+  width: 100%;
+}
+
+.top-3-grid-container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+  justify-items: center; /* Center align the text items */
   width: 100%;
 }
 
 .left {
   background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
-  border-radius: 12px; /* Rounded corners */
-  padding: 20px; /* Padding inside the container */
-  width: 100%;
-  margin-top: 0 auto;
+  border-radius: 8px;
+  padding: 20px;
   display: flex;
-  flex-direction: row; /* Default to row layout */
-}
-
-.middle {
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
-  border-radius: 12px; /* Rounded corners */
-  padding: 20px; /* Padding inside the container */
+  flex-direction: column;
+  gap: 20px;
+  box-sizing: border-box; /* Ensure padding is included in width */
+  color: black;
+  align-items: center;
   width: 100%;
-  margin-top: 0 auto;
-  display: flex;
-  flex-direction: row; /* Default to row layout */
+  max-height: 400px;
 }
 
 .right {
   background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
-  border-radius: 12px; /* Rounded corners */
-  padding: 20px; /* Padding inside the container */
-  width: 100%;
-  margin-top: 0 auto;
+  border-radius: 8px;
+  padding: 20px;
   display: flex;
-  flex-direction: row; /* Default to row layout */
+  flex-direction: column;
+  gap: 20px;
+  box-sizing: border-box; /* Ensure padding is included in width */
+  color: black;
+  align-items: center;
+  width: 100%;
+  max-height: 400px;
 }
 
-.middle-grid-container {
-  display: grid;
-  grid-template-columns: repeat(
-    2,
-    1fr
-  ); /* Two columns for the two text items */
-  gap: 10px; /* Space between text items */
-  margin-bottom: 20px; /* Margin below to separate from cards */
+.middle-D1-container {
+  display: flex;
+  padding: 20px;
+  width: 100%;
+  gap: 20px;
+}
+
+.bubble-graph {
+  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  border-radius: 8px; /* Rounded corners */
+  padding: 20px; /* Padding inside the container */
+  width: 60%;
+  max-height: 600px;
+  display: flex;
+  flex-direction: column; /* Default to row layout */
+  gap: 20px;
   justify-items: center; /* Center align the text items */
-  padding: 5px; /* Padding around the container */
-  width: 100%;
+  align-items: center;
 }
 
-.donut-graph-container {
+.bar-graph {
   background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
-  border-radius: 12px; /* Rounded corners */
+  border-radius: 8px; /* Rounded corners */
   padding: 20px; /* Padding inside the container */
-  width: 100%;
-  margin-top: 0 auto;
+  width: 40%;
+  max-height: 600px;
   display: flex;
-  flex-direction: row; /* Default to row layout */
+  flex-direction: column; /* Default to column layout */
+  justify-items: center; /* Center align the text items */
+  align-items: center;
 }
 
-.map-graph-container {
+.bottom-D1-container {
+  display: flex;
+  margin: 20px;
+  width: 100%;
+  gap: 20px;
+}
+
+.donut-Graph {
+  width: 40%;
   background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
   border-radius: 12px; /* Rounded corners */
-  padding: 20px; /* Padding inside the container */
-  width: 100%;
-  margin-top: 0 auto;
+  padding: 20px;
+  gap: 20px;
   display: flex;
-  flex-direction: row; /* Default to row layout */
+  flex-direction: column; /* Default to column layout */
+  justify-items: center; /* Center align the text items */
+  align-items: center;
+}
+
+.map-wrapper {
+  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  border-radius: 12px; /* Rounded corners */
+  width: 60%; /* Ensure full width */
+  height: 600px; /* Set a defined height */
+  padding: 20px;
+  margin: 0 auto; /* Center the map within its container */
+  border: 1px solid #ccc; /* Optional: Add a border for clarity */
+  justify-items: center; /* Center align the text items */
+  align-items: center;
+}
+
+.map-container {
+  position: relative;
+  width: 100%; /* Fill the wrapper */
+  height: 100%; /* Fill the wrapper */
+  border-radius: 12px; /* Rounded corners */
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .top-1-grid-container {
+    grid-template-columns: 1fr;
+  }
+  .top-2-grid-container {
+    grid-template-columns: 1fr;
+  }
+  .top-3-grid-container {
+    grid-template-columns: 1fr;
+  }
+  .middle-grid-container {
+    grid-template-columns: 1fr;
+  }
 }

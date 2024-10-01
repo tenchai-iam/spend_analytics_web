@@ -8,7 +8,7 @@ const BarChart = ({ data }) => {
   const colorScale = d3
     .scaleSequential()
     .domain([0, d3.max(data, (d) => d.value)]) // Map values to a color range
-    .interpolator(d3.interpolatePurples); // Use a blue color scale
+    .interpolator(d3.interpolatePurples); // Use a purple color scale
 
   useEffect(() => {
     // Set up the SVG element
@@ -45,17 +45,25 @@ const BarChart = ({ data }) => {
       .nice() // Makes the axis end on a nice round number
       .range([height, 0]);
 
-    // Add the X axis
+    // Add the X axis with custom styles
     chart
       .append("g")
       .attr("transform", `translate(0,${height})`)
       .call(d3.axisBottom(x))
       .selectAll("text")
       .style("text-anchor", "middle")
-      .style("font-size", "12px"); // Adjust font size for better readability
+      .style("font-family", "Arial, sans-serif") // Custom font family
+      .style("font-size", "14px") // Custom font size
+      .style("fill", "#333"); // Custom font color
 
-    // Add the Y axis
-    chart.append("g").call(d3.axisLeft(y).ticks(5));
+    // Add the Y axis with custom styles
+    chart
+      .append("g")
+      .call(d3.axisLeft(y).ticks(5))
+      .selectAll("text")
+      .style("font-family", "Arial, sans-serif") // Custom font family
+      .style("font-size", "14px") // Custom font size
+      .style("fill", "#333"); // Custom font color
 
     // Tooltip setup
     const tooltip = d3
