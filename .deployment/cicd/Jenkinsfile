@@ -112,13 +112,9 @@ podTemplate(cloud: 'kubernetes', nodeSelector: 'node-role.kubernetes.io/control-
 
         stage("pre-build") {
             container("node") {
-                script {
-                    ansiColor('xterm') {
+                ansiColor('xterm') {
+                    script {
                         try {
-                            // install yarn
-                            // sh "npm install --global yarn"
-
-                            // sh "npm install --verbose"
                             sh "npm install --verbose --force"
                         } catch (ex) {
                             cleanWs()
@@ -131,8 +127,10 @@ podTemplate(cloud: 'kubernetes', nodeSelector: 'node-role.kubernetes.io/control-
 
         stage("build") {
             container("node") {
-                script {
-                    sh "npm run build"
+                ansiColor('xterm') {
+                    script {
+                        sh "npm run build"
+                    }
                 }
             }
         }
