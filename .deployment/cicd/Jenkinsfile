@@ -116,10 +116,10 @@ podTemplate(cloud: 'kubernetes', nodeSelector: 'node-role.kubernetes.io/control-
                     ansiColor('xterm') {
                         try {
                             // install yarn
-                            sh "npm install --global yarn"
+                            // sh "npm install --global yarn"
 
                             // sh "npm install --verbose"
-                            sh "yarn install --verbose"
+                            sh "npm install --verbose --force"
                         } catch (ex) {
                             cleanWs()
                             error ex.getMessage()
