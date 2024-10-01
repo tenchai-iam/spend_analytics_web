@@ -76,9 +76,9 @@
   .cards-container {
     grid-template-columns: repeat(3, 1fr);
   }
-  .card-title (
+  .card-title {
     font-size: clamp(1rem, 2vw, 1.4rem);
-  );;
+  }
 }
 
 @media (max-width: 375px) {
@@ -86,9 +86,9 @@
     grid-template-columns: 1fr;
   }
 
-  .card-title (
+  .card-title {
     font-size: clamp(0.9rem, 5vw, 1.2rem);
-  );;
+  }
 
   .card {
     padding: 5px; /* Smaller padding for smaller screens */
