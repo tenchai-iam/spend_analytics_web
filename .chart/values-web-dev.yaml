@@ -83,8 +83,7 @@ autoscaling:
 
 # nodeSelector: {}
 
-nodeSelector: 
-  build: "true"
+nodeSelector:  {}
 
 tolerations: []
 
