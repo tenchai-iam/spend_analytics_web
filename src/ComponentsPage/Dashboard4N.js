@@ -1,232 +1,354 @@
-import React from "react";
-import NavbarComponent from "../NavbarComponent";
-import BackgroundComponent from "../BackgroundComponent";
+import React, { useState, useEffect } from "react";
+import NavbarComponent from "../ComponentsPage/NavbarComponent";
+import BackgroundComponent from "../ComponentsPage/BackgroundComponent";
 import "../ComponentsStyles/Dashboard4.css"; // Updated to use Dashboard3.css
 import YearDropdown from "./YearDropdown";
 import Table4 from "./Table4.js";
-import DonutChart from "./DonutChart.js";
+import D4DonutChartRe from "./D4DonutChartRe.js";
 import TableD42 from "./TableD42.js";
-import BarChart from "./BarChart";
+import BarGraphReV from "./BarGraphReV";
+import Select from "react-select"; // Import react-select
+import { useQuery } from "@tanstack/react-query";
+import {
+  getYears,
+  getD4Categories,
+  getD4Materials,
+  getD4UsableMaterialGroup,
+  getD4RequireMaterialDetail,
+  getD4SimMaterialPlan,
+} from "../services/api.js"; // Import your API service function
 
 const Dashboard4 = () => {
-  const data4 = [
-    {
-      region: "กฟน.1",
-      usage: 4863,
-      stock: 4287,
-      contract: 9751,
-      awaiting: 1000,
-      totalStock: 15038,
-      monthsLeft: 3,
-      ordered: 43767,
-      delivered: 14589,
-      totalRegion: 29178,
-    },
-    {
-      region: "กฟน.2",
-      usage: 4473,
-      stock: 11462,
-      contract: 840,
-      awaiting: 1000,
-      totalStock: 13302,
-      monthsLeft: 3,
-      ordered: 40257,
-      delivered: 13419,
-      totalRegion: 26838,
-    },
-    {
-      region: "กฟน.3",
-      usage: 3399,
-      stock: 3608,
-      contract: 1486,
-      awaiting: 1000,
-      totalStock: 6094,
-      monthsLeft: 2,
-      ordered: 33990,
-      delivered: 13596,
-      totalRegion: 20394,
-    },
-    {
-      region: "กฟฉ.1",
-      usage: 3000,
-      stock: 12309,
-      contract: 19211,
-      awaiting: 0,
-      totalStock: 31520,
-      monthsLeft: 11,
-      ordered: 3000,
-      delivered: 3000,
-      totalRegion: 0,
-    },
-    {
-      region: "กฟฉ.2",
-      usage: 5724,
-      stock: 7545,
-      contract: 2231,
-      awaiting: 1000,
-      totalStock: 10776,
-      monthsLeft: 2,
-      ordered: 57240,
-      delivered: 22896,
-      totalRegion: 34344,
-    },
-    {
-      region: "กฟฉ.3",
-      usage: 5133,
-      stock: 8245,
-      contract: 40,
-      awaiting: 1000,
-      totalStock: 9285,
-      monthsLeft: 2,
-      ordered: 51330,
-      delivered: 20532,
-      totalRegion: 30798,
-    },
-    {
-      region: "กฟก.1",
-      usage: 6158,
-      stock: 19833,
-      contract: 725,
-      awaiting: 1000,
-      totalStock: 21558,
-      monthsLeft: 4,
-      ordered: 49624,
-      delivered: 12316,
-      totalRegion: 36948,
-    },
-    {
-      region: "กฟก.2",
-      usage: 6257,
-      stock: 7344,
-      contract: 2054,
-      awaiting: 1000,
-      totalStock: 10478,
-      monthsLeft: 5,
-      ordered: 49767,
-      delivered: 6257,
-      totalRegion: 5610,
-    },
-  ];
+  const [selectedYear, setSelectedYear] = useState(""); // State to hold the selected year
+  const [selectedMaterialGroup, setSelectedMaterialGroup] = useState("High");
+  const [selectedCategory, setSelectedCategory] = useState(""); // State to hold the selected category
+  const [selectedMaterial, setSelectedMaterial] = useState(""); // State to hold the selected material
+  const [selectedHQLeadTime, setSelectedHQLeadTime] = useState(null);
+  const [selectedDemandMonth, setSelectedDemandMonth] = useState(null);
 
-  const dataD42 = [
+  // Fetch available years using React Query
+  const { data: yearsData, isLoading } = useQuery({
+    queryKey: ["years"],
+    queryFn: getYears,
+  });
+
+  // Set the default year to the most recent one
+  useEffect(() => {
+    if (yearsData && yearsData.years.length > 0) {
+      const mostRecentYear = Math.max(...yearsData.years); // Get the most recent year
+      setSelectedYear(mostRecentYear.toString()); // Set as default selected year
+    }
+  }, [yearsData]);
+
+  const { data: categoryData, isLoading: isCategoriesLoading } = useQuery({
+    queryKey: ["categories"],
+    queryFn: getD4Categories,
+  });
+
+  const {
+    data: materialD4Data,
+    isLoading: isLoadingMaterialD4Data,
+    isError: isErrorMaterialD4Data,
+    error: errorMaterialD4Data,
+  } = useQuery({
+    queryKey: ["materials", selectedYear, selectedCategory], // Unique query key for caching
+    queryFn: () => getD4Materials(selectedYear, selectedCategory), // API call to fetch data based on year and category
+    enabled: Boolean(selectedYear) && Boolean(selectedCategory), // Only run query if year and category are selected
+  });
+
+  // Map material data to options for react-select
+  const materialD4Options = materialD4Data?.map((materialD4) => ({
+    value: materialD4.MATNR,
+    label: `${materialD4.MATNR} ${materialD4.MAKTX}`,
+  }));
+
+  const {
+    data: donutUsable,
+    isLoading: isLoadingDonutUsable,
+    isError: isErrorDonutUsable,
+    error: errorDonutUsable,
+  } = useQuery({
+    queryKey: ["donutUsable", selectedYear], // Unique query key for caching
+    queryFn: () => getD4UsableMaterialGroup(selectedYear), // API call to fetch data based on year
+    enabled: !!selectedYear, // Only run query if year is selected
+  });
+
+  const dataDonutUsable = [
     {
-      itemCode: "1020050000",
-      description: "CABLE, AERIAL AL 22 KV, 1X50 SQ.MM",
-      usage: "2 เดือน",
+      name: "ใช้ได้ <=6 เดือน",
       priority: "High",
+      value: donutUsable?.LESS_SIX,
     },
     {
-      itemCode: "1020050100",
-      description: "CABLE, AERIAL AL 33 KV, 1X50 SQ.MM",
-      usage: "3 เดือน",
-      priority: "High",
-    },
-    {
-      itemCode: "1020070004",
-      description: "CABLE, AL 750 V, 95 SQ.MM, TIS 293",
-      usage: "8 เดือน",
+      name: "ใช้ได้ 6-9 เดือน",
       priority: "Medium",
+      value: donutUsable?.SIX_TO_NINE,
     },
     {
-      itemCode: "1060050009",
-      description: "METER, WATTHOUR 1 P, 2 W 15(45) A",
-      usage: "1 เดือน",
-      priority: "High",
+      name: "ใช้ได้ >9 เดือน",
+      priority: "Low",
+      value: donutUsable?.MORE_NINE,
     },
   ];
 
-  const chartData = [
-    { name: "กราฟที่ 1 - หมวด 1", value: 130 },
-    { name: "กราฟที่ 1 - หมวด 2", value: 80 },
-  ];
+  const handlePrioritySelect = (priority) => {
+    setSelectedMaterialGroup(priority); // Update state with selected priority
+  };
 
-  const savings = 50000000; // ค่าใช้จ่ายที่ลดได้
+  const {
+    data: requireMaterialDetail,
+    isLoading: isLoadingRequireMaterialDetail,
+    isError: isErrorRequireMaterialDetail,
+    error: errorRequireMaterialDetail,
+  } = useQuery({
+    queryKey: ["requireMaterialDetail", selectedYear, selectedMaterialGroup], // Unique query key for caching
+    queryFn: () =>
+      getD4RequireMaterialDetail(selectedYear, selectedMaterialGroup), // API call to fetch data based on year
+    enabled: Boolean(selectedYear) && Boolean(selectedMaterialGroup), // Only run query if year is selected
+  });
+
+  const dataTableRequireMaterialDetail =
+    requireMaterialDetail?.map((item) => ({
+      matNum: item.MATNR,
+      matName: item.MAKTX,
+      usableMonth: Number(item.TOTAL_USABLE_MONTH).toLocaleString("th-TH"),
+      matGrade: item.PRIORITY.toLocaleString("th-TH"),
+    })) || [];
+
+  const {
+    data: simMaterialPlan,
+    isLoading: isLoadingSimMaterialPlan,
+    isError: isErrorSimMaterialPlan,
+    error: errorSimMaterialPlan,
+  } = useQuery({
+    queryKey: [
+      "simMaterialPlan",
+      selectedYear,
+      selectedHQLeadTime,
+      selectedDemandMonth,
+      selectedMaterial,
+    ], // Unique query key for caching
+    queryFn: () =>
+      getD4SimMaterialPlan(
+        selectedYear,
+        selectedHQLeadTime,
+        selectedDemandMonth,
+        selectedMaterial
+      ), // API call to fetch data based on year, HQleadtime, DemandMonth, Material
+    enabled:
+      Boolean(selectedYear) &&
+      Boolean(selectedHQLeadTime) &&
+      Boolean(selectedDemandMonth) &&
+      Boolean(selectedMaterial), // Only run query if year, HQleadtime, DemandMonth, Material is selected
+  });
+
+  const dataTableSimMaterialPlan =
+    simMaterialPlan?.map((item) => ({
+      region: item.DISTRICT_NAME,
+      usage: Number(item.RM),
+      stock: Number(item.INVENTORY),
+      quantityPR: Number(item.PR_WO_PO),
+      contract: Number(item.CONTRACTING),
+      availStock: Number(item.TOTAL_USABLE_INVENTORY),
+      availMonth: Number(item.TOTAL_USABLE_MONTH),
+      newMonth: Number(item.TO_PROCURE_MONTH),
+      newQuantity: Number(item.TO_PROCURE_UNIT),
+      unitHQ: Number(item.TO_PROCURE_HQ),
+      unitDistrict: Number(item.TO_PROCURE_DISTRICT),
+      priceHQ: Number(item.PRICE_HQ),
+      priceDistrict: Number(item.PRICE_DISTRICT),
+      mediumPrice: Number(item.MEDIUM_PRICE),
+      budget: Number(item.BUDGET),
+    })) || [];
+
+  /*   const chartData = [
+    { name: "ก่อนปรับปรุง", value: 130 },
+    { name: "หลังปรับปรุง", value: 80 },
+  ];
+ */
+
+  const handleSelectHQLeadTime = (index) => {
+    console.log("selectedHQLeadTime", index);
+    setSelectedHQLeadTime(index);
+  };
+
+  const getButtonStyle = (isSelected) => ({
+    backgroundColor: isSelected ? "#8e44ad" : "#f0f0f0",
+    color: isSelected ? "white" : "black",
+  });
+
+  const handleSelectDemandMonth = (index) => {
+    console.log("selectedDemandMonth", index);
+    setSelectedDemandMonth(index);
+  };
 
   return (
     <div>
       <NavbarComponent />
       <BackgroundComponent />
       <div className="year-dropdown-container">
-        <YearDropdown />
+        <YearDropdown
+          onSelectYear={setSelectedYear}
+          selectedYear={selectedYear}
+        />
       </div>
       <div className="dashboard4-container">
-        {/*----------------------------------------------------------------*/}
-        <div className="btn-container-L1">
-          <div className="dropdown-group">
-            <p className="text-subtitle">เลือกรายการพัสดุที่ต้องการดูราคา</p>
-            <select>
-              <option value="102 สายไฟและ">102 สายไฟและ</option>
-              {/* Additional options */}
-            </select>
-            <select>
-              <option value="1020010009 COND.">1020010009 COND.,</option>
-              {/* Additional options */}
-            </select>
-          </div>
-          {/*-------------------------------------------------------.*/}
-          <div className="lead-time">
-            <p className="text-subtitle">ระยะเวลาจัดซื้อโดยส่วนกลาง</p>
-
-            <div className="button-group button">
-              <button onClick={() => console.log("Button 1 clicked")}>
-                3 เดือน
-              </button>
-              <button onClick={() => console.log("Button 1 clicked")}>
-                6 เดือน
-              </button>
-              <button onClick={() => console.log("Button 1 clicked")}>
-                9 เดือน
-              </button>
-            </div>
-          </div>
-          {/*-------------------------------------------------------.*/}
-          <div className="demand-time">
-            <p className="text-subtitle">ระยะเวลาที่ต้องการใช้พัสดุ</p>
-
-            <div className="button-group button">
-              <button onClick={() => console.log("Button 1 clicked")}>
-                6 เดือน
-              </button>
-              <button onClick={() => console.log("Button 1 clicked")}>
-                9 เดือน
-              </button>
-              <button onClick={() => console.log("Button 1 clicked")}>
-                12 เดือน
-              </button>
-            </div>
-          </div>
-        </div>
-        {/*----------------------------------------------------------------*/}
+        {/* Summary Section */}
         <div className="summary-container-L1">
           <div className="donutChart">
-            <h1 className="text-title">ภาพรวมสถานะพัสดุ</h1>
-            <DonutChart />
+            <D4DonutChartRe
+              data={dataDonutUsable}
+              title="สัดส่วนรายการพัสดุตามปริมาณที่ใช้ได้ต่อเดือน"
+              onPrioritySelect={handlePrioritySelect} // Pass the handler
+              height={400}
+            />
           </div>
-          <div className="text-summary">
-            <h1 className="text-label">รายพัสดุที่ต้องจัดสรรเพิ่มเติม</h1>
-            <h1 className="text-label">20 รายการ</h1>
-          </div>
+          {/*           <div className="text-summary">
+            <h1 className="text-label">
+              จำนวนพัสดุที่ต้องจัดสรรเพิ่มเติม{" "}
+              {requireMaterialNum?.MAT_Q_REQ.toLocaleString("th-TH")} รายการ
+            </h1>
+          </div> */}
           <div className="table-summary">
-            <h1 className="text-title">ตารางข้อมูล</h1>
-            <TableD42 data={dataD42} />
-          </div>
-        </div>
-        {/*----------------------------------------------------------------*/}
-        <div className="table-container-L1">
-          <div className="table-compare">
-            <h1 className="text-title">ตารางจำลองแผนจัดสรรเพิ่มเติม</h1>
-            <Table4 data={data4} />
-          </div>
-          <div className="BarGraphV">
-            <h1 className="text-title">ประมาณการ Value</h1>
-            <BarChart
-              style={{ width: "100%", height: "100%" }}
-              data={chartData}
+            <TableD42
+              title="รายการพัสดุที่ต้องจัดสรรเพิ่มเติม"
+              data={dataTableRequireMaterialDetail}
             />
           </div>
         </div>
 
-        {/*----------------------------------------------------------------*/}
+        {/* Top Controls Section */}
+        <div className="btn-container-L1">
+          <div className="dropdown-group dropdown-cat-group">
+            <h1 className="text-subtitle">
+              เลือกกลุ่มและรายพัสดุที่ต้องการจำลองแผนการจัดซื้อพัสดุเพิ่มเติมระหว่างปี
+            </h1>
+            {isCategoriesLoading ? (
+              <p>Loading categories...</p>
+            ) : (
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+              >
+                <option value="">-- เลือกกลุ่มพัสดุ --</option>
+                {categoryData
+                  ?.slice() // Create a shallow copy of the array to avoid modifying the original
+                  .sort((a, b) => {
+                    if (a.CATEGORY_ID === "102") return -1; // Move `102` to the top
+                    if (b.CATEGORY_ID === "102") return 1;
+                    return a.CATEGORY_ID.localeCompare(b.CATEGORY_ID); // Default alphabetical sort by ID
+                  })
+                  .map((category, index) => (
+                    <option key={index} value={category.CATEGORY_ID}>
+                      {`${category.CATEGORY_ID}: ${category.CATEGORY_NAME}`}
+                    </option>
+                  ))}
+              </select>
+            )}
+            {isLoadingMaterialD4Data ? (
+              <p>Loading materials...</p>
+            ) : isErrorMaterialD4Data ? (
+              <p>Error fetching materials: {errorMaterialD4Data.message}</p>
+            ) : (
+              <Select
+                options={materialD4Options}
+                value={
+                  materialD4Options?.find(
+                    (option) => option.value === selectedMaterial
+                  ) || null
+                }
+                onChange={(selectedOption) => {
+                  const value = selectedOption ? selectedOption.value : ""; // Ensure only value is stored
+                  console.log("Selected Material Value:", value); // Log the value
+                  setSelectedMaterial(value); // Store only the value in state
+                }}
+                placeholder="เลือกรายการพัสดุ..."
+                isClearable
+                isSearchable
+                styles={{
+                  control: (base) => ({
+                    ...base,
+                    padding: "5px",
+                  }),
+                }}
+              />
+            )}
+          </div>
+
+          {/* Lead Time Section */}
+          <div className="lead-time">
+            <p className="text-subtitle">ระยะเวลาจัดซื้อโดยส่วนกลาง</p>
+            <div className="button-group">
+              {[
+                "1 เดือน",
+                "2 เดือน",
+                "3 เดือน",
+                "4 เดือน",
+                "5 เดือน",
+                "6 เดือน",
+                "7 เดือน",
+                "8 เดือน",
+                "9 เดือน",
+              ].map((label, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleSelectHQLeadTime(index + 1)}
+                  style={getButtonStyle(selectedHQLeadTime === index + 1)}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Demand Time Section */}
+          <div className="demand-time">
+            <p className="text-subtitle">ระยะเวลาที่ต้องการใช้พัสดุ</p>
+            <div className="button-group">
+              {[
+                "1 เดือน",
+                "2 เดือน",
+                "3 เดือน",
+                "4 เดือน",
+                "5 เดือน",
+                "6 เดือน",
+                "7 เดือน",
+                "8 เดือน",
+                "9 เดือน",
+                "10 เดือน",
+                "11 เดือน",
+                "12 เดือน",
+              ].map((label, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleSelectDemandMonth(index + 1)}
+                  style={getButtonStyle(selectedDemandMonth === index + 1)}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
+          {/*           <div className="BarGraphV">
+            <BarGraphReV
+              data={chartData}
+              xAxisKey="name"
+              barKey="value"
+              title="ประมาณการค่าใช้จ่ายที่ลดลง (ล้าน)"
+              height={300}
+            />
+          </div> */}
+        </div>
+
+        {/* Table and Chart Section */}
+        <div className="table-container-L1">
+          <div className="table-compare">
+            <Table4
+              title="ตารางจำลองแผนจัดซื้อพัสดุเพิ่มเติมระหว่างปี"
+              data={dataTableSimMaterialPlan}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

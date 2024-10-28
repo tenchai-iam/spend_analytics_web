@@ -1,0 +1,42 @@
+/* General Container for the Line Chart */
+.line-chart-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Chart Title */
+.line-chart-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #4a0072;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* iPad and Tablets (max-width: 768px) */
+@media (max-width: 768px) {
+  .line-chart-container {
+    padding: 15px;
+  }
+  .line-chart-title {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+  }
+}
+
+/* iPhone and smaller screens (max-width: 600px) */
+@media (max-width: 600px) {
+  .line-chart-container {
+    padding: 10px;
+  }
+  .line-chart-title {
+    font-size: 1rem;
+    margin-bottom: 10px;
+  }
+}

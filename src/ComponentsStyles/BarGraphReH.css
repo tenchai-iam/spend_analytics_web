@@ -1,0 +1,43 @@
+/* Container for the Bar Chart */
+.bar-chart-container {
+    width: 100%;
+    max-width: 100%; /* Set a maximum width for the container */
+    margin: 20px auto; /* Center the container */
+    padding: 20px; /* Add some padding */
+    background: #ffffff; /* Set a white background */
+    border: 1px solid #ddd; /* Add a subtle border */
+    border-radius: 8px; /* Round the corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Apply a shadow */
+  }
+  
+  /* Chart Title */
+  .bar-chart-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #4a0072; /* Custom color for the title */
+    text-align: center; /* Center the title */
+    margin-bottom: 20px; /* Add spacing below the title */
+  }
+  
+  /* Responsive Styles */
+  @media only screen and (max-width: 768px) {
+    .bar-chart-container {
+      padding: 15px;
+      width: 90%; /* Make the container responsive */
+    }
+  
+    .bar-chart-title {
+      font-size: 1.2rem; /* Reduce title font size on smaller screens */
+    }
+  }
+  
+  @media only screen and (max-width: 480px) {
+    .bar-chart-container {
+      padding: 10px;
+      width: 95%;
+    }
+  
+    .bar-chart-title {
+      font-size: 1rem;
+    }
+  }

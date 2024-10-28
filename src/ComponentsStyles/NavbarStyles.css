@@ -3,25 +3,23 @@
 /* Navbar Styling */
 .gradient-navbar {
   background: linear-gradient(
-    90deg,
-    #5b0e7b,
-    #a456b1
+    to right, #d3cce3, #e9e4f0
   ); /* Replace with desired purple gradient colors */
-  color: white;
+  color: #2E073F;
   border: none;
   font-family: "Sarabun", sans-serif;
   width: 100%;
   z-index: 100;
-  padding: 10px 0;
+  padding: 5px 0;
 }
 
 .navbar-brand,
 .navbar-nav .nav-link {
-  color: #ebd3f8 !important; /* Ensure links are white */
+  color: #2E073F; /* Ensure links are white */
   font-family: "Sarabun", sans-serif;
-  font-weight: 400;
+  font-weight: 500;
 }
 
-.navbar-brand img {
-  filter: brightness(0) invert(1); /* Ensure logo looks good on dark background */
-}
+/* .navbar-brand img {
+  filter: brightness(0) invert(1); 
+} */

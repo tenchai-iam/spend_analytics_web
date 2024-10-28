@@ -1,20 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { getYears } from "../services/api"; // Import the getYears function
 import "../ComponentsStyles/YearDropdown.css";
 
-const YearDropdown = ({ startYear = 2022, endYear }) => {
-  const [selectedYear, setSelectedYear] = useState("");
+const YearDropdown = ({ onSelectYear, selectedYear }) => {
+  // Use React Query's useQuery to fetch years
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["years"],
+    queryFn: getYears,
+  });
 
-  // Set the default end year to the current year if not provided
-  const currentYear = new Date().getFullYear();
-  const years = [];
+  // Set the default year to the most recent one once data is fetched
+  useEffect(() => {
+    if (data && data.years.length > 0 && !selectedYear) {
+      const mostRecentYear = Math.max(...data.years); // Get the most recent year
+      onSelectYear(mostRecentYear.toString()); // Set the most recent year as default
+    }
+  }, [data, onSelectYear, selectedYear]);
 
-  // Generate the list of years dynamically
-  for (let i = startYear; i <= (endYear || currentYear); i++) {
-    years.push(i);
-  }
+  // Handle loading and error states using React Query's properties
+  if (isLoading) return <div>Loading years...</div>;
+  if (isError) return <div>Error: {error.message}</div>;
 
   const handleChange = (e) => {
-    setSelectedYear(e.target.value);
+    const selectedYear = e.target.value;
+    onSelectYear(selectedYear); // Notify parent component when a year is selected
   };
 
   return (
@@ -24,13 +34,12 @@ const YearDropdown = ({ startYear = 2022, endYear }) => {
         <option value="" disabled>
           -- Select a Year --
         </option>
-        {years.map((year) => (
+        {data.years.map((year) => (
           <option key={year} value={year}>
             {year}
           </option>
         ))}
       </select>
-      {selectedYear && <p>You selected: {selectedYear}</p>}
     </div>
   );
 };

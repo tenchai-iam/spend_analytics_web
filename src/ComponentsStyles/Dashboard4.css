@@ -45,8 +45,8 @@
 }
 
 .dropdown-group {
-  flex: 1 1 calc(70% - 30px);
-  max-width: calc(70%-30px);
+  flex: 1 1 calc(35% - 30px);
+  max-width: calc(35%-30px);
   background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
   border-radius: 8px;
   padding: 20px;
@@ -54,7 +54,16 @@
   flex-direction: column;
   gap: 20px;
   box-sizing: border-box; /* Ensure padding is included in width */
+  margin: 0 auto;
   color: black;
+}
+
+.dropdown-cat-group {
+  font-size: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  z-index: 5;
 }
 
 .dropdown-group label {
@@ -63,8 +72,8 @@
 }
 
 .lead-time {
-  flex: 1 1 calc(15% - 30px);
-  max-width: calc(15%-30px);
+  flex: 1 1 calc(17.5% - 30px);
+  max-width: calc(17.5%-30px);
   background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
   border-radius: 8px;
   padding: 20px;
@@ -77,8 +86,8 @@
 }
 
 .demand-time {
-  flex: 1 1 calc(15% - 30px);
-  max-width: calc(15%-30px);
+  flex: 1 1 calc(17.5% - 30px);
+  max-width: calc(17.5%-30px);
   background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
   border-radius: 8px;
   padding: 20px;
@@ -88,6 +97,21 @@
   box-sizing: border-box; /* Ensure padding is included in width */
   margin: 0 auto;
   color: black;
+}
+
+.BarGraphV {
+  flex: 1 1 calc(30% - 30px);
+  max-width: calc(30%-30px);
+  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-sizing: border-box; /* Ensure padding is included in width */
+  color: black;
+  align-items: center;
+  justify-items: center;
 }
 
 .button-group button {
@@ -170,22 +194,7 @@
 }
 
 .table-compare {
-  flex: 1 1 60%;
-  max-width: 60%;
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
-  border-radius: 8px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  box-sizing: border-box; /* Ensure padding is included in width */
-  color: black;
-  align-items: center;
-}
-
-.BarGraphV {
-  flex: 1 1 40%;
-  max-width: 40%;
+  max-width: 100%;
   background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
   border-radius: 8px;
   padding: 20px;

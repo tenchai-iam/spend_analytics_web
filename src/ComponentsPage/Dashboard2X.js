@@ -1,50 +1,167 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../ComponentsStyles/Dashboard2.css";
-import BarGraphH from "./D2Chart"; // Import D2Chart component
 import Card from "./D2Card.js"; // Import the Card component
-import BackgroundComponent from "../BackgroundComponent";
+import BackgroundComponent from "../ComponentsPage/BackgroundComponent";
 import YearDropdown from "./YearDropdown";
-import NavbarComponent from "../NavbarComponent";
+import NavbarComponent from "../ComponentsPage/NavbarComponent";
+import BarGraphReH from "./BarGraphReH";
+import { useQuery } from "@tanstack/react-query";
+import {
+  getYears,
+  getD2SummaryData,
+  getD2TopSupplier,
+  getD2CategorySpend,
+  getD2CategoryPOQuantity,
+  getD2CategoryAverageSpend,
+} from "../services/api.js"; // Import your API service function
 
 const Dashboard2 = () => {
-  // Dummy data for charts
-  const chartData = [
-    {
-      title: "มูลค่าจัดซื้อ (บาท)",
-      data: [30, 80, 45, 60, 20, 90, 55, 33, 50, 70],
-    },
-    {
-      title: "จำนวน PO",
-      data: [50, 40, 70, 85, 15, 100, 60, 40, 45, 80],
-    },
-    {
-      title: "มูลค่าจัดซื้อต่อ PO (บาท)",
-      data: [80, 30, 55, 65, 10, 70, 75, 25, 60, 95],
-    },
+  const [selectedYear, setSelectedYear] = useState(""); // State to hold the selected year
+  const [selectedCategoryGroup, setSelectedCategoryGroup] = useState(1); // State to hold the selected category id
+  const [selectedButton, setSelectedButton] = useState(0); // Track selected button index
+  const [isCardView, setIsCardView] = useState(true); // State to toggle between card and graph view
+
+  // Fetch available years using React Query
+  const { data: yearsData, isLoading } = useQuery({
+    queryKey: ["years"],
+    queryFn: getYears,
+  });
+
+  // Set the default year to the most recent one
+  useEffect(() => {
+    if (yearsData && yearsData.years.length > 0) {
+      const mostRecentYear = Math.max(...yearsData.years); // Get the most recent year
+      setSelectedYear(mostRecentYear.toString()); // Set as default selected year
+    }
+  }, [yearsData]);
+
+  // Category labels
+  const categories = [
+    "ผลิตภัณฑ์คอนกรีต",
+    "หม้อแปลง",
+    "มิเตอร์",
+    "ลูกถ้วย และ เคเบิลสเปเซอร์",
+    "สายไฟ",
+    "อลูมิเนียมอินกอท",
+    "ดรอพเอาท์ ฟิวส์คัทเอาท์",
+    "ล่อฟ้า",
+    "คาปาซิเตอร์",
+    "รีโคลสเซอร์",
+    "สวิตซ์",
+    "พัสดุรอง/อุปกรณ์ประกอบ",
+    "อื่นๆ",
   ];
 
-  // Sample data for cards
-  const cardsData = [
-    {
-      company: "Bangkok Cable Co., Ltd.",
-      purchaseValue: "1,500 ล้านบาท",
-      poCount: "10 รายการ",
-      avgPoValue: "150 ล้านบาท",
-    },
-    {
-      company: "Company 2",
-      purchaseValue: "1,200 ล้านบาท",
-      poCount: "8 รายการ",
-      avgPoValue: "140 ล้านบาท",
-    },
-    // Additional card data here
-  ];
+  // Fetch summary data for selected year and category using React Query
+  const {
+    data: dashboardData,
+    isLoading: isLoadingData,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["dashboardData", selectedYear, selectedCategoryGroup], // Unique query key for caching
+    queryFn: () => getD2SummaryData(selectedYear, selectedCategoryGroup), // API call to fetch data based on year and category
+    enabled: !!selectedYear && selectedCategoryGroup !== null, // Only run query if both year and category_group are selected
+  });
 
-  // State to toggle between card and graph view
-  const [isCardView, setIsCardView] = useState(true);
+  // Fetch top supplier data for selected year and category using React Query
+  const {
+    data: topSuppliersData,
+    isLoading: isLoadingSuppliers,
+    isError: isErrorSuppliers,
+    error: errorSuppliers,
+  } = useQuery({
+    queryKey: ["topSuppliers", selectedYear, selectedCategoryGroup],
+    queryFn: () => getD2TopSupplier(selectedYear, selectedCategoryGroup),
+    enabled: !!selectedYear && selectedCategoryGroup !== null, // Only run query if both year and category_group are selected
+  });
+
+  // Handle data mapping for top suppliers
+  const renderTopSuppliers = () => {
+    if (!topSuppliersData || !topSuppliersData.top_suppliers) return null;
+
+    const topSuppliers = topSuppliersData.top_suppliers;
+
+    // Debugging: Log top suppliers data before rendering
+    console.log("Top Suppliers Data: ", topSuppliers);
+
+    return Object.keys(topSuppliers).map((supplierId) => {
+      const supplier = topSuppliers[supplierId]; // Get each supplier's data
+
+      return (
+        <Card
+          key={supplierId}
+          SUPPLIER_NAME={supplier.SUPPLIER_NAME}
+          TOTAL_SPEND={supplier.TOTAL_SPEND}
+          TOTAL_PO={supplier.TOTAL_PO}
+          SPEND_PER_PO={supplier.SPEND_PER_PO}
+        />
+      );
+    });
+  };
+
+  const {
+    data: barCategorySpend,
+    isLoading: isLoadingBarCategorySpend,
+    isError: isErrorBarCategorySpend,
+    error: errorBarCategorySpend,
+  } = useQuery({
+    queryKey: ["barCategorySpend", selectedYear, selectedCategoryGroup], // Unique query key for caching
+    queryFn: () => getD2CategorySpend(selectedYear, selectedCategoryGroup), // API call to fetch data based on year and category_group are selected
+    enabled: !!selectedYear && selectedCategoryGroup !== null, // Only run query if year and category_group are selected
+  });
+
+  const dataBarCategorySpend =
+    barCategorySpend?.top_suppliers?.map((supplier) => ({
+      name: supplier.SUPPLIER_NAME,
+      value: supplier.TOTAL_SPEND / 1000000,
+    })) || [];
+
+  const {
+    data: barCategoryPOQuantity,
+    isLoading: isLoadingBarCategoryPOQuantity,
+    isError: isErrorBarCategoryPOQuantity,
+    error: errorBarCategoryPOQuantity,
+  } = useQuery({
+    queryKey: ["barCategoryPOQuantity", selectedYear, selectedCategoryGroup], // Unique query key for caching
+    queryFn: () => getD2CategoryPOQuantity(selectedYear, selectedCategoryGroup), // API call to fetch data based on year and category_group are selected
+    enabled: !!selectedYear && selectedCategoryGroup !== null, // Only run query if year and category_group are selected
+  });
+
+  const dataBarCategoryPOQuantity =
+    barCategoryPOQuantity?.top_suppliers?.map((supplier) => ({
+      name: supplier.SUPPLIER_NAME,
+      value: supplier.TOTAL_PO,
+    })) || [];
+
+  const {
+    data: barCategoryAverageSpend,
+    isLoading: isLoadingBarCategoryAverageSpend,
+    isError: isErrorBarCategoryAverageSpend,
+    error: errorBarCategoryAverageSpend,
+  } = useQuery({
+    queryKey: ["barCategoryAverageSpend", selectedYear, selectedCategoryGroup], // Unique query key for caching
+    queryFn: () =>
+      getD2CategoryAverageSpend(selectedYear, selectedCategoryGroup), // API call to fetch data based on year and category_group are selected
+    enabled: !!selectedYear && selectedCategoryGroup !== null, // Only run query if year and category_group are selected
+  });
+
+  const dataBarCategoryAverageSpend =
+    barCategoryAverageSpend?.top_suppliers?.map((supplier) => ({
+      name: supplier.SUPPLIER_NAME,
+      value: supplier.SPEND_PER_PO,
+    })) || [];
 
   const toggleView = () => {
     setIsCardView(!isCardView); // Toggle between true (card view) and false (chart view)
+  };
+
+  const handleCategorySelect = (index, categoryGroup) => {
+    setSelectedButton(index); // Highlight the selected button
+    setSelectedCategoryGroup(categoryGroup); // Use the calculated category ID for fetching data
+    console.log(
+      `Button ${index} selected with category Group: ${categoryGroup}`
+    );
   };
 
   return (
@@ -52,58 +169,61 @@ const Dashboard2 = () => {
       <NavbarComponent />
       <BackgroundComponent />
       <div className="year-dropdown-container">
-        <YearDropdown />
+        <YearDropdown
+          onSelectYear={setSelectedYear}
+          selectedYear={selectedYear}
+        />
       </div>
       <div className="dashboard2-container">
         <div className="top-container">
           <h1 className="text-subtitle">เลือกกลุ่มพัสดุและปีที่ต้องการ</h1>
           <div className="btn-menu">
             {/* Button Controls */}
-            <div className="button-group button">
-              <button onClick={() => console.log("Button 1 clicked")}>
-                เสาคอน คาน สมอบกคอนกรีต
-              </button>
-              <button onClick={() => console.log("Button 2 clicked")}>
-                Pole line hardware
-              </button>
-              <button onClick={() => console.log("Button 3 clicked")}>
-                สายไฟ
-              </button>
-              <button onClick={() => console.log("Button 4 clicked")}>
-                ลูกถ้วย
-              </button>
-              <button onClick={() => console.log("Button 5 clicked")}>
-                อุปกรณ์ป้องกัน และสวิตซ์
-              </button>
-              <button onClick={() => console.log("Button 6 clicked")}>
-                หม้อแปลง แคแปซิเตอร์ โวลเตจเรกูเรเตอร์
-              </button>
-              <button onClick={() => console.log("Button 7 clicked")}>
-                มิเตอร์ ซีที.พีที.
-              </button>
-              <button onClick={() => console.log("Button 8 clicked")}>
-                อุปกรณ์ไฟถนน
-              </button>
-              <button onClick={() => console.log("Button 9 clicked")}>
-                อุปกรณ์เดินสายภายในและภายนอกอาคาร
-              </button>
-              <button onClick={() => console.log("Button 10 clicked")}>
-                พัสดุรอง/อุปกรณ์ประกอบ
-              </button>
+            <div className="button-group">
+              {categories.map((label, index) => {
+                // Calculate the category ID based on the button index
+                const categoryGroup = index < 12 ? 1 + index : 99; // 1-12 for first 9 buttons, 99 for the last button
+                return (
+                  <button
+                    key={index}
+                    onClick={() => handleCategorySelect(index, categoryGroup)} // Send calculated category ID on click
+                    style={{
+                      backgroundColor:
+                        selectedButton === index ? "#8e44ad" : "#f0f0f0",
+                      color: selectedButton === index ? "white" : "black",
+                      margin: "5px",
+                      padding: "10px 20px",
+                      border: "1px solid #ddd",
+                      cursor: "pointer",
+                    }}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>
-        <div className="middle-container">
+        {/* <div className="middle-container">
           <h1 className="container-title">ภาพรวมคู่ค้าของกฟภ.</h1>
-          <h1 className="text-subtitle">
-            จำนวนคู่ค้าทั้งหมดตามกลุ่มพัสดุที่เลือก
-          </h1>
-          <h1 className="text-subtitle">
-            จำนวนคู่ค้า Active ตามกลุ่มพัสดุที่เลือก
-          </h1>
-        </div>
+          {/* Check if dashboard2Data is available before rendering the values */}
+        {/* {dashboardData ? (
+            <>
+              <h1 className="text-subtitle">
+                จำนวนคู่ค้าทั้งหมดตามกลุ่มพัสดุที่เลือก:{" "}
+                {dashboardData.data.TOTAL_SUPPLIER.toLocaleString("th-TH")}
+              </h1>
+              <h1 className="text-subtitle">
+                จำนวนคู่ค้า Active ตามกลุ่มพัสดุที่เลือก:{" "}
+                {dashboardData.data.TOTAL_CONT_SUPPLIER.toLocaleString("th-TH")}
+              </h1>
+            </>
+          ) : (
+            <h1 className="text-subtitle">Fetching data...</h1> */}
+        {/* )} */}
+        {/* </div> */}
         <div className="bottom-container">
-          <h1 className="container-title">Top 10 คู่ค้า</h1>
+          <h1 className="text-subtitle">Top 10 Suppliers</h1>
           {/* Toggle Button */}
           <button className="chart-button" onClick={toggleView}>
             {isCardView ? "Graph View" : "Card View"}
@@ -112,27 +232,39 @@ const Dashboard2 = () => {
           {/* Chart Container */}
           {isCardView ? (
             <div className="cards-grid-container">
-              {cardsData.map((card, index) => (
-                <Card
-                  key={index}
-                  company={card.company}
-                  purchaseValue={card.purchaseValue}
-                  poCount={card.poCount}
-                  avgPoValue={card.avgPoValue}
-                />
-              ))}
+              {isLoadingSuppliers ? (
+                <h1 className="text-subtitle">Loading Top Suppliers...</h1>
+              ) : isErrorSuppliers ? (
+                <h1 className="text-subtitle">
+                  Error: {errorSuppliers.message}
+                </h1>
+              ) : (
+                renderTopSuppliers()
+              )}
             </div>
           ) : (
             <div className="charts-grid-container">
-              {chartData.map((chart, index) => (
-                <div className="chart-wrapper" key={index}>
-                  {/* Add Chart Title */}
-                  <h1 className="chart-title">{chart.title}</h1>
-                  <div className="chart-container">
-                    <BarGraphH data={chart.data} />
-                  </div>
-                </div>
-              ))}
+              <BarGraphReH
+                data={dataBarCategorySpend}
+                yAxisKey="name"
+                barKey="value"
+                title="ยอดจัดซื้อทั้งหมดแบ่งตามประเภทจัดซื้อ (ล้านบาท)"
+                height={700}
+              />
+              <BarGraphReH
+                data={dataBarCategoryPOQuantity}
+                yAxisKey="name"
+                barKey="value"
+                title="จำนวนรายการ PO"
+                height={700}
+              />
+              <BarGraphReH
+                data={dataBarCategoryAverageSpend}
+                yAxisKey="name"
+                barKey="value"
+                title="มูลค่าต่อ PO (บาท)"
+                height={700}
+              />
             </div>
           )}
         </div>

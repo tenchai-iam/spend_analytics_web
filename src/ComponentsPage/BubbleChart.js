@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
-import "../ComponentsStyles/BubbleChart.css"; // Import the CSS file
+import "../ComponentsStyles/BubbleChart.css"; // Import CSS
 
 const BubbleChart = ({ data }) => {
   const svgRef = useRef();
   const containerRef = useRef();
   const [dimensions, setDimensions] = useState({ width: 600, height: 600 });
 
-  // Update chart dimensions based on container size
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
       if (!entries || entries.length === 0) return;
@@ -21,6 +20,44 @@ const BubbleChart = ({ data }) => {
     return () => resizeObserver.disconnect();
   }, []);
 
+  const numberFormatter = new Intl.NumberFormat("en-US", {
+    style: "decimal",
+    maximumFractionDigits: 3,
+  });
+
+  const colorPalette = [
+    "#BC6FF1",
+    "#7A1CAC",
+    "#AD49E1",
+    "#8d98a1",
+    "#c69530",
+    "#7f3f98",
+    "#7a0f5a",
+    "#81377e",
+    "#5B4B8A",
+    "#EE4266",
+  ];
+
+  const generateGradient = (defs, color, index) => {
+    const gradient = defs
+      .append("linearGradient")
+      .attr("id", `gradient-${index}`)
+      .attr("x1", "0%")
+      .attr("x2", "100%")
+      .attr("y1", "0%")
+      .attr("y2", "100%");
+
+    gradient
+      .append("stop")
+      .attr("offset", "0%")
+      .attr("stop-color", d3.color(color).brighter(0.8));
+
+    gradient
+      .append("stop")
+      .attr("offset", "100%")
+      .attr("stop-color", d3.color(color).darker(1.2));
+  };
+
   useEffect(() => {
     if (!data || data.length === 0) return;
 
@@ -29,102 +66,136 @@ const BubbleChart = ({ data }) => {
       .attr("width", dimensions.width)
       .attr("height", dimensions.height);
 
-    // Remove old chart elements before drawing new ones
     svg.selectAll("*").remove();
 
-    // Calculate the maximum radius based on container dimensions
+    const defs = svg.append("defs");
+
+    data.forEach((_, i) => {
+      const color = colorPalette[i % colorPalette.length];
+      generateGradient(defs, color, i);
+    });
+
     const maxRadius = Math.min(dimensions.width, dimensions.height) / 10;
 
-    // Create a size scale for bubble radius
     const sizeScale = d3
       .scaleSqrt()
       .domain([0, d3.max(data, (d) => d.value)])
-      .range([maxRadius / 4, maxRadius]); // Bubble size range relative to container
+      .range([maxRadius / 2, maxRadius * 1.5]);
 
-    // Create a color scale for the bubbles
-    const colorScale = d3.scaleOrdinal(d3.schemeTableau10);
-
-    // Force Simulation Setup
     const simulation = d3
       .forceSimulation(data)
       .force("x", d3.forceX(dimensions.width / 2).strength(0.05))
       .force("y", d3.forceY(dimensions.height / 2).strength(0.05))
       .force(
         "collision",
-        d3.forceCollide((d) => sizeScale(d.value) + 5)
+        d3.forceCollide((d) => sizeScale(d.value) + 30)
       )
+      .force("manyBody", d3.forceManyBody().strength(10))
+      .alphaDecay(0.005) // Keep the simulation running
       .on("tick", ticked);
 
-    // Draw groups for each bubble
     const bubbleGroup = svg
       .selectAll(".bubble-group")
       .data(data)
       .enter()
       .append("g")
-      .attr("class", "bubble-group")
-      .attr("transform", (d) => `translate(${d.x},${d.y})`);
+      .attr("class", "bubble-group");
 
-    // Draw the bubbles
-    bubbleGroup
+    const circles = bubbleGroup
       .append("circle")
       .attr("class", "bubble")
       .attr("r", (d) => sizeScale(d.value))
-      .attr("fill", (d) => colorScale(d.group))
-      .attr("stroke", "black");
+      .attr("fill", (d, i) => `url(#gradient-${i})`)
+      .attr("stroke", "#d3cce3")
+      .on("mouseenter", (event, d) => applyInteractionForce(d))
+      .on("mouseleave", resetInteractionForce)
+      .on("touchstart", (event, d) => {
+        event.preventDefault(); // Prevent default scrolling
+        applyInteractionForce(d);
+      })
+      .on("touchend", resetInteractionForce);
 
-    // Add a tooltip title for hover
-    bubbleGroup.append("title").text((d) => `${d.name}: ${d.value}`);
-
-    // Add labels inside each bubble
-    const labels = bubbleGroup
+    bubbleGroup
       .append("text")
-      .attr("class", "bubble-label") // Use CSS class for styling
-      .style("pointer-events", "none")
-      .attr("text-anchor", "middle") // Center align text
-      .attr("dy", "-0.5em") // Position label text slightly above center
-      .style("font-size", (d) => calculateFontSize(d, sizeScale(d.value))) // Dynamic font size
-      .text((d) => d.name);
-
-    // Add the value as a separate tspan element below the text
-    labels
-      .append("tspan")
-      .attr("class", "bubble-value") // Use CSS class for value styling
+      .attr("class", "bubble-label")
+      .attr("text-anchor", "middle")
+      .attr("dy", "-1.5em") // Move the name upwards
+      .selectAll("tspan")
+      .data((d) => wrapText(d.name, sizeScale(d.value)))
+      .join("tspan")
       .attr("x", 0)
-      .attr("dy", "1.2em") // Position value text below the label
-      .text((d) => d.value);
+      .attr("dy", (d, i) => `${i}em`) // Align multiple lines properly
+      .text((d) => d);
 
-    // Update positions on each tick of the simulation
+    bubbleGroup
+      .append("text")
+      .attr("class", "bubble-value")
+      .attr("text-anchor", "middle")
+      .attr("dy", "2.0em") // Move the value below the name
+      .text((d) => numberFormatter.format(d.value));
+
     function ticked() {
-      bubbleGroup.attr("transform", (d) => `translate(${d.x},${d.y})`);
+      bubbleGroup.attr("transform", (d) => {
+        d.x = Math.max(
+          sizeScale(d.value),
+          Math.min(dimensions.width - sizeScale(d.value), d.x)
+        );
+        d.y = Math.max(
+          sizeScale(d.value),
+          Math.min(dimensions.height - sizeScale(d.value), d.y)
+        );
+        return `translate(${d.x},${d.y})`;
+      });
     }
 
-    // Calculate the font size to fit within the bubble radius
-    function calculateFontSize(d, radius) {
-      const defaultFontSize = 12;
-      const maxFontSize = Math.min(defaultFontSize, radius / 3); // Calculate max font size based on bubble size
-      let fontSize = maxFontSize;
-
-      // Create a temporary SVG text element to measure text width
-      const tempText = svg
-        .append("text")
-        .attr("class", "bubble-label-temp")
-        .style("font-size", `${fontSize}px`)
-        .style("visibility", "hidden")
-        .text(d.name);
-
-      let textWidth = tempText.node().getBBox().width;
-
-      // Decrease the font size if text width is larger than the bubble diameter
-      while (textWidth > radius * 1.8 && fontSize > 6) {
-        // Keep reducing font size until it fits or reaches a minimum
-        fontSize -= 1;
-        tempText.style("font-size", `${fontSize}px`);
-        textWidth = tempText.node().getBBox().width;
-      }
-
-      tempText.remove(); // Remove the temporary text element
-      return `${fontSize}px`;
+    function applyInteractionForce(d) {
+      const strength = 0.3;
+      simulation
+        .alpha(0.3) // Add energy to the simulation
+        .force(
+          "x",
+          d3
+            .forceX()
+            .strength(strength)
+            .x((node) =>
+              node === d ? Math.random() * dimensions.width : node.x
+            )
+        )
+        .force(
+          "y",
+          d3
+            .forceY()
+            .strength(strength)
+            .y((node) =>
+              node === d ? Math.random() * dimensions.height : node.y
+            )
+        )
+        .restart();
     }
+
+    function resetInteractionForce() {
+      simulation.alpha(0.1).restart();
+    }
+
+    function wrapText(text, radius) {
+      const words = text.split(/\s+/);
+      const lines = [];
+      let currentLine = [];
+
+      words.forEach((word) => {
+        currentLine.push(word);
+        const lineWidth = currentLine.join(" ").length * 6;
+        if (lineWidth > radius * 2) {
+          lines.push(currentLine.join(" "));
+          currentLine = [];
+        }
+      });
+
+      if (currentLine.length) lines.push(currentLine.join(" "));
+      return lines;
+    }
+
+    return () => simulation.stop(); // Clean up on unmount
   }, [data, dimensions]);
 
   return (

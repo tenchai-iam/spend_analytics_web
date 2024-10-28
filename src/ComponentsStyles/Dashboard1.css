@@ -1,3 +1,12 @@
+/* General Layout */
+.year-dropdown-container {
+  display: flex;
+  justify-content: flex-end; /* This moves the dropdown to the right */
+  padding-right: 20px; /* Optional: adjust padding as per your needs */
+  margin-top: 20px;
+  color: white;
+}
+
 .dashboard1-container {
   position: relative;
   display: flex;
@@ -8,44 +17,50 @@
   flex-wrap: wrap; /* Allow wrapping for responsiveness */
 }
 
-.year-dropdown-container {
-  display: flex;
-  justify-content: flex-end; /* This moves the dropdown to the right */
-  padding-right: 20px; /* Optional: adjust padding as per your needs */
-  margin-top: 20px;
-  color: white;
-}
-
-.top-grid-container {
+.table-container-L1 {
   padding: 20px;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Default: 5 columns */
+  /* flex-wrap: nowrap; */
   gap: 20px;
   box-sizing: border-box; /* Ensure padding is included in width */
   width: 100%;
+  font-size: 0.9rem;
 }
 
-.top-1-grid-container {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
+.table-top-price-diff {
+  flex: 1 1 60%;
+  max-width: 60%;
+  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
   gap: 20px;
-  justify-items: center; /* Center align the text items */
-  width: 100%;
+  box-sizing: border-box; /* Ensure padding is included in width */
+  color: black;
 }
 
-.top-2-grid-container {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
+.table-top-povalue-count {
+  flex: 1 1 40%;
+  max-width: 40%;
+  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
   gap: 20px;
-  justify-items: center; /* Center align the text items */
-  width: 100%;
+  box-sizing: border-box; /* Ensure padding is included in width */
+  color: black;
 }
 
-.top-3-grid-container {
+.top-D1-grid-container {
+  padding: 20px;
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: repeat(2, 1fr); /* Default: 5 columns */
+  /* flex-wrap: nowrap; */
   gap: 20px;
-  justify-items: center; /* Center align the text items */
+  box-sizing: border-box; /* Ensure padding is included in width */
   width: 100%;
 }
 
@@ -53,28 +68,14 @@
   background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
   border-radius: 8px;
   padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  box-sizing: border-box; /* Ensure padding is included in width */
-  color: black;
-  align-items: center;
   width: 100%;
-  max-height: 400px;
 }
 
 .right {
   background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
   border-radius: 8px;
   padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  box-sizing: border-box; /* Ensure padding is included in width */
-  color: black;
-  align-items: center;
   width: 100%;
-  max-height: 400px;
 }
 
 .middle-D1-container {
@@ -89,7 +90,7 @@
   border-radius: 8px; /* Rounded corners */
   padding: 20px; /* Padding inside the container */
   width: 60%;
-  max-height: 600px;
+  max-height: 700px;
   display: flex;
   flex-direction: column; /* Default to row layout */
   gap: 20px;
@@ -102,7 +103,7 @@
   border-radius: 8px; /* Rounded corners */
   padding: 20px; /* Padding inside the container */
   width: 40%;
-  max-height: 600px;
+  max-height: 700px;
   display: flex;
   flex-direction: column; /* Default to column layout */
   justify-items: center; /* Center align the text items */
@@ -121,9 +122,6 @@
   background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
   border-radius: 12px; /* Rounded corners */
   padding: 20px;
-  gap: 20px;
-  display: flex;
-  flex-direction: column; /* Default to column layout */
   justify-items: center; /* Center align the text items */
   align-items: center;
 }
@@ -131,7 +129,7 @@
 .map-wrapper {
   background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
   border-radius: 12px; /* Rounded corners */
-  width: 60%; /* Ensure full width */
+  width: 100%; /* Ensure full width */
   height: 600px; /* Set a defined height */
   padding: 20px;
   margin: 0 auto; /* Center the map within its container */
@@ -148,17 +146,58 @@
   overflow: hidden;
 }
 
+/* iPad (max-width: 768px) */
 @media (max-width: 768px) {
-  .top-1-grid-container {
-    grid-template-columns: 1fr;
+  .dashboard1-container,
+  .table-container-L1,
+  .middle-D1-container,
+  .bottom-D1-container {
+    flex-direction: column; /* Stack vertically on smaller screens */
   }
-  .top-2-grid-container {
-    grid-template-columns: 1fr;
+
+  .table-top-price-diff,
+  .table-top-povalue-count {
+    max-width: 100%; /* Full width for better readability */
   }
-  .top-3-grid-container {
-    grid-template-columns: 1fr;
+
+  .left,
+  .right {
+    max-width: 100%; /* Stack side-by-side sections */
+    flex: 1 1 100%;
   }
-  .middle-grid-container {
-    grid-template-columns: 1fr;
+
+  .bubble-graph,
+  .bar-graph,
+  .donut-Graph,
+  .map-wrapper {
+    width: 100%; /* Full width for graphs on smaller screens */
+  }
+}
+
+/* iPhone (max-width: 600px) */
+@media (max-width: 600px) {
+  .dashboard1-container,
+  .table-container-L1,
+  .middle-D1-container,
+  .bottom-D1-container {
+    flex-direction: column;
+  }
+
+  .table-top-price-diff,
+  .table-top-povalue-count {
+    max-width: 100%;
+    flex: 1 1 100%; /* Full width */
+  }
+
+  .left,
+  .right {
+    max-width: 100%; /* Full width sections */
+  }
+
+  .bubble-graph,
+  .bar-graph,
+  .donut-Graph,
+  .map-wrapper {
+    width: 100%; /* Full width for graphs */
   }
 }

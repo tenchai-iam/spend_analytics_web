@@ -1,37 +1,51 @@
-// File: MapChart.js
 import React from "react";
 import { Map } from "react-map-gl/maplibre";
 import DeckGL from "@deck.gl/react";
 import { AmbientLight, PointLight, LightingEffect } from "@deck.gl/core";
-import { ColumnLayer, TextLayer } from "@deck.gl/layers";
+import { ColumnLayer } from "@deck.gl/layers";
+import "../ComponentsStyles/MapChart.css"; // Ensure CSS is imported
+import { GeoJsonLayer } from "@deck.gl/layers";
 
-// Initial view state centered over Thailand
+const THAILAND_GEOJSON_URL = "/src/json/Thailand_S.json";
+
+const thailandLayer = new GeoJsonLayer({
+  id: "thailand-boundary",
+  data: THAILAND_GEOJSON_URL,
+  filled: true,
+  stroked: true,
+  lineWidthMinPixels: 2,
+  getFillColor: [34, 139, 34, 80], // Green with transparency
+  getLineColor: [0, 0, 0, 255], // Black borders
+});
+
 const INITIAL_VIEW_STATE = {
   longitude: 100.9925,
   latitude: 11.1,
-  zoom: 5.2,
-  minZoom: 5.2,
+  zoom: 5.5,
+  minZoom: 5.5,
   maxZoom: 7.2,
-  pitch: 45,
-  bearing: 0,
+  pitch: 75,
+  bearing: -5,
 };
 
-// Sample data for demonstration purposes
-const DATA = [
-  { position: [100.5018, 13.7563], value: 100 }, // Bangkok
-  { position: [98.9933, 18.7877], value: 80 }, // Chiang Mai
-  { position: [100.9925, 15.87], value: 50 }, // Central Thailand
-  { position: [99.7207, 12.5684], value: 40 }, // Prachuap Khiri Khan
-  { position: [102.135, 16.4343], value: 70 }, // Khon Kaen
-  { position: [101.0757, 14.9799], value: 60 }, // Nakhon Ratchasima
-  { position: [100.2741, 16.8248], value: 55 }, // Phitsanulok
-  { position: [100.3697, 7.0083], value: 45 }, // Hat Yai
-  { position: [103.204, 14.8857], value: 35 }, // Ubon Ratchathani
-  { position: [100.6063, 13.762], value: 90 }, // Nonthaburi
-  { position: [104.1472, 17.4138], value: 65 }, // Mukdahan
-];
+// Mapping abbreviations to full Thai location names
+const LOCATION_NAMES = {
+  A: "กฟน.1",
+  B: "กฟน.2",
+  C: "กฟน.3",
+  D: "กฟฉ.1",
+  E: "กฟฉ.2",
+  F: "กฟฉ.3",
+  G: "กฟก.1",
+  H: "กฟก.2",
+  I: "กฟก.3",
+  J: "กฟต.1",
+  K: "กฟต.2",
+  L: "กฟต.3",
+  U: "ตัวอย่าง", // Example text in Thai
+  Z: "ส่วนกลาง",
+};
 
-// Lighting setup for 3D effects
 const ambientLight = new AmbientLight({
   color: [255, 255, 255],
   intensity: 1.0,
@@ -43,35 +57,69 @@ const pointLight = new PointLight({
 });
 const lightingEffect = new LightingEffect({ ambientLight, pointLight });
 
+const ELEVATION_SCALE_PO = 30;
+const ELEVATION_SCALE_SPEND = 30;
+
+const quantityFormatter = new Intl.NumberFormat("en-US", {
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 0,
+});
+
+const priceFormatter = new Intl.NumberFormat("en-US", {
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 3,
+});
+
 function getTooltip({ object }) {
-  return (
-    object &&
-    `Location: [${object.position[0].toFixed(4)}, ${object.position[1].toFixed(
-      4
-    )}]\nValue: ${object.value}`
-  );
+  if (!object) return null;
+  const formattedValue = priceFormatter.format(object.value);
+  const locationName = LOCATION_NAMES[object.location] || object.location;
+  return `Location: ${locationName}\nType: ${object.type}\nValue: ${formattedValue}`;
 }
 
-const MapChart = ({
-  data = DATA,
-  mapStyle = "https://basemaps.cartocdn.com/gl/dark-matter-nolabels-gl-style/style.json",
-}) => {
-  // ColumnLayer for 3D bars
+// Legend Component
+const Legend = () => (
+  <div className="legend">
+    <div className="legend-item">
+      <span className="color-box po-color"></span> จำนวน PO สะสม (รายการ)
+    </div>
+    <div className="legend-item">
+      <span className="color-box spend-color"></span> ยอดจัดซื้อพัสดุสะสม
+      (ล้านบาท)
+    </div>
+  </div>
+);
+
+// Group data by location for easy access
+const groupDataByLocation = (data) =>
+  data.reduce((acc, item) => {
+    if (!acc[item.location]) acc[item.location] = [];
+    acc[item.location].push(item);
+    return acc;
+  }, {});
+
+// Adjust positions to prevent column overlap
+const getOffsetPosition = (position, type) => {
+  const offset = type === "TOTAL_PO_MAT" ? -0.15 : 0.15;
+  return [position[0] + offset, position[1]]; // Offset along longitude (x-axis)
+};
+
+const MapChart = ({ data, mapStyle }) => {
+  const groupedData = groupDataByLocation(data);
+
   const columnLayer = new ColumnLayer({
     id: "3d-bar-chart",
     data,
-    diskResolution: 12,
-    radius: 15000, // Adjusted radius to prevent overlap
-    elevationScale: 100,
-    getPosition: (d) => d.position,
-    getFillColor: (d) => {
-      const value = d.value;
-      if (value > 80) return [178, 24, 43];
-      if (value > 60) return [239, 138, 98];
-      if (value > 40) return [253, 219, 199];
-      return [209, 229, 240];
-    },
-    getElevation: (d) => d.value,
+    diskResolution: 50,
+    radius: 15000,
+    getPosition: (d) => getOffsetPosition(d.position, d.type),
+    getFillColor: (d) =>
+      d.type === "TOTAL_PO_MAT" ? [122, 28, 72] : [173, 72, 225], // Different colors for PO and Spend
+    getElevation: (d) =>
+      d.value *
+      (d.type === "TOTAL_SPEND_MAT"
+        ? ELEVATION_SCALE_SPEND
+        : ELEVATION_SCALE_PO),
     pickable: true,
     extruded: true,
     material: {
@@ -82,34 +130,83 @@ const MapChart = ({
     },
   });
 
-  // TextLayer for displaying values on top of each bar
-  const textLayer = new TextLayer({
-    id: "text-layer",
-    data,
-    pickable: false,
-    getPosition: (d) => [d.position[0], d.position[1], d.value * 100], // Position text at the top of each bar
-    getText: (d) => `${d.value}`, // Display the value as text
-    getSize: 16, // Font size
-    getColor: [255, 255, 255], // White text color
-    getTextAnchor: "middle", // Center the text horizontally
-    getAlignmentBaseline: "bottom", // Align text to the bottom to ensure it's on top of the bar
-  });
+  return (
+    <div className="map-container">
+      <Legend /> {/* Include Legend at the top */}
+      <div className="map-and-table">
+        <div className="map-section">
+          <DeckGL
+            layers={[columnLayer]}
+            effects={[lightingEffect]}
+            initialViewState={INITIAL_VIEW_STATE}
+            controller={{ dragRotate: false }}
+            getTooltip={getTooltip}
+            style={{ height: "100%", width: "100%" }}
+          >
+            <Map
+              reuseMaps
+              mapStyle={{
+                version: 8,
+                sources: {
+                  osm: {
+                    type: "raster",
+                    tiles: [
+                      "https://basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", // Dark-themed OSM tiles
+                    ],
+                    tileSize: 256,
+                  },
+                },
+                layers: [
+                  {
+                    id: "osm-tiles",
+                    type: "raster",
+                    source: "osm",
+                    minzoom: 0,
+                    maxzoom: 22,
+                  },
+                ],
+              }}
+              style={{ height: "100%", width: "100%" }}
+            />
+          </DeckGL>
+        </div>
+        <div className="table-section">
+          <DataTable data={data} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const DataTable = ({ data }) => {
+  const groupedData = groupDataByLocation(data);
 
   return (
-    <DeckGL
-      layers={[columnLayer, textLayer]} // Include both ColumnLayer and TextLayer
-      effects={[lightingEffect]}
-      initialViewState={INITIAL_VIEW_STATE}
-      controller={{ dragRotate: false }}
-      getTooltip={getTooltip}
-      style={{ height: "100%", width: "100%" }}
-    >
-      <Map
-        reuseMaps
-        mapStyle={mapStyle}
-        style={{ height: "100%", width: "100%" }}
-      />
-    </DeckGL>
+    <table className="data-table">
+      <thead>
+        <tr>
+          <th>เขต</th>
+          <th>จำนวนรายการ PO พัสดุ</th>
+          <th>ยอดจัดซื้อพัสดุ (ล้านบาท)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {Object.entries(groupedData).map(([location, items]) => {
+          const totalPO =
+            items.find((d) => d.type === "TOTAL_PO_MAT")?.value || 0;
+          const totalSpend =
+            items.find((d) => d.type === "TOTAL_SPEND_MAT")?.value || 0;
+          const locationName = LOCATION_NAMES[location] || location;
+          return (
+            <tr key={location}>
+              <td>{locationName}</td>
+              <td>{quantityFormatter.format(totalPO)}</td>
+              <td>{priceFormatter.format(totalSpend)}</td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
   );
 };
 

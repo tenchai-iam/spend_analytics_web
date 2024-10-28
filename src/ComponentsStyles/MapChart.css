@@ -1,0 +1,65 @@
+@font-face {
+  font-family: "Sarabun";
+  src: url("./fonts/Sarabun-Regular.ttf");
+}
+
+.map-container {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.map-and-table {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  width: 100%;
+}
+
+.map-section {
+  flex: 2;
+  position: relative;
+}
+
+.table-section {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.legend {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.color-box {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.po-color {
+  background-color: #531530;
+}
+
+.spend-color {
+  background-color: #6f2e90;
+}
+
+body,
+.data-table,
+.legend,
+.map-container {
+  font-family: "Sarabun" !important;
+}

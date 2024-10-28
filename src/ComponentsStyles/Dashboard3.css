@@ -25,7 +25,6 @@
   background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
   border-radius: 8px;
   padding: 20px;
-  flex: 1 1 25%; /* Flex basis 25% for normal case */
   max-width: 100%; /* Maximum width set to 25% */
   display: flex;
   flex-direction: column;
@@ -35,11 +34,22 @@
   margin: 0 auto;
 }
 
+.table-compare-price {
+  flex: 1 1 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: row;
+  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  border-radius: 8px;
+  padding: 20px;
+  gap: 20px;
+  box-sizing: border-box; /* Ensure padding is included in width */
+}
+
 .bottom-container {
   background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
   border-radius: 8px;
   padding: 20px;
-  flex: 1 1 75%; /* Flex basis 75% for normal case */
   max-width: 100%; /* Maximum width set to 75% */
   display: flex;
   flex-direction: column;
@@ -47,10 +57,11 @@
   box-sizing: border-box; /* Ensure padding is included in width */
 }
 
-.dropdown-group {
+.dropdown-cat-group {
+  font-size: 0.9rem;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  width: 100%;
 }
 
 .dropdown-group label {
@@ -65,14 +76,17 @@
   gap: 20px;
 }
 
-.chart-container {
+.chart2-container {
   background-color: #fff; /* Example background for the chart */
-  height: 90%; /* Adjust height as needed */
+  height: 100%; /* Adjust height as needed */
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Example shadow */
+  width: 100%;
+  max-width: 100%;
 }
 
 .chart-button {
@@ -100,10 +114,29 @@
   white-space: nowrap; /* Keep title on a single line */
 }
 
+/* Chart Wrapper for Responsive Layout */
+.chart-wrapper {
+  width: 100%; /* Make the chart container full-width */
+  max-width: 1200px; /* Limit the maximum width */
+  margin: 0 auto; /* Center the chart container */
+  padding: 10px;
+}
+
 /* Responsive styles */
 @media (max-width: 768px) {
   .spend-analytics-container {
     flex-direction: column; /* Stack containers vertically */
+  }
+  .chart-wrapper {
+    max-width: 100%; /* Full width on smaller screens */
+  }
+
+  .chart-content {
+    padding-bottom: 70%; /* Increase height for smaller screens */
+  }
+
+  .chart-title {
+    font-size: 1.2em; /* Adjust font size */
   }
 
   .left-container,

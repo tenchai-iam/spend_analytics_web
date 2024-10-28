@@ -2,41 +2,66 @@
 import React from "react";
 import "../ComponentsStyles/table.css";
 
-const Table4 = ({ data }) => {
+const Table4 = ({ title, data }) => {
+  const formatQuantity = (value) =>
+    new Intl.NumberFormat("en-US", {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(value);
+
+  const formatPrice = (value) =>
+    new Intl.NumberFormat("en-US", {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 3,
+    }).format(value);
+
   return (
     <div className="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th>กฟฟ</th>
-            <th>อัตราใช้งานต่อเดือน (unit / เดือน)</th>
-            <th>ยอดคงคลัง (unit)</th>
-            <th>สัญญาค้างรับ (PR without PO) (unit)</th>
-            <th>ยอดรวมคงคลังใช้งานได้ (unit)</th>
-            <th>อยู่ระหว่างการจัดหาเพิ่ม (unit)</th>
-            <th>จัดหาเพิ่ม (เดือน)</th>
-            <th>จัดหาเพิ่ม (unit)</th>
-            <th>ฝัง (unit)</th>
-            <th>กฟฟเขต (unit)</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((row, index) => (
-            <tr key={index}>
-              <td>{row.region}</td>
-              <td>{row.usage}</td>
-              <td>{row.stock}</td>
-              <td>{row.contract}</td>
-              <td>{row.awaiting}</td>
-              <td>{row.totalStock}</td>
-              <td>{row.monthsLeft}</td>
-              <td>{row.ordered}</td>
-              <td>{row.delivered}</td>
-              <td>{row.totalRegion}</td>
+      <h2 className="table-title">{title}</h2>
+      <div className="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>กฟฟ.</th>
+              <th>อัตราใช้งานต่อเดือน (unit / เดือน)</th>
+              <th>ยอดคงคลัง (unit)</th>
+              <th>อยู่ระหว่างการดำเนินการจัดหา (PR ที่ยังไม่เป็น PO) (unit)</th>
+              <th>สัญญาค้างรับ (unit)</th>
+              <th>ยอดคงเหลือ (unit)</th>
+              <th>จำนวนเดือนที่ใช้ได้ (unit)</th>
+              <th>จัดหาเพิ่ม (เดือน)</th>
+              <th>จัดหาเพิ่ม (unit)</th>
+              <th>โดย ฝวห. (unit)</th>
+              <th>โดย กฟข. (unit)</th>
+              <th>ราคาจัดซื้อที่ ฝวห. (บาท)</th>
+              <th>ราคาจัดซื้อที่ กฟข. (บาท)</th>
+              <th>ราคากลาง (บาท)</th>
+              <th>งบประมาณที่ต้องใช้ (บาท)</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {data.map((row, index) => (
+              <tr key={index}>
+                <td>{row.region}</td>
+                <td>{formatQuantity(row.usage)}</td>
+                <td>{formatQuantity(row.stock)}</td>
+                <td>{formatQuantity(row.quantityPR)}</td>
+                <td>{formatQuantity(row.contract)}</td>
+                <td>{formatQuantity(row.availStock)}</td>
+                <td>{formatQuantity(row.availMonth)}</td>
+                <td>{formatQuantity(row.newMonth)}</td>
+                <td>{formatQuantity(row.newQuantity)}</td>
+                <td>{formatQuantity(row.unitHQ)}</td>
+                <td>{formatQuantity(row.unitDistrict)}</td>
+                <td>{formatPrice(row.priceHQ)}</td>
+                <td>{formatPrice(row.priceDistrict)}</td>
+                <td>{formatPrice(row.mediumPrice)}</td>
+                <td>{formatPrice(row.budget)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

@@ -1,12 +1,11 @@
-// src/Table2Component.js
 import React from "react";
 import "../ComponentsStyles/table.css";
 
-const TableD42 = ({ title, data }) => {
-  const formatQuantity = (value) =>
+const TableD3Price = ({ title, data }) => {
+  const formatPrice = (value) =>
     new Intl.NumberFormat("en-US", {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
+      minimumFractionDigits: 3,
+      maximumFractionDigits: 3,
     }).format(value);
 
   return (
@@ -18,21 +17,19 @@ const TableD42 = ({ title, data }) => {
             <tr>
               <th>รหัสพัสดุ</th>
               <th>ชื่อพัสดุ</th>
-              <th>ใช้งานได้ (เดือน)</th>
-              <th>Priority</th>
+              <th>เปอร์เซ็นต์ราคาที่แตกต่างกัน</th>
+              <th>ราคาที่กฟข. (บาท)</th>
+              <th>ราคาที่ส่วนกลาง (บาท)</th>
             </tr>
           </thead>
           <tbody>
             {data.map((row, index) => (
               <tr key={index}>
-                <td>{row.matNum}</td>
+                <td>{row.matNR}</td>
                 <td>{row.matName}</td>
-                <td>{formatQuantity(row.usableMonth)}</td>
-                <td>
-                  <span className={`priority ${row.matGrade.toLowerCase()}`}>
-                    {row.matGrade}
-                  </span>
-                </td>
+                <td>{row.priceDiff}</td>
+                <td>{formatPrice(row.priceDistrict)}</td>
+                <td>{formatPrice(row.priceHQ)}</td>
               </tr>
             ))}
           </tbody>
@@ -42,4 +39,4 @@ const TableD42 = ({ title, data }) => {
   );
 };
 
-export default TableD42;
+export default TableD3Price;

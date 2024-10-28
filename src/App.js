@@ -1,5 +1,6 @@
 import "./styles.css";
 import React from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   BrowserRouter as Router,
   Routes,
@@ -14,25 +15,29 @@ import Dashboard4 from "./ComponentsPage/Dashboard4N";
 import Upload from "./ComponentsPage/Upload";
 
 export default function App() {
+  const queryClient = new QueryClient();
   return (
-    <Router>
-      <div className="App">
-        <Routes>
-          {/* Home page route */}
-          <Route path="/" element={<Home />} />
-          {/* Dashboard routes */}
-          <Route path="/dashboard1" element={<Dashboard1 />} />
-          <Route path="/dashboard2" element={<Dashboard2 />} />
-          <Route path="/dashboard3" element={<Dashboard3 />} />
-          <Route path="/dashboard4" element={<Dashboard4 />} />
+    <QueryClientProvider client={queryClient}>
+      <Router>
+        <div className="App">
+          <Routes>
+            {/* Home page route */}
+            <Route path="/" element={<Home />} />
 
-          {/* Upload route */}
-          <Route path="/upload" element={<Upload />} />
+            {/* Dashboard routes */}
+            <Route path="/dashboard1" element={<Dashboard1 />} />
+            <Route path="/dashboard2" element={<Dashboard2 />} />
+            <Route path="/dashboard3" element={<Dashboard3 />} />
+            <Route path="/dashboard4" element={<Dashboard4 />} />
 
-          {/* Redirect any undefined route to Home */}
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
-      </div>
-    </Router>
+            {/* Upload route */}
+            <Route path="/upload" element={<Upload />} />
+
+            {/* Redirect any undefined route to Home */}
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </div>
+      </Router>
+    </QueryClientProvider>
   );
 }
