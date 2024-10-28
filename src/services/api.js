@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://cardinal-analytic-spend.thepostway.com/api";
+const API_URL = "http://10.4.32.144/api";
 
 // Fetch years from the API
 export const getYears = async () => {
