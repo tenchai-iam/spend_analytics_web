@@ -208,7 +208,7 @@ podTemplate(cloud: 'kubernetes', containers: [
                                 // upgrade config and value
                                 cmd = [
                                     "apply",
-                                    "-f namespace-secret.yaml",
+                                    "-f namespace-secret-tcc.yaml",
                                     "--kubeconfig=config.yaml",
                                     "--context ${kubeContextName}",
                                 ].join(' ')
