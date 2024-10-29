@@ -141,7 +141,7 @@ podTemplate(cloud: 'kubernetes', containers: [
                     script {
                         try {
                             def image = ''
-                            def preImage = "tcc-harbor.pea.co.th/logistc/spend-analytic/web"
+                            def preImage = "tcc-harbor.pea.co.th/logistic/spend-analytic/web"
                             def tagName = 'latest'
 
                             if (mode == 'develop') {
