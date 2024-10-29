@@ -88,7 +88,7 @@ const Dashboard3 = () => {
     categoryPriceTable?.data?.map((item) => ({
       matNR: item.MATNR,
       matName: item.MAKTX,
-      priceDiff: `${(Number(item.PRICE_DIFF) * 100).toFixed(2)}%`,
+      priceDiff: `${((Number(item.PRICE_DIFF)-1) * 100).toFixed(2)}%`,
       priceDistrict: Number(item.PRICE_REGION),
       priceHQ: Number(item.PRICE_HQ),
     })) || [];
