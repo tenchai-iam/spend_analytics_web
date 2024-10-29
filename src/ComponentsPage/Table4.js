@@ -11,8 +11,14 @@ const Table4 = ({ title, data }) => {
 
   const formatPrice = (value) =>
     new Intl.NumberFormat("en-US", {
-      minimumFractionDigits: 0,
+      minimumFractionDigits: 2,
       maximumFractionDigits: 2,
+    }).format(value);
+
+  const formatTotal = (value) =>
+    new Intl.NumberFormat("en-US", {
+      minimumFractionDigits: 3,
+      maximumFractionDigits: 3,
     }).format(value);
 
   return (
@@ -56,7 +62,7 @@ const Table4 = ({ title, data }) => {
                 <td>{formatPrice(row.priceHQ)}</td>
                 <td>{formatPrice(row.priceDistrict)}</td>
                 <td>{formatPrice(row.mediumPrice)}</td>
-                <td>{formatPrice(row.budget)}</td>
+                <td>{formatTotal(row.budget)}</td>
               </tr>
             ))}
           </tbody>
