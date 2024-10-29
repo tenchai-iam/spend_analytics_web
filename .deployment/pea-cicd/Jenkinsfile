@@ -28,7 +28,7 @@ podTemplate(cloud: 'kubernetes', containers: [
     containerTemplate(
         args: '9999999', 
         command: 'sleep', 
-        image: 'harbor.thepostway.com/google/kaniko-project/executor:v1.23.2-debug', 
+        image: 'gcr.io/kaniko-project/executor:v1.23.2-debug', 
         livenessProbe: containerLivenessProbe(execArgs: '', failureThreshold: 0, initialDelaySeconds: 0, periodSeconds: 0, successThreshold: 0, timeoutSeconds: 0), 
         name: 'kaniko', 
         resourceLimitCpu: '', 
