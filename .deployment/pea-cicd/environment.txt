@@ -1,4 +1,4 @@
-gitUrl=https://tcc-gitlab.pea.co.th/simpitec/spend_analytics/api.git
+gitUrl=https://tcc-gitlab.pea.co.th/simpitec/spend_analytics/web.git
 gitCred=pea-gitlab-root-password
 gitBranch=develop
 
