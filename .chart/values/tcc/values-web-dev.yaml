@@ -5,7 +5,7 @@
 replicaCount: 3
 
 image:
-  repository: harbor.thepostway.com/cardinal/spend-analytic/web/dev
+  repository: tcc-harbor.pea.co.th/logistic/spend-analytic/web/dev
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
