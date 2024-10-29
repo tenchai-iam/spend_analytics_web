@@ -141,7 +141,7 @@ podTemplate(cloud: 'kubernetes', containers: [
                     script {
                         try {
                             def image = ''
-                            def preImage = "harbor.thepostway.com/cardinal/spend-analytic/web"
+                            def preImage = "tcc-harbor.pea.co.th/logistc/spend-analytic/web"
                             def tagName = 'latest'
 
                             if (mode == 'develop') {
@@ -187,19 +187,19 @@ podTemplate(cloud: 'kubernetes', containers: [
                         error ex.getMessage()
                     }
 
-                    def helmNamespace = 'cardinal'
+                    def helmNamespace = 'logistic'
                     def helmValue = ''
 
                     // if else with split by mode name
                     if (mode == 'develop') {
                         helmNamespace = "${helmNamespace}-dev"
-                        helmValue = "values/simpitec/values-web-dev.yaml"
+                        helmValue = "values/tcc/values-web-dev.yaml"
                     } else if (mode == 'staging') {
                         helmNamespace = "${helmNamespace}-stg"
-                        helmValue = "values/simpitec/values-web-stg.yaml"
+                        helmValue = "values/tcc/values-web-stg.yaml"
                     } else if (mode == 'production') {
                         helmNamespace = "${helmNamespace}"
-                        helmValue = "values/simpitec/values-web.yaml"
+                        helmValue = "values/tcc/values-web.yaml"
                     }
 
                     container('helm') {
