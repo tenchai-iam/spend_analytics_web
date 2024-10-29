@@ -12,7 +12,7 @@ const Table4 = ({ title, data }) => {
   const formatPrice = (value) =>
     new Intl.NumberFormat("en-US", {
       minimumFractionDigits: 0,
-      maximumFractionDigits: 3,
+      maximumFractionDigits: 2,
     }).format(value);
 
   return (
