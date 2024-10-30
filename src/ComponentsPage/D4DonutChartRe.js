@@ -13,8 +13,8 @@ const COLORS = ["#7A1CAC", "#522258", "#2E073F"]; // Example colors
 
 const D4DonutChartRe = ({ data, title, height = 400, onPrioritySelect }) => {
   const numberFormatter = new Intl.NumberFormat("en-US", {
-    minimumFractionDigits: 3,
-    maximumFractionDigits: 3,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
   });
 
   const CustomTooltip = ({ active, payload }) => {
