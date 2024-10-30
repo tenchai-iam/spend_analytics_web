@@ -198,7 +198,7 @@ const Dashboard4 = () => {
           <div className="donutChart">
             <D4DonutChartRe
               data={dataDonutUsable}
-              title="สัดส่วนรายการพัสดุตามปริมาณที่ใช้ได้ต่อเดือน"
+              title="สัดส่วนรายการพัสดุตามจำนวนเดือนคงเหลือที่ใช้ได้"
               onPrioritySelect={handlePrioritySelect} // Pass the handler
               height={400}
             />
