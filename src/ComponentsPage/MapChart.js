@@ -21,11 +21,11 @@ const thailandLayer = new GeoJsonLayer({
 const INITIAL_VIEW_STATE = {
   longitude: 100.9925,
   latitude: 11.1,
-  zoom: 5.5,
-  minZoom: 5.5,
+  zoom: 5.0,
+  minZoom: 5.0,
   maxZoom: 7.2,
   pitch: 75,
-  bearing: -5,
+  bearing: -3,
 };
 
 // Mapping abbreviations to full Thai location names
@@ -148,19 +148,17 @@ const MapChart = ({ data, mapStyle }) => {
               mapStyle={{
                 version: 8,
                 sources: {
-                  osm: {
+                  localTiles: {
                     type: "raster",
-                    tiles: [
-                      "https://basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", // Dark-themed OSM tiles
-                    ],
+                    tiles: ["/tiles/{z}/{x}/{y}.png"], // Use local tiles from public folder
                     tileSize: 256,
                   },
                 },
                 layers: [
                   {
-                    id: "osm-tiles",
+                    id: "local-raster-layer",
                     type: "raster",
-                    source: "osm",
+                    source: "localTiles",
                     minzoom: 0,
                     maxzoom: 22,
                   },
