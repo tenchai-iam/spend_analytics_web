@@ -38,12 +38,6 @@
   width: 100%;
 }
 
-.btn-container-L1 > * {
-  flex: 1 1 calc(33.33% - 30px);
-  max-width: calc(33.33% -30px);
-  box-sizing: border-box;
-}
-
 .dropdown-group {
   flex: 1 1 calc(35% - 30px);
   max-width: calc(35%-30px);
@@ -150,6 +144,7 @@
   align-items: center;
 }
 
+<<<<<<< HEAD
 .text-summary {
   flex: 1 1 calc(20% - 30px);
   max-width: calc(20% - 30px); /* Corrected spacing for calc */
@@ -169,9 +164,11 @@
   text-align: center;
 }
 
+=======
+>>>>>>> e78c1dc3e809f30a74c8b8ca42d81ce89ca601d6
 .table-summary {
-  flex: 1 1 calc(40% - 30px);
-  max-width: calc(40%-30px);
+  flex: 1 1 calc(60% - 30px);
+  max-width: calc(60%-30px);
   background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
   border-radius: 8px;
   padding: 20px;
