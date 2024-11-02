@@ -24,10 +24,12 @@ import {
   getD1DonutSpend,
   getD1PONumSpend,
   getD1CategorySpend,
+  getCategories,
 } from "../services/api.js"; // Import your API service function
 
 const Dashboard1 = () => {
   const [selectedYear, setSelectedYear] = useState(""); // State to hold the selected year
+  const [selectedCategory, setSelectedCategory] = useState(""); // State to hold the selected category
 
   // Fetch available years using React Query
   const { data: yearsData, isLoading } = useQuery({
@@ -43,16 +45,10 @@ const Dashboard1 = () => {
     }
   }, [yearsData]);
 
-  const dataBubble = [
-    { name: "สายไฟและอุปกรณ์ประกอบ", value: 6168 },
-    { name: "หม้อแปลง แคแปซิเตอร์ โวลเตจเรกูเรเตอร์", value: 4003 },
-    { name: "ลูกถ้วยและอุปกรณ์ประกอบ", value: 1767 },
-    { name: "เสา คอน คาน สมอบกคอนกรีต", value: 1645 },
-    { name: "อุปกรณ์ป้องกันและสวิตซ์", value: 2138 },
-    { name: "Pole line hardware", value: 1428 },
-    { name: "มิเตอร์ ซีที. พีที.", value: 1380 },
-    { name: "อื่นๆ", value: 926 },
-  ];
+  const { data: categoryData, isLoading: isCategoriesLoading } = useQuery({
+    queryKey: ["categories"],
+    queryFn: getCategories,
+  });
 
   const {
     data: top10SpendDiff,
@@ -315,6 +311,30 @@ const Dashboard1 = () => {
       <div className="dashboard1-container">
         <div className="table-container-L1">
           <div className="table-top-price-diff">
+          <div className="dropdown-cat-group">
+            {isCategoriesLoading ? (
+              <p>Loading categories...</p>
+            ) : (
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+              >
+                <option value="">-- เลือกกลุ่มพัสดุ --</option>
+                {categoryData
+                  ?.slice() // Create a shallow copy of the array to avoid modifying the original
+                  .sort((a, b) => {
+                    if (a.CATEGORY_ID === "102") return -1; // Move `102` to the top
+                    if (b.CATEGORY_ID === "102") return 1;
+                    return a.CATEGORY_ID.localeCompare(b.CATEGORY_ID); // Default alphabetical sort by ID
+                  })
+                  .map((category, index) => (
+                    <option key={index} value={category.CATEGORY_ID}>
+                      {`${category.CATEGORY_ID}: ${category.CATEGORY_NAME}`}
+                    </option>
+                  ))}
+              </select>
+            )}
+          </div>
             <TableD1Price
               title="Top 10 พัสดุที่มีราคาจัดซื้อระหว่างกฟข. และ ส่วนกลางแตกต่างกันมากที่สุด"
               data={dataTablePrice}
