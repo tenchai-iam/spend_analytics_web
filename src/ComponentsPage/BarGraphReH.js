@@ -25,7 +25,7 @@ const BarGraphReH = ({ data, yAxisKey, barKey, title, height = 900 }) => {
         <BarChart
           data={data}
           layout="vertical"
-          margin={{ top: 20, right: 20, left: 30, bottom: 5 }}
+          margin={{ top: 20, right: 20, left: 40, bottom: 5 }}
         >
           <CartesianGrid strokeDasharray="3 3" />
           {/* X-Axis now represents the numeric values */}
@@ -35,7 +35,7 @@ const BarGraphReH = ({ data, yAxisKey, barKey, title, height = 900 }) => {
             domain={[0, "dataMax"]}
           />
           {/* Y-Axis represents the category names */}
-          <YAxis dataKey={yAxisKey} type="category" width={130} />
+          <YAxis dataKey={yAxisKey} type="category" width={150} />
           <Tooltip formatter={(value) => numberFormatter.format(value)} />
           <Bar dataKey={barKey} fill="#4a0072">
             {/* Display labels inside the horizontal bars */}
