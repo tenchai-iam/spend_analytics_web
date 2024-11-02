@@ -249,21 +249,21 @@ const Dashboard2 = () => {
                 yAxisKey="name"
                 barKey="value"
                 title="ยอดจัดซื้อทั้งหมดแบ่งตามประเภทจัดซื้อ (ล้านบาท)"
-                height={700}
+                height={900}
               />
               <BarGraphReH
                 data={dataBarCategoryPOQuantity}
                 yAxisKey="name"
                 barKey="value"
-                title="จำนวนรายการ PO"
-                height={700}
+                title="จำนวน PO"
+                height={900}
               />
               <BarGraphReH
                 data={dataBarCategoryAverageSpend}
                 yAxisKey="name"
                 barKey="value"
                 title="มูลค่าต่อ PO (บาท)"
-                height={700}
+                height={900}
               />
             </div>
           )}
