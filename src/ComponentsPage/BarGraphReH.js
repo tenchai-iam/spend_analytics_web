@@ -36,7 +36,7 @@ const BarGraphReH = ({ data, yAxisKey, barKey, title, height = 900 }) => {
           />
           {/* Y-Axis represents the category names */}
           <YAxis dataKey={yAxisKey} type="category" width={130} />
-          <Tooltip />
+          <Tooltip formatter={(value) => numberFormatter.format(value)} />
           <Bar dataKey={barKey} fill="#4a0072">
             {/* Display labels inside the horizontal bars */}
             <LabelList

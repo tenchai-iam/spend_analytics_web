@@ -92,7 +92,7 @@ const Dashboard2 = () => {
         <Card
           key={supplierId}
           SUPPLIER_NAME={supplier.SUPPLIER_NAME}
-          TOTAL_SPEND={supplier.TOTAL_SPEND}
+          TOTAL_SPEND={supplier.TOTAL_SPEND/1000000}
           TOTAL_PO={supplier.TOTAL_PO}
           SPEND_PER_PO={supplier.SPEND_PER_PO}
         />
@@ -249,21 +249,21 @@ const Dashboard2 = () => {
                 yAxisKey="name"
                 barKey="value"
                 title="ยอดจัดซื้อทั้งหมดแบ่งตามประเภทจัดซื้อ (ล้านบาท)"
-                height={900}
+                height={1000}
               />
               <BarGraphReH
                 data={dataBarCategoryPOQuantity}
                 yAxisKey="name"
                 barKey="value"
                 title="จำนวน PO"
-                height={900}
+                height={1000}
               />
               <BarGraphReH
                 data={dataBarCategoryAverageSpend}
                 yAxisKey="name"
                 barKey="value"
                 title="มูลค่าต่อ PO (บาท)"
-                height={900}
+                height={1000}
               />
             </div>
           )}
