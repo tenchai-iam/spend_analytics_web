@@ -28,7 +28,7 @@ const TableD1Price = ({ title, data }) => {
                 <td data-label="รหัสพัสดุ">{row.matNR}</td>
                 <td data-label="ชื่อพัสดุ">{row.matName}</td>
                 <td data-label="ราคาที่แตกต่าง (เท่า)">{row.priceDiff}</td>
-                <td data-label="ราคาที่กฟข. (บาท)">
+                <td data-label="ราคาเฉลี่ยที่กฟข. (บาท)">
                   {formatPrice(row.priceDistrict)}
                 </td>
                 <td data-label="ราคาที่ส่วนกลาง (บาท)">

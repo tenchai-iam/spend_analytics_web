@@ -353,7 +353,7 @@ const Dashboard1 = () => {
               data={dataLinePOQuantity}
               xAxisKey="month"
               lineKey="value"
-              title="จำนวนใบสั่งซื้อ (PO) (รายการ)"
+              title="จำนวนใบสั่งซื้อ (PO)"
               height={230}
             />
           </div>
@@ -362,7 +362,7 @@ const Dashboard1 = () => {
               data={dataBarPurchaseQ}
               xAxisKey="name"
               barKey="value"
-              title="จำนวนใบสั่งซื้อ (PO) แบ่งตามประเภทการจัดซื้อ(รายการ)"
+              title="จำนวนใบสั่งซื้อ (PO) แบ่งตามประเภทการจัดซื้อ"
               height={330}
             />
           </div>

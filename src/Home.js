@@ -34,7 +34,7 @@ const Dashboard = ({ selectedYear }) => {
         </label>
       </div>
       <div className="text-bottom">
-        <label className="text">จำนวนรายการใบสั่งซื้อ PO</label>
+        <label className="text">จำนวนใบสั่งซื้อ PO</label>
         <label className="text">{data.TOTAL_PO.toLocaleString("th-TH")}</label>
       </div>
     </div>

@@ -64,7 +64,15 @@ const UploadPage = () => {
             {uploadStatus && <p>{uploadStatus}</p>}
           </div>
           <div className="upload-module">
-            <h1 className="text-title ">Upload ไฟล์ อื่นๆ</h1>
+            <h1 className="text-title ">Upload ไฟล์การจัดกลุ่มพัสดุ</h1>
+            <form onSubmit={handleUpload}>
+              <input type="file" onChange={handleFileChange} />
+              <button type="submit">Upload</button>
+            </form>
+            {uploadStatus && <p>{uploadStatus}</p>}
+          </div>
+          <div className="upload-module">
+            <h1 className="text-title ">Upload ไฟล์นับจำนวน Packaging</h1>
             <form onSubmit={handleUpload}>
               <input type="file" onChange={handleFileChange} />
               <button type="submit">Upload</button>
