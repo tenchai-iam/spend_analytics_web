@@ -15,11 +15,12 @@
   width: 100%;
   margin: 0 auto;
   flex-wrap: wrap; /* Allow wrapping for responsiveness */
+  padding: 20px;
 }
 
 .table-container-L1 {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Default: 5 columns */
+  grid-template-columns: repeat(2, 1fr); /* Default: 2 columns */
   /* flex-wrap: nowrap; */
   gap: 20px;
   box-sizing: border-box; /* Ensure padding is included in width */
@@ -55,10 +56,9 @@
 
 .top-D1-grid-container {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Default: 5 columns */
+  grid-template-columns: repeat(2, 1fr); /* Default: 2 columns */
   /* flex-wrap: nowrap; */
   gap: 20px;
-  padding: 20px;
   box-sizing: border-box; /* Ensure padding is included in width */
   width: 100%;
 }
@@ -81,7 +81,6 @@
   display: flex;
   width: 100%;
   gap: 20px;
-  padding: 20px;
 }
 
 .bubble-graph {
@@ -97,25 +96,6 @@
   align-items: center;
 }
 
-.bar-graph {
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
-  border-radius: 8px; /* Rounded corners */
-  padding: 20px; /* Padding inside the container */
-  width: 40%;
-  max-height: 700px;
-  display: flex;
-  flex-direction: column; /* Default to column layout */
-  justify-items: center; /* Center align the text items */
-  align-items: center;
-}
-
-.bottom-D1-container {
-  display: flex;
-  margin: 20px;
-  width: 100%;
-  gap: 20px;
-}
-
 .donut-Graph {
   width: 40%;
   background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
@@ -125,12 +105,21 @@
   align-items: center;
 }
 
+.bottom-D1-container {
+  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  border-radius: 8px; /* Rounded corners */
+  display: flex;
+  width: 100%;
+  gap: 20px;
+  padding: 20px;
+  width: 100%;
+}
+
 .map-wrapper {
   background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
   border-radius: 12px; /* Rounded corners */
   width: 100%; /* Ensure full width */
-  height: 600px; /* Set a defined height */
-  padding: 20px;
+  height: 100%; /* Set a defined height */
   margin: 0 auto; /* Center the map within its container */
   border: 1px solid #ccc; /* Optional: Add a border for clarity */
   justify-items: center; /* Center align the text items */

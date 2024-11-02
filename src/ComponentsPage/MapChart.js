@@ -81,7 +81,7 @@ function getTooltip({ object }) {
 const Legend = () => (
   <div className="legend">
     <div className="legend-item">
-      <span className="color-box po-color"></span> จำนวน PO สะสม (รายการ)
+      <span className="color-box po-color"></span> จำนวน PO สะสม
     </div>
     <div className="legend-item">
       <span className="color-box spend-color"></span> ยอดจัดซื้อพัสดุสะสม
@@ -184,7 +184,7 @@ const DataTable = ({ data }) => {
       <thead>
         <tr>
           <th>เขต</th>
-          <th>จำนวนรายการ PO พัสดุ</th>
+          <th>จำนวน PO พัสดุ</th>
           <th>ยอดจัดซื้อพัสดุ (ล้านบาท)</th>
         </tr>
       </thead>
