@@ -15,6 +15,11 @@
   border: 1px solid #ddd; /* Optional: Add a border around the table */
 }
 
+.table-wrapper-NS {
+  overflow-y: auto; /* Enable vertical scrolling */
+  border: 1px solid #ddd; /* Optional: Add a border around the table */
+}
+
 /* Table Title */
 .table-title {
   font-size: 1.2rem;

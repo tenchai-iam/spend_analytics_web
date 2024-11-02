@@ -11,7 +11,7 @@ const TableD1Price = ({ title, data }) => {
   return (
     <div className="table-container">
       <h2 className="table-title">{title}</h2>
-      <div className="table-wrapper">
+      <div className="table-wrapper-NS">
         <table>
           <thead>
             <tr>
