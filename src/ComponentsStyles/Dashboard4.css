@@ -14,12 +14,12 @@
   width: 100%;
   margin: 0 auto;
   flex-wrap: wrap; /* Allow wrapping for responsiveness */
+  padding: 20px;
 }
 
 .summary-container-L1 {
-  padding: 20px;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Default: 2 columns */
   gap: 20px;
   box-sizing: border-box; /* Ensure padding is included in width */
   margin: 0 auto;
@@ -27,8 +27,8 @@
 }
 
 .donutChart {
-  flex: 1 1 calc(40% - 20px);
-  max-width: calc(40%-20px);
+  flex: 1 1 40%;
+  max-width: 1 1 40%;
   background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
   border-radius: 8px;
   padding: 20px;
@@ -41,8 +41,8 @@
 }
 
 .table-summary {
-  flex: 1 1 calc(60% - 20px);
-  max-width: calc(60%-20px);
+  flex: 1 1 60%;
+  max-width: 1 1 60%;
   background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
   border-radius: 8px;
   padding: 20px;
@@ -55,9 +55,8 @@
 }
 
 .btn-container-L1 {
-  padding: 20px;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Default: 3 columns */
   gap: 20px;
   box-sizing: border-box; /* Ensure padding is included in width */
   margin: 0 auto;
@@ -65,8 +64,8 @@
 }
 
 .dropdown-group {
-  flex: 1 1 calc(65% - 30px);
-  max-width: calc(65%-30px);
+  flex: 1 1 65%;
+  max-width: 1 1 65%;
   background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
   border-radius: 8px;
   padding: 20px;
@@ -92,8 +91,8 @@
 }
 
 .lead-time {
-  flex: 1 1 calc(17.5% - 30px);
-  max-width: calc(17.5%-30px);
+  flex: 1 1 17.5%;
+  max-width: 1 1 17.5%;
   background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
   border-radius: 8px;
   padding: 20px;
@@ -106,8 +105,8 @@
 }
 
 .demand-time {
-  flex: 1 1 calc(17.5% - 30px);
-  max-width: calc(17.5%-30px);
+  flex: 1 1 17.5%;
+  max-width: 1 1 17.5%;
   background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
   border-radius: 8px;
   padding: 20px;
@@ -137,7 +136,6 @@
 }
 
 .table-container-L1 {
-  padding: 20px;
   display: flex;
   flex-wrap: nowrap;
   gap: 20px;
