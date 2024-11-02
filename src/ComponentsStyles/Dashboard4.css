@@ -1,3 +1,11 @@
+.year-dropdown-container {
+  display: flex;
+  justify-content: flex-end; /* This moves the dropdown to the right */
+  padding-right: 20px; /* Optional: adjust padding as per your needs */
+  margin-top: 20px;
+  color: white;
+}
+
 .dashboard4-container {
   position: relative;
   display: flex;
@@ -8,24 +16,42 @@
   flex-wrap: wrap; /* Allow wrapping for responsiveness */
 }
 
-.text-title {
-  font-size: 24px;
-  margin-bottom: 10px;
-  color: black;
-}
-
-.text-subtitle {
-  font-size: 18px;
-  margin-bottom: 10px;
-  color: black;
-}
-
-.year-dropdown-container {
+.summary-container-L1 {
+  padding: 20px;
   display: flex;
-  justify-content: flex-end; /* This moves the dropdown to the right */
-  padding-right: 20px; /* Optional: adjust padding as per your needs */
-  margin-top: 20px;
-  color: white;
+  flex-wrap: wrap;
+  gap: 20px;
+  box-sizing: border-box; /* Ensure padding is included in width */
+  margin: 0 auto;
+  width: 100%;
+}
+
+.donutChart {
+  flex: 1 1 calc(40% - 30px);
+  max-width: calc(40%-30px);
+  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-sizing: border-box; /* Ensure padding is included in width */
+  color: black;
+  align-items: center;
+}
+
+.table-summary {
+  flex: 1 1 calc(60% - 30px);
+  max-width: calc(60%-30px);
+  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-sizing: border-box; /* Ensure padding is included in width */
+  color: black;
+  align-items: center;
 }
 
 .btn-container-L1 {
@@ -93,21 +119,6 @@
   color: black;
 }
 
-.BarGraphV {
-  flex: 1 1 calc(30% - 30px);
-  max-width: calc(30%-30px);
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
-  border-radius: 8px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  box-sizing: border-box; /* Ensure padding is included in width */
-  color: black;
-  align-items: center;
-  justify-items: center;
-}
-
 .button-group button {
   cursor: pointer;
   background-color: #4a0072;
@@ -120,47 +131,9 @@
   max-width: 300px;
 }
 
-.summary-container-L1 {
-  padding: 20px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  box-sizing: border-box; /* Ensure padding is included in width */
-  margin: 0 auto;
-  width: 100%;
-}
-
-.donutChart {
-  flex: 1 1 calc(40% - 30px);
-  max-width: calc(40%-30px);
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
-  border-radius: 8px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  box-sizing: border-box; /* Ensure padding is included in width */
-  color: black;
-  align-items: center;
-}
-
 .text-label {
   font-size: 2rem;
   text-align: center;
-}
-
-.table-summary {
-  flex: 1 1 calc(60% - 30px);
-  max-width: calc(60%-30px);
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
-  border-radius: 8px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  box-sizing: border-box; /* Ensure padding is included in width */
-  color: black;
-  align-items: center;
 }
 
 .table-container-L1 {
@@ -184,6 +157,18 @@
   box-sizing: border-box; /* Ensure padding is included in width */
   color: black;
   align-items: center;
+}
+
+.text-title {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: black;
+}
+
+.text-subtitle {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: black;
 }
 
 @media (max-width: 768px) {
