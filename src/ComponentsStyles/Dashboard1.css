@@ -1,3 +1,8 @@
+.data-date {
+  font-size: 1rem;
+  color: #fff;
+}
+
 /* General Layout */
 .year-dropdown-container {
   display: flex;

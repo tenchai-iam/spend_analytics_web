@@ -1,4 +1,9 @@
 /* General Layout */
+.data-date {
+  font-size: 1rem;
+  color: #fff;
+}
+
 .year-dropdown-container {
   display: flex;
   justify-content: flex-end;

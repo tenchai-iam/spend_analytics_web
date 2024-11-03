@@ -13,6 +13,7 @@ import {
   getD2CategorySpend,
   getD2CategoryPOQuantity,
   getD2CategoryAverageSpend,
+  getDateInfo,
 } from "../services/api.js"; // Import your API service function
 
 const Dashboard2 = () => {
@@ -164,6 +165,20 @@ const Dashboard2 = () => {
     );
   };
 
+  const datadate = 1;
+
+  // Fetch summary data for selected year and category using React Query
+  const {
+    data: dateInfoData,
+    isLoading: isLoadingDateInfoData,
+    isError: isErrorDateInfoData,
+    error: errorDateInfoData,
+  } = useQuery({
+    queryKey: ["dateInfoData", datadate], // Unique query key for caching
+    queryFn: () => getDateInfo(datadate), // API call to fetch data based on datadate
+    enabled: !!selectedYear, // Only run query if both year and category_group are selected
+  });
+
   return (
     <div>
       <NavbarComponent />
@@ -267,6 +282,12 @@ const Dashboard2 = () => {
               />
             </div>
           )}
+        </div>
+        <div>
+          <h1 className="data-date">
+            ข้อมูล ณ วันที่ {dateInfoData?.day} เดือน {dateInfoData?.month} ปี{" "}
+            {dateInfoData?.year}
+          </h1>
         </div>
       </div>
     </div>
