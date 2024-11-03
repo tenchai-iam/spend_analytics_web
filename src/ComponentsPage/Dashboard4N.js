@@ -78,17 +78,17 @@ const Dashboard4 = () => {
     {
       name: "ใช้ได้ <=3 เดือน",
       priority: "High",
-      value: donutUsable?.LESS_SIX,
+      value: donutUsable?.LESS_THREE,
     },
     {
       name: "ใช้ได้ 3-6 เดือน",
       priority: "Medium",
-      value: donutUsable?.SIX_TO_NINE,
+      value: donutUsable?.THREE_TO_SIX,
     },
     {
       name: "ใช้ได้ >6 เดือน",
       priority: "Low",
-      value: donutUsable?.MORE_NINE,
+      value: donutUsable?.MORE_SIX,
     },
   ];
 
