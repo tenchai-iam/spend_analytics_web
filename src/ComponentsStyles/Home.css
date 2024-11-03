@@ -1,4 +1,10 @@
 /* General Layout */
+.data-date {
+  font-size: 1rem;
+  padding: 20px;
+  color: #fff;
+}
+
 .home-container {
   position: relative;
   width: 100%;
