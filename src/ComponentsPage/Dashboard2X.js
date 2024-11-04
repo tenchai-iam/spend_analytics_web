@@ -13,6 +13,7 @@ import {
   getD2CategorySpend,
   getD2CategoryPOQuantity,
   getD2CategoryAverageSpend,
+  getDateInfo,
 } from "../services/api.js"; // Import your API service function
 
 const Dashboard2 = () => {
@@ -92,7 +93,7 @@ const Dashboard2 = () => {
         <Card
           key={supplierId}
           SUPPLIER_NAME={supplier.SUPPLIER_NAME}
-          TOTAL_SPEND={supplier.TOTAL_SPEND}
+          TOTAL_SPEND={supplier.TOTAL_SPEND/1000000}
           TOTAL_PO={supplier.TOTAL_PO}
           SPEND_PER_PO={supplier.SPEND_PER_PO}
         />
@@ -163,6 +164,20 @@ const Dashboard2 = () => {
       `Button ${index} selected with category Group: ${categoryGroup}`
     );
   };
+
+  const datadate = 1;
+
+  // Fetch summary data for selected year and category using React Query
+  const {
+    data: dateInfoData,
+    isLoading: isLoadingDateInfoData,
+    isError: isErrorDateInfoData,
+    error: errorDateInfoData,
+  } = useQuery({
+    queryKey: ["dateInfoData", datadate], // Unique query key for caching
+    queryFn: () => getDateInfo(datadate), // API call to fetch data based on datadate
+    enabled: !!selectedYear, // Only run query if both year and category_group are selected
+  });
 
   return (
     <div>
@@ -249,24 +264,30 @@ const Dashboard2 = () => {
                 yAxisKey="name"
                 barKey="value"
                 title="ยอดจัดซื้อทั้งหมดแบ่งตามประเภทจัดซื้อ (ล้านบาท)"
-                height={700}
+                height={1000}
               />
               <BarGraphReH
                 data={dataBarCategoryPOQuantity}
                 yAxisKey="name"
                 barKey="value"
-                title="จำนวนรายการ PO"
-                height={700}
+                title="จำนวน PO"
+                height={1000}
               />
               <BarGraphReH
                 data={dataBarCategoryAverageSpend}
                 yAxisKey="name"
                 barKey="value"
                 title="มูลค่าต่อ PO (บาท)"
-                height={700}
+                height={1000}
               />
             </div>
           )}
+        </div>
+        <div>
+          <h1 className="data-date">
+            ข้อมูล ณ วันที่ {dateInfoData?.day} เดือน {dateInfoData?.month} ปี{" "}
+            {dateInfoData?.year}
+          </h1>
         </div>
       </div>
     </div>

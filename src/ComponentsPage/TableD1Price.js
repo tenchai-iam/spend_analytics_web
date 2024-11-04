@@ -11,14 +11,14 @@ const TableD1Price = ({ title, data }) => {
   return (
     <div className="table-container">
       <h2 className="table-title">{title}</h2>
-      <div className="table-wrapper">
+      <div className="table-wrapper-NS">
         <table>
           <thead>
             <tr>
               <th>รหัสพัสดุ</th>
               <th>ชื่อพัสดุ</th>
               <th>% ราคาที่แตกต่าง</th>
-              <th>ราคาที่กฟฟ. เขต</th>
+              <th>ราคาเฉลี่ยที่กฟฟ. เขต</th>
               <th>ราคาที่ส่วนกลาง</th>
             </tr>
           </thead>
@@ -28,7 +28,7 @@ const TableD1Price = ({ title, data }) => {
                 <td data-label="รหัสพัสดุ">{row.matNR}</td>
                 <td data-label="ชื่อพัสดุ">{row.matName}</td>
                 <td data-label="ราคาที่แตกต่าง (เท่า)">{row.priceDiff}</td>
-                <td data-label="ราคาที่กฟข. (บาท)">
+                <td data-label="ราคาเฉลี่ยที่กฟข. (บาท)">
                   {formatPrice(row.priceDistrict)}
                 </td>
                 <td data-label="ราคาที่ส่วนกลาง (บาท)">

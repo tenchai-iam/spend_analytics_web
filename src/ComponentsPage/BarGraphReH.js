@@ -11,10 +11,13 @@ import {
 } from "recharts";
 import "../ComponentsStyles/BarGraphReH.css";
 
-const formatCurrency = (value) => `${value.toLocaleString()}`;
+const numberFormatter = new Intl.NumberFormat("en-US", {
+  style: "decimal",
+  maximumFractionDigits: 3,
+});
 
 // Component to render a horizontal bar chart
-const BarGraphReH = ({ data, yAxisKey, barKey, title, height = 400 }) => {
+const BarGraphReH = ({ data, yAxisKey, barKey, title, height = 900 }) => {
   return (
     <div className="bar-chart-container">
       <h2 className="bar-chart-title">{title}</h2>
@@ -22,24 +25,24 @@ const BarGraphReH = ({ data, yAxisKey, barKey, title, height = 400 }) => {
         <BarChart
           data={data}
           layout="vertical"
-          margin={{ top: 20, right: 20, left: 30, bottom: 5 }}
+          margin={{ top: 20, right: 20, left: 40, bottom: 5 }}
         >
           <CartesianGrid strokeDasharray="3 3" />
           {/* X-Axis now represents the numeric values */}
           <XAxis
-            tickFormatter={formatCurrency}
+            tickFormatter={numberFormatter.format}
             type="number"
             domain={[0, "dataMax"]}
           />
           {/* Y-Axis represents the category names */}
-          <YAxis dataKey={yAxisKey} type="category" width={130} />
-          <Tooltip />
+          <YAxis dataKey={yAxisKey} type="category" width={150} />
+          <Tooltip formatter={(value) => numberFormatter.format(value)} />
           <Bar dataKey={barKey} fill="#4a0072">
             {/* Display labels inside the horizontal bars */}
             <LabelList
               dataKey={barKey}
-              position="outside"
-              formatter={formatCurrency}
+              position="top"
+              formatter={numberFormatter.format}
             />
           </Bar>
         </BarChart>

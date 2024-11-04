@@ -16,6 +16,7 @@ import {
   getD4UsableMaterialGroup,
   getD4RequireMaterialDetail,
   getD4SimMaterialPlan,
+  getDateInfo,
 } from "../services/api.js"; // Import your API service function
 
 const Dashboard4 = () => {
@@ -75,19 +76,19 @@ const Dashboard4 = () => {
 
   const dataDonutUsable = [
     {
-      name: "ใช้ได้ <=6 เดือน",
+      name: "ใช้ได้ <=3 เดือน",
       priority: "High",
-      value: donutUsable?.LESS_SIX,
+      value: donutUsable?.LESS_THREE,
     },
     {
-      name: "ใช้ได้ 6-9 เดือน",
+      name: "ใช้ได้ 3-6 เดือน",
       priority: "Medium",
-      value: donutUsable?.SIX_TO_NINE,
+      value: donutUsable?.THREE_TO_SIX,
     },
     {
-      name: "ใช้ได้ >9 เดือน",
+      name: "ใช้ได้ >6 เดือน",
       priority: "Low",
-      value: donutUsable?.MORE_NINE,
+      value: donutUsable?.MORE_SIX,
     },
   ];
 
@@ -181,6 +182,20 @@ const Dashboard4 = () => {
     console.log("selectedDemandMonth", index);
     setSelectedDemandMonth(index);
   };
+
+  const datadate = 1;
+
+  // Fetch summary data for selected year and category using React Query
+  const {
+    data: dateInfoData,
+    isLoading: isLoadingDateInfoData,
+    isError: isErrorDateInfoData,
+    error: errorDateInfoData,
+  } = useQuery({
+    queryKey: ["dateInfoData", datadate], // Unique query key for caching
+    queryFn: () => getDateInfo(datadate), // API call to fetch data based on datadate
+    enabled: !!selectedYear, // Only run query if both year and category_group are selected
+  });
 
   return (
     <div>
@@ -348,6 +363,12 @@ const Dashboard4 = () => {
               data={dataTableSimMaterialPlan}
             />
           </div>
+        </div>
+        <div>
+          <h1 className="data-date">
+            ข้อมูล ณ วันที่ {dateInfoData?.day} เดือน {dateInfoData?.month} ปี{" "}
+            {dateInfoData?.year}
+          </h1>
         </div>
       </div>
     </div>

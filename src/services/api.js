@@ -8,6 +8,18 @@ export const getYears = async () => {
   return response.data; // Return the data received from the API
 };
 
+// Fetch datadate from the API 
+export const getDateInfo = async (datadate) => {
+  const response = await axios.post(
+    `${API_URL}/get_date_info`,
+    {
+      datadate: datadate, // Pass the data format value in the request body
+    },
+    { timeout: 5000 }
+  );
+  return response.data; // Return the data received from the API
+};
+
 // Fetch cateogories from the API
 export const getCategories = async () => {
   const response = await axios.get(`${API_URL}/dashboard_3_categories`);

@@ -1,3 +1,8 @@
+.data-date {
+  font-size: 1rem;
+  color: #fff;
+}
+
 .dashboard3-container {
   position: relative;
   display: flex;

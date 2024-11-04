@@ -10,8 +10,7 @@ import D2 from "./pic/02 - Supplier.png";
 import D3 from "./pic/03 - Price.png";
 import D4 from "./pic/04 - Procurement.png";
 import { useQuery } from "@tanstack/react-query";
-import { getHomeData } from "./services/api.js"; // Import your API service function
-import { getYears } from "./services/api.js"; // Import your API service function
+import { getHomeData, getYears, getDateInfo } from "./services/api.js"; // Import your API service function
 
 const Dashboard = ({ selectedYear }) => {
   // Use React Query's useQuery to fetch data for the selected year
@@ -34,7 +33,7 @@ const Dashboard = ({ selectedYear }) => {
         </label>
       </div>
       <div className="text-bottom">
-        <label className="text">จำนวนรายการใบสั่งซื้อ PO</label>
+        <label className="text">จำนวนใบสั่งซื้อ PO</label>
         <label className="text">{data.TOTAL_PO.toLocaleString("th-TH")}</label>
       </div>
     </div>
@@ -65,6 +64,20 @@ const Home = () => {
     "PEA dashboard maintenance scheduled for this weekend.",
     "New training sessions available for procurement team.",
   ];
+
+  const datadate = 1;
+
+  // Fetch summary data for selected year and category using React Query
+  const {
+    data: dateInfoData,
+    isLoading: isLoadingDateInfoData,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["dateInfoData", datadate], // Unique query key for caching
+    queryFn: () => getDateInfo(datadate), // API call to fetch data based on datadate
+    enabled: !!selectedYear, // Only run query if both year and category_group are selected
+  });
 
   return (
     <div>
@@ -116,6 +129,13 @@ const Home = () => {
               />
             </div>
           </div>
+          <div></div>
+        </div>
+        <div>
+          <h1 className="data-date-home">
+            ข้อมูล ณ วันที่ {dateInfoData?.day} เดือน {dateInfoData?.month} ปี{" "}
+            {dateInfoData?.year}
+          </h1>
         </div>
       </div>
       <NewsTicker data={newsItems} />

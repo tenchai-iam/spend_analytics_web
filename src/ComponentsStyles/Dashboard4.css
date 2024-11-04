@@ -1,23 +1,6 @@
-.dashboard4-container {
-  position: relative;
-  display: flex;
-  flex-direction: row; /* Default to row layout */
-  gap: 20px;
-  width: 100%;
-  margin: 0 auto;
-  flex-wrap: wrap; /* Allow wrapping for responsiveness */
-}
-
-.text-title {
-  font-size: 24px;
-  margin-bottom: 10px;
-  color: black;
-}
-
-.text-subtitle {
-  font-size: 18px;
-  margin-bottom: 10px;
-  color: black;
+.data-date {
+  font-size: 1rem;
+  color: #fff;
 }
 
 .year-dropdown-container {
@@ -28,10 +11,57 @@
   color: white;
 }
 
-.btn-container-L1 {
+.dashboard4-container {
+  position: relative;
+  display: flex;
+  flex-direction: row; /* Default to row layout */
+  gap: 20px;
+  width: 100%;
+  margin: 0 auto;
+  flex-wrap: wrap; /* Allow wrapping for responsiveness */
+  padding: 20px;
+}
+
+.summary-container-L1 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Default: 2 columns */
+  gap: 20px;
+  box-sizing: border-box; /* Ensure padding is included in width */
+  margin: 0 auto;
+  width: 100%;
+}
+
+.donutChart {
+  flex: 1 1 40%;
+  max-width: 1 1 40%;
+  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  border-radius: 8px;
   padding: 20px;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 20px;
+  box-sizing: border-box; /* Ensure padding is included in width */
+  color: black;
+  align-items: center;
+}
+
+.table-summary {
+  flex: 1 1 60%;
+  max-width: 1 1 60%;
+  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-sizing: border-box; /* Ensure padding is included in width */
+  color: black;
+  align-items: center;
+}
+
+.btn-container-L1 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Default: 3 columns */
   gap: 20px;
   box-sizing: border-box; /* Ensure padding is included in width */
   margin: 0 auto;
@@ -39,8 +69,8 @@
 }
 
 .dropdown-group {
-  flex: 1 1 calc(65% - 30px);
-  max-width: calc(65%-30px);
+  flex: 1 1 65%;
+  max-width: 1 1 65%;
   background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
   border-radius: 8px;
   padding: 20px;
@@ -66,8 +96,8 @@
 }
 
 .lead-time {
-  flex: 1 1 calc(17.5% - 30px);
-  max-width: calc(17.5%-30px);
+  flex: 1 1 17.5%;
+  max-width: 1 1 17.5%;
   background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
   border-radius: 8px;
   padding: 20px;
@@ -80,8 +110,8 @@
 }
 
 .demand-time {
-  flex: 1 1 calc(17.5% - 30px);
-  max-width: calc(17.5%-30px);
+  flex: 1 1 17.5%;
+  max-width: 1 1 17.5%;
   background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
   border-radius: 8px;
   padding: 20px;
@@ -91,21 +121,6 @@
   box-sizing: border-box; /* Ensure padding is included in width */
   margin: 0 auto;
   color: black;
-}
-
-.BarGraphV {
-  flex: 1 1 calc(30% - 30px);
-  max-width: calc(30%-30px);
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
-  border-radius: 8px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  box-sizing: border-box; /* Ensure padding is included in width */
-  color: black;
-  align-items: center;
-  justify-items: center;
 }
 
 .button-group button {
@@ -120,6 +135,7 @@
   max-width: 300px;
 }
 
+<<<<<<< HEAD
 .summary-container-L1 {
   padding: 20px;
   display: flex;
@@ -164,11 +180,14 @@
 
 =======
 >>>>>>> 9d0c72da8874d896368048b42f8a09f0aa82650b
+=======
+>>>>>>> 2056233ea4e5776546453c616763bcae20af3d63
 .text-label {
   font-size: 2rem;
   text-align: center;
 }
 
+<<<<<<< HEAD
 =======
 >>>>>>> e78c1dc3e809f30a74c8b8ca42d81ce89ca601d6
 .table-summary {
@@ -185,8 +204,9 @@
   align-items: center;
 }
 
+=======
+>>>>>>> 2056233ea4e5776546453c616763bcae20af3d63
 .table-container-L1 {
-  padding: 20px;
   display: flex;
   flex-wrap: nowrap;
   gap: 20px;
@@ -206,6 +226,18 @@
   box-sizing: border-box; /* Ensure padding is included in width */
   color: black;
   align-items: center;
+}
+
+.text-title {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: black;
+}
+
+.text-subtitle {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: black;
 }
 
 @media (max-width: 768px) {
