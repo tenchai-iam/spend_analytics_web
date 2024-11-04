@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://10.4.32.144/api";
+const API_URL = "https://cardinal-analytic-spend.thepostway.com/api";
 
 // Fetch years from the API
 export const getYears = async () => {
@@ -8,7 +8,7 @@ export const getYears = async () => {
   return response.data; // Return the data received from the API
 };
 
-// Fetch datadate from the API 
+// Fetch datadate from the API
 export const getDateInfo = async (datadate) => {
   const response = await axios.post(
     `${API_URL}/get_date_info`,
@@ -17,6 +17,12 @@ export const getDateInfo = async (datadate) => {
     },
     { timeout: 5000 }
   );
+  return response.data; // Return the data received from the API
+};
+
+// Fetch cateogories from the API
+export const getCategory = async () => {
+  const response = await axios.get(`${API_URL}/get_category`);
   return response.data; // Return the data received from the API
 };
 
@@ -84,11 +90,12 @@ export const getHomeData = async (year) => {
 };
 
 // Fetch top 10 spend diff supplier data for a specific year using a POST request
-export const getD1Top10SpendDiff = async (year) => {
+export const getD1Top10SpendDiff = async (year, category_id) => {
   const response = await axios.post(
     `${API_URL}/dashboard_1_get_top_10_price_diff_by_year`,
     {
       year: year, // Pass the year value in the request body
+      category_id: category_id,
     },
     { timeout: 5000 }
   );
@@ -389,18 +396,4 @@ export const getD4SimMaterialPlan = async (
     );
     throw error; // Ensure error is propagated
   }
-};
-
-
-export const getD2SummaryData = async (year, matnr, district) => {
-  // const response = await axios.post(
-  //   `${API_URL}/dashboard_3_get_price_by_subregion`,
-  //   {
-  //     year: year, // Pass the year value in the request body
-  //     matnr: String(matnr), // Pass the matnr value in the request body
-  //     district: String(district), // Pass the matnr value in the request body
-  //   },
-  //   { timeout: 5000 }
-  // );
-  // return response.data;
 };
