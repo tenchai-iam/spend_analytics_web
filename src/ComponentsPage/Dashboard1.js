@@ -24,7 +24,7 @@ import {
   getD1DonutSpend,
   getD1PONumSpend,
   getD1CategorySpend,
-  getCategories,
+  getCategory,
   getDateInfo,
 } from "../services/api.js"; // Import your API service function
 
@@ -38,6 +38,11 @@ const Dashboard1 = () => {
     queryFn: getYears,
   });
 
+  const { data: categoryData, isLoading: isCategoriesLoading } = useQuery({
+    queryKey: ["category"],
+    queryFn: getCategory,
+  });
+
   // Set the default year to the most recent one
   useEffect(() => {
     if (yearsData && yearsData.years.length > 0) {
@@ -46,27 +51,22 @@ const Dashboard1 = () => {
     }
   }, [yearsData]);
 
-  const { data: categoryData, isLoading: isCategoriesLoading } = useQuery({
-    queryKey: ["categories"],
-    queryFn: getCategories,
-  });
-
   const {
     data: top10SpendDiff,
     isLoading: isLoadingTop10SpendDiff,
     isError: isErrorTop10SpendDiff,
     error: errorTop10SpendDiff,
   } = useQuery({
-    queryKey: ["top10SpendDiff", selectedYear], // Unique query key for caching
-    queryFn: () => getD1Top10SpendDiff(selectedYear), // API call to fetch data based on year
-    enabled: !!selectedYear, // Only run query if year is selected
+    queryKey: ["top10SpendDiff", selectedYear, selectedCategory], // Unique query key for caching
+    queryFn: () => getD1Top10SpendDiff(selectedYear, selectedCategory), // API call to fetch data based on year
+    enabled: Boolean(selectedYear) && Boolean(selectedCategory), // Only run query if year and category are selected
   });
 
   const dataTablePrice =
     top10SpendDiff?.map((item) => ({
       matNR: item.MATNR,
       matName: item.MAKTX,
-      priceDiff: `${((Number(item.PRICE_DIFF)-1) * 100).toFixed(2)}%`,
+      priceDiff: `${((Number(item.PRICE_DIFF) - 1) * 100).toFixed(2)}%`,
       priceDistrict: Number(item.PRICE_REGION),
       priceHQ: Number(item.PRICE_HQ),
     })) || [];
@@ -326,30 +326,30 @@ const Dashboard1 = () => {
       <div className="dashboard1-container">
         <div className="table-container-L1">
           <div className="table-top-price-diff">
-          <div className="dropdown-cat-group">
-            {isCategoriesLoading ? (
-              <p>Loading categories...</p>
-            ) : (
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-              >
-                <option value="">-- เลือกกลุ่มพัสดุ --</option>
-                {categoryData
-                  ?.slice() // Create a shallow copy of the array to avoid modifying the original
-                  .sort((a, b) => {
-                    if (a.CATEGORY_ID === "102") return -1; // Move `102` to the top
-                    if (b.CATEGORY_ID === "102") return 1;
-                    return a.CATEGORY_ID.localeCompare(b.CATEGORY_ID); // Default alphabetical sort by ID
-                  })
-                  .map((category, index) => (
-                    <option key={index} value={category.CATEGORY_ID}>
-                      {`${category.CATEGORY_ID}: ${category.CATEGORY_NAME}`}
-                    </option>
-                  ))}
-              </select>
-            )}
-          </div>
+            <div className="dropdown-cat-group">
+              {isCategoriesLoading ? (
+                <p>Loading categories...</p>
+              ) : (
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                >
+                  <option value="">-- เลือกกลุ่มพัสดุ --</option>
+                  {categoryData
+                    ?.slice() // Create a shallow copy of the array to avoid modifying the original
+                    .sort((a, b) => {
+                      if (a.CATEGORY_ID === "100") return -1; // Move `100` to the top
+                      if (b.CATEGORY_ID === "100") return 1;
+                      return a.CATEGORY_ID.localeCompare(b.CATEGORY_ID); // Default alphabetical sort by ID
+                    })
+                    .map((category, index) => (
+                      <option key={index} value={category.CATEGORY_ID}>
+                        {`${category.CATEGORY_ID}: ${category.CATEGORY_NAME}`}
+                      </option>
+                    ))}
+                </select>
+              )}
+            </div>
             <TableD1Price
               title="Top 10 พัสดุที่มีราคาจัดซื้อระหว่างกฟข. และ ส่วนกลางแตกต่างกันมากที่สุด"
               data={dataTablePrice}
