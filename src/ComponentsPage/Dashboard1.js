@@ -452,8 +452,8 @@ const Dashboard1 = () => {
           </div>
         </div>
         <div>
-          <h1 className="data-date">
-            ข้อมูล ณ วันที่ {dateInfoData?.day} เดือน {dateInfoData?.month} ปี{" "}
+          <h1 className="data-date-home">
+            ข้อมูล ณ วันที่ {dateInfoData?.day}/{dateInfoData?.month}/
             {dateInfoData?.year}
           </h1>
         </div>

@@ -133,7 +133,7 @@ const Home = () => {
         </div>
         <div>
           <h1 className="data-date-home">
-            ข้อมูล ณ วันที่ {dateInfoData?.day} เดือน {dateInfoData?.month} ปี{" "}
+            ข้อมูล ณ วันที่ {dateInfoData?.day}/{dateInfoData?.month}/
             {dateInfoData?.year}
           </h1>
         </div>
