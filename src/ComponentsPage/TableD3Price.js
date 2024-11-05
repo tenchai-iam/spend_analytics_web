@@ -28,8 +28,20 @@ const TableD3Price = ({ title, data }) => {
                 <td>{row.matNR}</td>
                 <td>{row.matName}</td>
                 <td>{row.priceDiff}</td>
-                <td>{formatPrice(row.priceDistrict)}</td>
-                <td>{formatPrice(row.priceHQ)}</td>
+                <td>
+                  <span
+                    className={row.priceDistrict < row.priceHQ ? "lower" : ""}
+                  >
+                    {formatPrice(row.priceDistrict)}
+                  </span>
+                </td>
+                <td>
+                  <span
+                    className={row.priceHQ < row.priceDistrict ? "lower" : ""}
+                  >
+                    {formatPrice(row.priceHQ)}
+                  </span>
+                </td>
               </tr>
             ))}
           </tbody>
