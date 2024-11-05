@@ -106,7 +106,7 @@ td {
 }
 
 .priority.medium {
-  background-color: yellow;
+  background-color: #c69530;
   color: #333; /* Darker text color for better readability on yellow */
 }
 
