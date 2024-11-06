@@ -8,6 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
   LabelList,
+  Cell,
 } from "recharts";
 import "../ComponentsStyles/BarGraphReV.css";
 
@@ -31,7 +32,22 @@ const CustomTooltip = ({ active, payload }) => {
   return null;
 };
 
+// Find the highest maxPrice and lowest minPrice in the data
+const findPriceExtremes = (data) => {
+  let highestMaxPrice = -Infinity;
+  let lowestMinPrice = Infinity;
+
+  data.forEach((item) => {
+    if (item.maxPrice > highestMaxPrice) highestMaxPrice = item.maxPrice;
+    if (item.minPrice < lowestMinPrice) lowestMinPrice = item.minPrice;
+  });
+
+  return { highestMaxPrice, lowestMinPrice };
+};
+
 const D3BarGraphReV = ({ data, xAxisKey, barKey, title, height = 400 }) => {
+  const { highestMaxPrice, lowestMinPrice } = findPriceExtremes(data);
+
   return (
     <div className="bar-chart-container">
       <h2 className="bar-chart-title">{title}</h2>
@@ -50,6 +66,12 @@ const D3BarGraphReV = ({ data, xAxisKey, barKey, title, height = 400 }) => {
           <YAxis tickFormatter={formatCurrency} />
           <Tooltip content={<CustomTooltip />} />
           <Bar dataKey={barKey} fill="#4a0072">
+            {data.map((entry, index) => {
+              let color = "#4a0072"; // Default color
+              if (entry.maxPrice === highestMaxPrice) color = "red";
+              if (entry.minPrice === lowestMinPrice) color = "green";
+              return <Cell key={`cell-${index}`} fill={color} />;
+            })}
             <LabelList
               dataKey={barKey}
               position="top"

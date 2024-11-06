@@ -393,11 +393,15 @@ const Dashboard3 = () => {
                 title="ข้อมูลราคาเฉลี่ยของแต่ละการไฟฟ้า"
               />
             )}
+            <h1 className="text-subtitle">
+              หากไม่มีการจัดซื้อเกิดขึ้นในปีที่เลือกแสดง
+              จะไม่มีการแสดงผลราคาเฉลี่ย ณ เขต หรือ ส่วนกลางในปีนั้นๆ
+            </h1>
           </div>
         </div>
         <div>
           <h1 className="data-date">
-            ข้อมูล ณ วันที่ {dateInfoData?.day} เดือน {dateInfoData?.month} ปี{" "}
+            ข้อมูล ณ วันที่ {dateInfoData?.day}/{dateInfoData?.month}/
             {dateInfoData?.year}
           </h1>
         </div>

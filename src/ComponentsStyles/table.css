@@ -106,10 +106,18 @@ td {
 }
 
 .priority.medium {
-  background-color: yellow;
+  background-color: #c69530;
   color: #333; /* Darker text color for better readability on yellow */
 }
 
 .priority.low {
+  background-color: green;
+}
+
+.lower {
+  padding: 5px;
+  color: #fff; /* Set text color to white for readability */
+  border-radius: 4px;
+  font-weight: bold;
   background-color: green;
 }
