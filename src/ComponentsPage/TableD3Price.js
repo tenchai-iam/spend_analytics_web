@@ -12,14 +12,14 @@ const TableD3Price = ({ title, data }) => {
     <div className="table-container">
       <h2 className="table-title">{title}</h2>
       <div className="table-wrapper">
-        <table>
+      <table>
           <thead>
             <tr>
               <th>รหัสพัสดุ</th>
               <th>ชื่อพัสดุ</th>
-              <th>เปอร์เซ็นต์ราคาที่แตกต่างกัน</th>
-              <th>ราคาที่กฟข. (บาท)</th>
               <th>ราคาที่ส่วนกลาง (บาท)</th>
+              <th>ราคาที่กฟข. (บาท)</th>
+              <th>เปอร์เซ็นต์ราคาที่แตกต่างกัน</th>
             </tr>
           </thead>
           <tbody>
@@ -27,14 +27,6 @@ const TableD3Price = ({ title, data }) => {
               <tr key={index}>
                 <td>{row.matNR}</td>
                 <td>{row.matName}</td>
-                <td>{row.priceDiff}</td>
-                <td>
-                  <span
-                    className={row.priceDistrict < row.priceHQ ? "lower" : ""}
-                  >
-                    {formatPrice(row.priceDistrict)}
-                  </span>
-                </td>
                 <td>
                   <span
                     className={row.priceHQ < row.priceDistrict ? "lower" : ""}
@@ -42,6 +34,14 @@ const TableD3Price = ({ title, data }) => {
                     {formatPrice(row.priceHQ)}
                   </span>
                 </td>
+                <td>
+                  <span
+                    className={row.priceDistrict < row.priceHQ ? "lower" : ""}
+                  >
+                    {formatPrice(row.priceDistrict)}
+                  </span>
+                </td>
+                <td>{row.priceDiff}</td>
               </tr>
             ))}
           </tbody>
