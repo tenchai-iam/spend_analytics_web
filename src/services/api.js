@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://10.4.32.144/api";
+const API_URL = "https://dev-spendi-tcc.pea.co.th/api";
 
 // Fetch years from the API
 export const getYears = async () => {
