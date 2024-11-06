@@ -8,7 +8,6 @@ import BarGraphReH from "./BarGraphReH";
 import { useQuery } from "@tanstack/react-query";
 import {
   getYears,
-  getD2SummaryData,
   getD2TopSupplier,
   getD2CategorySpend,
   getD2CategoryPOQuantity,
@@ -52,18 +51,6 @@ const Dashboard2 = () => {
     "พัสดุรอง/อุปกรณ์ประกอบ",
     "อื่นๆ",
   ];
-
-  // Fetch summary data for selected year and category using React Query
-  const {
-    data: dashboardData,
-    isLoading: isLoadingData,
-    isError,
-    error,
-  } = useQuery({
-    queryKey: ["dashboardData", selectedYear, selectedCategoryGroup], // Unique query key for caching
-    queryFn: () => getD2SummaryData(selectedYear, selectedCategoryGroup), // API call to fetch data based on year and category
-    enabled: !!selectedYear && selectedCategoryGroup !== null, // Only run query if both year and category_group are selected
-  });
 
   // Fetch top supplier data for selected year and category using React Query
   const {
