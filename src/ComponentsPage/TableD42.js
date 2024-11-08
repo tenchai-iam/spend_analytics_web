@@ -1,13 +1,51 @@
-// src/Table2Component.js
-import React from "react";
+import React, { useState } from "react";
 import "../ComponentsStyles/table.css";
 
 const TableD42 = ({ title, data }) => {
+  const [sortConfig, setSortConfig] = useState({
+    key: null,
+    direction: "ascending",
+  });
+
   const formatQuantity = (value) =>
     new Intl.NumberFormat("en-US", {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(value);
+
+  const handleSort = (key) => {
+    // Skip sorting for "matGrade"
+    if (key === "matGrade") return;
+
+    let direction = "ascending";
+    if (sortConfig.key === key && sortConfig.direction === "ascending") {
+      direction = "descending";
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedData = [...data].sort((a, b) => {
+    const aValue = a[sortConfig.key];
+    const bValue = b[sortConfig.key];
+
+    if (sortConfig.key === "matName") {
+      return sortConfig.direction === "ascending"
+        ? aValue.localeCompare(bValue)
+        : bValue.localeCompare(aValue);
+    } else if (typeof aValue === "number" && typeof bValue === "number") {
+      return sortConfig.direction === "ascending"
+        ? aValue - bValue
+        : bValue - aValue;
+    }
+    return 0;
+  });
+
+  const renderSortArrow = (columnKey) => {
+    if (sortConfig.key === columnKey) {
+      return sortConfig.direction === "ascending" ? "▲" : "▼";
+    }
+    return "";
+  };
 
   return (
     <div className="table-container">
@@ -16,14 +54,20 @@ const TableD42 = ({ title, data }) => {
         <table>
           <thead>
             <tr>
-              <th>รหัสพัสดุ</th>
-              <th>ชื่อพัสดุ</th>
-              <th>ใช้งานได้ (เดือน)</th>
-              <th>Priority</th>
+              <th onClick={() => handleSort("matNum")}>
+                รหัสพัสดุ {renderSortArrow("matNum")}
+              </th>
+              <th onClick={() => handleSort("matName")}>
+                ชื่อพัสดุ {renderSortArrow("matName")}
+              </th>
+              <th onClick={() => handleSort("usableMonth")}>
+                ใช้งานได้ (เดือน) {renderSortArrow("usableMonth")}
+              </th>
+              <th>ความเสี่ยง</th> {/* No sorting or arrow for matGrade */}
             </tr>
           </thead>
           <tbody>
-            {data.map((row, index) => (
+            {sortedData.map((row, index) => (
               <tr key={index}>
                 <td>{row.matNum}</td>
                 <td>{row.matName}</td>

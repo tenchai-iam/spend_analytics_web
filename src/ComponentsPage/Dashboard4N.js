@@ -112,7 +112,7 @@ const Dashboard4 = () => {
     requireMaterialDetail?.map((item) => ({
       matNum: item.MATNR,
       matName: item.MAKTX,
-      usableMonth: Number(item.TOTAL_USABLE_MONTH).toLocaleString("th-TH"),
+      usableMonth: Number(item.TOTAL_USABLE_MONTH),
       matGrade: item.PRIORITY.toLocaleString("th-TH"),
     })) || [];
 
