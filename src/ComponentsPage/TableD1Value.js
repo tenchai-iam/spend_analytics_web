@@ -12,22 +12,22 @@ const TableD1Value = ({ title, data }) => {
     <div className="table-container">
       <h2 className="table-title">{title}</h2>
       <div className="table-wrapper">
-        <table>
+      <table>
           <thead>
             <tr>
               <th>พื้นที่การจัดซื้อ</th>
-              <th>เปอร์เซ็นต์ PO มูลค่าไม่เกิน 500,000 บาท</th>
               <th>จำนวน PO มูลค่าไม่เกิน 500,000 บาท</th>
               <th>จำนวน PO ทั้งหมด</th>
+              <th>เปอร์เซ็นต์ PO มูลค่าไม่เกิน 500,000 บาท</th>
             </tr>
           </thead>
           <tbody>
             {data.map((row, index) => (
               <tr key={index}>
                 <td>{row.district}</td>
-                <td>{row.percentQuantity}</td>
                 <td>{formatQuantity(row.lessThanQuantity)}</td>
                 <td>{formatQuantity(row.totalQuantity)}</td>
+                <td>{row.percentQuantity}</td>
               </tr>
             ))}
           </tbody>
