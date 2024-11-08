@@ -13,12 +13,12 @@ const TableD1Price = ({ title, data }) => {
       maximumFractionDigits: 2,
     }).format(value);
 
-  const formatPercent = (value) =>
+  const formatPercentage = (value) =>
     new Intl.NumberFormat("en-US", {
       style: "percent",
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
-    }).format(value / 100);
+    }).format(value);
 
   const sortedData = [...data].sort((a, b) => {
     if (sortConfig.key) {
@@ -72,7 +72,7 @@ const TableD1Price = ({ title, data }) => {
                 ราคาที่ส่วนกลาง {renderSortArrow("priceHQ")}
               </th>
               <th onClick={() => handleSort("priceDistrict")}>
-                ราคาเฉลี่ยที่กฟฟ. เขต {renderSortArrow("priceDistrict")}
+              ราคาเฉลี่ยที่กฟข. (บาท)  {renderSortArrow("priceDistrict")}
               </th>
               <th onClick={() => handleSort("priceDiff")}>
                 % ราคาที่แตกต่าง {renderSortArrow("priceDiff")}
@@ -99,7 +99,7 @@ const TableD1Price = ({ title, data }) => {
                   </span>
                 </td>
                 <td data-label="% ราคาที่แตกต่าง">
-                  {formatPercent(row.priceDiff)}
+                  {formatPercentage(row.priceDiff)}
                 </td>
               </tr>
             ))}
