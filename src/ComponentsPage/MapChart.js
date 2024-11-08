@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Map } from "react-map-gl/maplibre";
 import DeckGL from "@deck.gl/react";
 import { AmbientLight, PointLight, LightingEffect } from "@deck.gl/core";
@@ -21,11 +21,11 @@ const thailandLayer = new GeoJsonLayer({
 const INITIAL_VIEW_STATE = {
   longitude: 100.9925,
   latitude: 11.1,
-  zoom: 5.0,
-  minZoom: 5.0,
+  zoom: 5.5,
+  minZoom: 5.5,
   maxZoom: 7.2,
   pitch: 75,
-  bearing: -3,
+  bearing: -5,
 };
 
 // Mapping abbreviations to full Thai location names
@@ -148,17 +148,19 @@ const MapChart = ({ data, mapStyle }) => {
               mapStyle={{
                 version: 8,
                 sources: {
-                  localTiles: {
+                  osm: {
                     type: "raster",
-                    tiles: ["/tiles/{z}/{x}/{y}.png"], // Use local tiles from public folder
+                    tiles: [
+                      "https://basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", // Dark-themed OSM tiles
+                    ],
                     tileSize: 256,
                   },
                 },
                 layers: [
                   {
-                    id: "local-raster-layer",
+                    id: "osm-tiles",
                     type: "raster",
-                    source: "localTiles",
+                    source: "osm",
                     minzoom: 0,
                     maxzoom: 22,
                   },
@@ -177,19 +179,60 @@ const MapChart = ({ data, mapStyle }) => {
 };
 
 const DataTable = ({ data }) => {
+  const [sortConfig, setSortConfig] = useState({
+    key: null,
+    direction: "ascending",
+  });
   const groupedData = groupDataByLocation(data);
+
+  const handleSort = (key) => {
+    let direction = "ascending";
+    if (sortConfig.key === key && sortConfig.direction === "ascending") {
+      direction = "descending";
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedData = Object.entries(groupedData).sort((a, b) => {
+    if (sortConfig.key === "location") {
+      const aLocationName = LOCATION_NAMES[a[0]] || a[0];
+      const bLocationName = LOCATION_NAMES[b[0]] || b[0];
+      return sortConfig.direction === "ascending"
+        ? aLocationName.localeCompare(bLocationName)
+        : bLocationName.localeCompare(aLocationName);
+    } else {
+      const aValue = a[1].find((d) => d.type === sortConfig.key)?.value || 0;
+      const bValue = b[1].find((d) => d.type === sortConfig.key)?.value || 0;
+      return sortConfig.direction === "ascending"
+        ? aValue - bValue
+        : bValue - aValue;
+    }
+  });
+
+  const renderSortArrow = (columnKey) => {
+    if (sortConfig.key === columnKey) {
+      return sortConfig.direction === "ascending" ? "▲" : "▼";
+    }
+    return "";
+  };
 
   return (
     <table className="data-table">
       <thead>
         <tr>
-          <th>เขต</th>
-          <th>จำนวน PO พัสดุ</th>
-          <th>ยอดจัดซื้อพัสดุ (ล้านบาท)</th>
+          <th onClick={() => handleSort("location")}>
+            เขต {renderSortArrow("location")}
+          </th>
+          <th onClick={() => handleSort("TOTAL_PO_MAT")}>
+            จำนวน PO พัสดุ {renderSortArrow("TOTAL_PO_MAT")}
+          </th>
+          <th onClick={() => handleSort("TOTAL_SPEND_MAT")}>
+            ยอดจัดซื้อพัสดุ (ล้านบาท) {renderSortArrow("TOTAL_SPEND_MAT")}
+          </th>
         </tr>
       </thead>
       <tbody>
-        {Object.entries(groupedData).map(([location, items]) => {
+        {sortedData.map(([location, items]) => {
           const totalPO =
             items.find((d) => d.type === "TOTAL_PO_MAT")?.value || 0;
           const totalSpend =
