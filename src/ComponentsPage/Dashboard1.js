@@ -66,9 +66,9 @@ const Dashboard1 = () => {
     top10SpendDiff?.map((item) => ({
       matNR: item.MATNR,
       matName: item.MAKTX,
-      priceDiff: `${((Number(item.PRICE_DIFF) - 1) * 100).toFixed(2)}%`,
-      priceDistrict: Number(item.PRICE_REGION),
       priceHQ: Number(item.PRICE_HQ),
+      priceDistrict: Number(item.PRICE_REGION),
+      priceDiff: (Number(item.PRICE_DIFF) - 1) * 100,
     })) || [];
 
   const {
