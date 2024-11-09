@@ -1,0 +1,141 @@
+import React, { useEffect, useState } from "react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  LabelList,
+  Legend,
+} from "recharts";
+import "../ComponentsStyles/BarGraphReV.css";
+
+const formatValue = (value) =>
+  new Intl.NumberFormat("en-US", {
+    minimumFractionDigits: 3,
+    maximumFractionDigits: 3,
+  }).format(value);
+
+const D4GroupBarRe = ({
+  data, // data is dataTableSimMaterialPlan
+  title,
+  height = 400,
+  hqColor = "#4a0072",
+  districtColor = "#AD49E1",
+}) => {
+  const [aggregatedData, setAggregatedData] = useState([]);
+  const [regionDifferences, setRegionDifferences] = useState([]);
+
+  useEffect(() => {
+    if (data && data.length > 0) {
+      const totalUnitHQCost = data.reduce(
+        (sum, item) => sum + (item.unitHQ * item.priceHQ) / 1000000,
+        0
+      );
+      const totalUnitDistrictCost = data.reduce(
+        (sum, item) => sum + (item.unitHQ * item.priceDistrict) / 1000000,
+        0
+      );
+      const difference = totalUnitDistrictCost - totalUnitHQCost;
+
+      // Pre-calculate differences for each region for tooltip display
+      const differences = data.map((item) => ({
+        region: item.region,
+        difference:
+          (item.unitHQ * item.priceDistrict - item.unitHQ * item.priceHQ) /
+          1000000,
+      }));
+
+      setAggregatedData([
+        {
+          CostAtHQPrice: totalUnitHQCost,
+          CostAtDistrictPrice: totalUnitDistrictCost,
+          Placeholder: totalUnitHQCost, // Placeholder for offsetting Difference
+          Difference: difference,
+        },
+      ]);
+      setRegionDifferences(differences);
+    }
+  }, [data, hqColor, districtColor]);
+
+  return (
+    <div className="bar-chart-container">
+      <h2 className="bar-chart-title">{title}</h2>
+      <ResponsiveContainer width="100%" height={height}>
+        <BarChart
+          data={aggregatedData}
+          margin={{
+            top: 20,
+            right: 30,
+            left: 20,
+            bottom: 40,
+          }}
+          barCategoryGap="20%"
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="name" />
+          <Tooltip
+            content={() => (
+              <div
+                style={{
+                  padding: "10px",
+                  backgroundColor: "white",
+                  border: "1px solid #ccc",
+                }}
+              >
+                <h5>Savings ตามเขต</h5>
+                <ul>
+                  {regionDifferences.map((item, index) => (
+                    <li key={index}>
+                      {item.region}: {formatValue(item.difference)}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          />
+          <Legend />
+
+          {/* Render bars for HQ Cost and District Cost */}
+          <Bar dataKey="CostAtHQPrice" fill={hqColor} name="จัดหาโดยส่วนกลาง">
+            <LabelList
+              dataKey="CostAtHQPrice"
+              position="top"
+              formatter={formatValue}
+            />
+          </Bar>
+          <Bar
+            dataKey="CostAtDistrictPrice"
+            fill={districtColor}
+            name="จัดหาโดยกฟข."
+          >
+            <LabelList
+              dataKey="CostAtDistrictPrice"
+              position="top"
+              formatter={formatValue}
+            />
+          </Bar>
+
+          {/* Render Placeholder and Difference bars for offset effect */}
+          <Bar dataKey="Placeholder" fill="transparent" stackId="offset" />
+          <Bar
+            dataKey="Difference"
+            fill={aggregatedData[0]?.Difference >= 0 ? "green" : "red"}
+            stackId="offset"
+            name="Savings"
+          >
+            <LabelList
+              dataKey="Difference"
+              position="top"
+              formatter={formatValue}
+            />
+          </Bar>
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
+  );
+};
+
+export default D4GroupBarRe;
