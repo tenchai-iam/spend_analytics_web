@@ -27,14 +27,14 @@ const BubbleChart = ({ data }) => {
 
   const colorPalette = [
     "#BC6FF1",
-    "#7A1CAC",
+    "#7ED4AD",
     "#AD49E1",
     "#8d98a1",
     "#c69530",
-    "#7f3f98",
-    "#7a0f5a",
-    "#81377e",
-    "#5B4B8A",
+    "#FB773C",
+    "#B03052",
+    "#FF77B7",
+    "#FDDBBB",
     "#EE4266",
   ];
 
