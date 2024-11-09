@@ -110,7 +110,7 @@ const Dashboard4 = () => {
 
   const dataTableRequireMaterialDetail =
     requireMaterialDetail?.map((item) => ({
-      matNum: item.MATNR,
+      matNum: Number(item.MATNR),
       matName: item.MAKTX,
       usableMonth: Number(item.TOTAL_USABLE_MONTH),
       matGrade: item.PRIORITY.toLocaleString("th-TH"),
