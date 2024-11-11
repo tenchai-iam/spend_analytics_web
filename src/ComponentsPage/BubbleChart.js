@@ -27,14 +27,14 @@ const BubbleChart = ({ data }) => {
 
   const colorPalette = [
     "#BC6FF1",
-    "#7A1CAC",
+    "#7ED4AD",
     "#AD49E1",
     "#8d98a1",
     "#c69530",
-    "#7f3f98",
-    "#7a0f5a",
-    "#81377e",
-    "#5B4B8A",
+    "#FB773C",
+    "#B03052",
+    "#FF77B7",
+    "#FDDBBB",
     "#EE4266",
   ];
 
@@ -60,6 +60,8 @@ const BubbleChart = ({ data }) => {
 
   useEffect(() => {
     if (!data || data.length === 0) return;
+
+    const totalValue = d3.sum(data, (d) => d.value); // Calculate the total value
 
     const svg = d3
       .select(svgRef.current)
@@ -119,7 +121,7 @@ const BubbleChart = ({ data }) => {
       .append("text")
       .attr("class", "bubble-label")
       .attr("text-anchor", "middle")
-      .attr("dy", "-1.5em") // Move the name upwards
+      .attr("dy", "-5em") // Move the name upwards
       .selectAll("tspan")
       .data((d) => wrapText(d.name, sizeScale(d.value)))
       .join("tspan")
@@ -133,6 +135,14 @@ const BubbleChart = ({ data }) => {
       .attr("text-anchor", "middle")
       .attr("dy", "2.0em") // Move the value below the name
       .text((d) => numberFormatter.format(d.value));
+
+    // Add percentage text below value
+    bubbleGroup
+      .append("text")
+      .attr("class", "bubble-percentage")
+      .attr("text-anchor", "middle")
+      .attr("dy", "3.5em") // Move the percentage below the value
+      .text((d) => `${((d.value / totalValue) * 100).toFixed(2)}%`);
 
     function ticked() {
       bubbleGroup.attr("transform", (d) => {

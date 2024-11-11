@@ -6,7 +6,7 @@ import YearDropdown from "./YearDropdown";
 import Table4 from "./Table4.js";
 import D4DonutChartRe from "./D4DonutChartRe.js";
 import TableD42 from "./TableD42.js";
-import BarGraphReV from "./BarGraphReV";
+import D4GroupBarRe from "./D4GroupBarRe";
 import Select from "react-select"; // Import react-select
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -110,9 +110,9 @@ const Dashboard4 = () => {
 
   const dataTableRequireMaterialDetail =
     requireMaterialDetail?.map((item) => ({
-      matNum: item.MATNR,
+      matNum: Number(item.MATNR),
       matName: item.MAKTX,
-      usableMonth: Number(item.TOTAL_USABLE_MONTH).toLocaleString("th-TH"),
+      usableMonth: Number(item.TOTAL_USABLE_MONTH),
       matGrade: item.PRIORITY.toLocaleString("th-TH"),
     })) || [];
 
@@ -152,21 +152,21 @@ const Dashboard4 = () => {
       contract: Number(item.CONTRACTING),
       availStock: Number(item.TOTAL_USABLE_INVENTORY),
       availMonth: Number(item.TOTAL_USABLE_MONTH),
+      quantityAllocate: Number(item.ALLOCATE),
+      availMonthAfter: Number(item.TOTAL_USABLE_MONTH_AFTER),
       newMonth: Number(item.TO_PROCURE_MONTH),
       newQuantity: Number(item.TO_PROCURE_UNIT),
       unitHQ: Number(item.TO_PROCURE_HQ),
-      unitDistrict: Number(item.TO_PROCURE_DISTRICT),
       priceHQ: Number(item.PRICE_HQ),
+      unitDistrict: Number(item.TO_PROCURE_DISTRICT),
       priceDistrict: Number(item.PRICE_DISTRICT),
       mediumPrice: Number(item.MEDIUM_PRICE),
       budget: Number(item.BUDGET),
     })) || [];
 
-  /*   const chartData = [
-    { name: "ก่อนปรับปรุง", value: 130 },
-    { name: "หลังปรับปรุง", value: 80 },
-  ];
- */
+  console.log("dataTableSimMaterialPlan:", dataTableSimMaterialPlan);
+
+  console.log("dataTableSimMaterialPlan:", dataTableSimMaterialPlan);
 
   const handleSelectHQLeadTime = (index) => {
     console.log("selectedHQLeadTime", index);
@@ -344,15 +344,6 @@ const Dashboard4 = () => {
               ))}
             </div>
           </div>
-          {/*           <div className="BarGraphV">
-            <BarGraphReV
-              data={chartData}
-              xAxisKey="name"
-              barKey="value"
-              title="ประมาณการค่าใช้จ่ายที่ลดลง (ล้าน)"
-              height={300}
-            />
-          </div> */}
         </div>
 
         {/* Table and Chart Section */}
@@ -362,10 +353,14 @@ const Dashboard4 = () => {
               title="ตารางจำลองแผนจัดซื้อพัสดุเพิ่มเติมระหว่างปี"
               data={dataTableSimMaterialPlan}
             />
+            <D4GroupBarRe
+              title="คาดการณ์ยอดจัดหาพัสดุ (ล้านบาท)"
+              data={dataTableSimMaterialPlan}
+            />
           </div>
         </div>
         <div>
-        <h1 className="data-date-home">
+          <h1 className="data-date">
             ข้อมูล ณ วันที่ {dateInfoData?.day}/{dateInfoData?.month}/
             {dateInfoData?.year}
           </h1>

@@ -66,9 +66,9 @@ const Dashboard1 = () => {
     top10SpendDiff?.map((item) => ({
       matNR: item.MATNR,
       matName: item.MAKTX,
-      priceDiff: `${((Number(item.PRICE_DIFF) - 1) * 100).toFixed(2)}%`,
-      priceDistrict: Number(item.PRICE_REGION),
       priceHQ: Number(item.PRICE_HQ),
+      priceDistrict: Number(item.PRICE_REGION),
+      priceDiff: (Number(item.PRICE_DIFF) - 1),
     })) || [];
 
   const {
@@ -85,11 +85,9 @@ const Dashboard1 = () => {
   const dataTableValue =
     top5POValue?.map((item) => ({
       district: item.DISTRICT_NAME,
-      percentQuantity: `${Number(item.PO_LESS_EQUAL_500K_QUANTITY).toFixed(
-        2
-      )}%`,
       lessThanQuantity: Number(item.PERCENT_PO_LESS),
       totalQuantity: Number(item.TOTAL_PO),
+      percentQuantity: Number(item.PO_LESS_EQUAL_500K_QUANTITY),
     })) || [];
 
   // Data mappings

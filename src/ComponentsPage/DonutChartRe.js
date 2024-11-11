@@ -9,7 +9,7 @@ import {
 } from "recharts";
 import "../ComponentsStyles/DonutChartRe.css";
 
-const COLORS = ["#7A1CAC", "#522258", "#2E073F"]; // Example colors
+const COLORS = ["#7A1CAC", "#B03052", "#C69530"]; // Example colors
 
 const D4DonutChartRe = ({ data, title, height = 400 }) => {
   const numberFormatter = new Intl.NumberFormat("en-US", {
