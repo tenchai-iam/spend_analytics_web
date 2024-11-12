@@ -58,7 +58,7 @@ ingress:
     nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "1024m"
   hosts:
-    - host: cardinal-analytic-spend.thepostway.com
+    - host: dev-spendi-tcc.pea.co.th
       paths:
         - /(.*)
 
