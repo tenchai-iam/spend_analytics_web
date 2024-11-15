@@ -2,8 +2,8 @@ import React from "react";
 import { Navbar, Nav, NavDropdown, Container } from "react-bootstrap";
 import { Link } from "react-router-dom"; // Import Link from react-router-dom
 import "bootstrap/dist/css/bootstrap.min.css";
-import logo from "./pic/PlogoL.png";
-import "./ComponentsStyles/NavbarStyles.css"; // Import the custom Navbar CSS file
+import spendinsight from "../pic/spend_insight_m.png";
+import "../ComponentsStyles/NavbarStyles.css"; // Import the custom Navbar CSS file
 
 function NavbarComponent() {
   return (
@@ -18,14 +18,20 @@ function NavbarComponent() {
         <Navbar.Brand as={Link} to="/home">
           {" "}
           {/* Use Link instead of href */}
-          <img
-            src={logo} // Replace with the path to your logo
+          {/*           <img
+            src={pealogo} // Replace with the path to your logo
             width="70"
             height="35"
             className="d-inline-block align-top"
             alt="PEA Logo"
+          />{" "} */}
+          <img
+            src={spendinsight} // Replace with the path to your logo
+            width="40"
+            height="40"
+            className="d-inline-block align-top"
+            alt="Spend Insight"
           />{" "}
-          Spend Analytics
         </Navbar.Brand>
 
         {/* Responsive Toggle */}
@@ -40,7 +46,7 @@ function NavbarComponent() {
             </Nav.Link>{" "}
             {/* Use Link with to */}
             {/* Dropdown for Admin */}
-            <NavDropdown title="สำหรับผู้บริหาร" id="admin-dropdown">
+            <NavDropdown title="สำหรับพนักงานทั่วไป" id="admin-dropdown">
               <NavDropdown.Item as={Link} to="/dashboard1">
                 ภาพรวมค่าใช้จ่าย
               </NavDropdown.Item>
@@ -49,7 +55,7 @@ function NavbarComponent() {
               </NavDropdown.Item>
             </NavDropdown>
             {/* Dropdown for Planning */}
-            <NavDropdown title="สำหรับกองวางแผน" id="planning-dropdown">
+            <NavDropdown title="สำหรับผู้จัดทำแผนจัดหาพัสดุ" id="planning-dropdown">
               <NavDropdown.Item as={Link} to="/dashboard3">
                 เปรียบเทียบราคาจัดซื้อ
               </NavDropdown.Item>

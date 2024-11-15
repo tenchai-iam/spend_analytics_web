@@ -94,8 +94,8 @@ const Home = () => {
         <div className="nav-container">
           {/* First Section */}
           <div className="nav-section">
-            <h1 className="nav-title">Management</h1>
-            <p className="nav-subtitle">Dashboard สำหรับผู้บริหาร</p>
+            <h1 className="nav-title">General</h1>
+            <p className="nav-subtitle">Dashboard ทั่วไป</p>
             <div className="menu-grid">
               <MenuCard
                 image={D1}
@@ -112,19 +112,19 @@ const Home = () => {
             </div>
           </div>
           <div className="nav-section">
-            <h1 className="nav-title">Procurement</h1>
-            <p className="nav-subtitle">Dashboard สำหรับกองวางแผน</p>
+            <h1 className="nav-title">Procurement Planning</h1>
+            <p className="nav-subtitle">Dashboard สำหรับผู้จัดทำแผนพัสดุ</p>
             <div className="menu-grid">
               <MenuCard
                 image={D3}
                 title="เปรียบเทียบราคาจัดซื้อพัสดุ"
-                description="Compare procurement prices"
+                description="Compare material purchase price"
                 link="/dashboard3"
               />
               <MenuCard
                 image={D4}
                 title="ปรับแผนเพิ่มเติมระหว่างปี"
-                description="Adjust purchasing budgets"
+                description="Design procurement plan"
                 link="/dashboard4"
               />
             </div>
@@ -137,8 +137,8 @@ const Home = () => {
             {dateInfoData?.year}
           </h1>
         </div>
+        <NewsTicker data={newsItems} />
       </div>
-      <NewsTicker data={newsItems} />
     </div>
   );
 };
