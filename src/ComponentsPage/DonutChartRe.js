@@ -5,13 +5,12 @@ import {
   Cell,
   Tooltip,
   ResponsiveContainer,
-  Legend,
 } from "recharts";
 import "../ComponentsStyles/DonutChartRe.css";
 
-const COLORS = ["#7A1CAC", "#B03052", "#C69530"]; // Example colors
+const COLORS = ["#BC6FF1", "#B03052", "#C69530"]; // Example colors
 
-const D4DonutChartRe = ({ data, title, height = 400 }) => {
+const DonutChartRe = ({ data, title, height = 400 }) => {
   const numberFormatter = new Intl.NumberFormat("en-US", {
     minimumFractionDigits: 3,
     maximumFractionDigits: 3,
@@ -39,6 +38,23 @@ const D4DonutChartRe = ({ data, title, height = 400 }) => {
     return null;
   };
 
+  const renderCustomLabel = ({ cx, cy, midAngle, outerRadius, name, value, percent }) => {
+    const RADIAN = Math.PI / 180;
+    const radius = outerRadius + 70; // Increase label radius to move labels away from the chart
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+    const formattedValue = numberFormatter.format(value);
+
+    return (
+      <text x={x} y={y} textAnchor="middle" dominantBaseline="central">
+        <tspan x={x} dy="-0.5em">{name}</tspan>
+        <tspan x={x} dy="1.2em">
+          {formattedValue} ({(percent * 100).toFixed(2)}%)
+        </tspan>
+      </text>
+    );
+  };
+
   return (
     <div style={{ width: "100%", height: "100%" }}>
       <h2 className="donut-title">{title}</h2>
@@ -48,15 +64,12 @@ const D4DonutChartRe = ({ data, title, height = 400 }) => {
             data={data}
             cx="50%"
             cy="50%"
-            innerRadius="60%"
-            outerRadius="80%"
+            innerRadius="35%"
+            outerRadius="55%"
             fill="#8884d8"
             paddingAngle={5}
             dataKey="value"
-            label={({ value, percent }) => {
-              const formattedValue = numberFormatter.format(value);
-              return `${formattedValue} (${(percent * 100).toFixed(2)}%)`;
-            }}
+            label={renderCustomLabel}
             labelLine={false}
           >
             {data.map((entry, index) => (
@@ -67,11 +80,10 @@ const D4DonutChartRe = ({ data, title, height = 400 }) => {
             ))}
           </Pie>
           <Tooltip content={<CustomTooltip />} />
-          <Legend layout="horizontal" verticalAlign="bottom" align="center" />
         </PieChart>
       </ResponsiveContainer>
     </div>
   );
 };
 
-export default D4DonutChartRe;
+export default DonutChartRe;

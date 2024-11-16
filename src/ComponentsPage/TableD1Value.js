@@ -61,7 +61,7 @@ const TableD1Value = ({ title, data }) => {
           <thead>
             <tr>
               <th onClick={() => handleSort("district")}>
-                พื้นที่การจัดซื้อ {renderSortArrow("district")}
+                หน่วยงานจัดซื้อ {renderSortArrow("district")}
               </th>
               <th onClick={() => handleSort("lessThanQuantity")}>
                 จำนวน PO มูลค่าไม่เกิน 500,000 บาท{" "}
@@ -71,7 +71,7 @@ const TableD1Value = ({ title, data }) => {
                 จำนวน PO ทั้งหมด {renderSortArrow("totalQuantity")}
               </th>
               <th onClick={() => handleSort("percentQuantity")}>
-                เปอร์เซ็นต์ PO มูลค่าไม่เกิน 500,000 บาท{" "}
+                % PO มูลค่าไม่เกิน 500,000 บาท{" "}
                 {renderSortArrow("percentQuantity")}
               </th>
             </tr>

@@ -5,7 +5,7 @@ import "../ComponentsStyles/BubbleChart.css"; // Import CSS
 const BubbleChart = ({ data }) => {
   const svgRef = useRef();
   const containerRef = useRef();
-  const [dimensions, setDimensions] = useState({ width: 600, height: 600 });
+  const [dimensions, setDimensions] = useState({ width: 600, height: 800 });
 
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {

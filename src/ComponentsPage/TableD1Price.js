@@ -72,7 +72,7 @@ const TableD1Price = ({ title, data }) => {
                 ราคาที่ส่วนกลาง {renderSortArrow("priceHQ")}
               </th>
               <th onClick={() => handleSort("priceDistrict")}>
-              ราคาเฉลี่ยที่กฟข. (บาท)  {renderSortArrow("priceDistrict")}
+                ราคาเฉลี่ยที่ กฟข. {renderSortArrow("priceDistrict")}
               </th>
               <th onClick={() => handleSort("priceDiff")}>
                 % ราคาที่แตกต่าง {renderSortArrow("priceDiff")}
