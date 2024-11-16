@@ -364,6 +364,10 @@ const Dashboard4 = () => {
             ข้อมูล ณ วันที่ {dateInfoData?.day}/{dateInfoData?.month}/
             {dateInfoData?.year}
           </h1>
+          <p className="data-date">
+            หมายเหตุ: ข้อมูลภายในระบบ Spend Insight เป็นข้อมูลภายในของกฟภ.
+            ห้ามเผยแพร่ให้กับผู้ภายนอก
+          </p>
         </div>
       </div>
     </div>

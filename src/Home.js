@@ -136,6 +136,10 @@ const Home = () => {
             ข้อมูล ณ วันที่ {dateInfoData?.day}/{dateInfoData?.month}/
             {dateInfoData?.year}
           </h1>
+          <p className="data-date-home">
+            หมายเหตุ: ข้อมูลภายในระบบ Spend Insight เป็นข้อมูลภายในของกฟภ.
+            ห้ามเผยแพร่ให้กับผู้ภายนอก
+          </p>
         </div>
         <NewsTicker data={newsItems} />
       </div>
