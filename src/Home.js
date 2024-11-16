@@ -27,13 +27,13 @@ const Dashboard = ({ selectedYear }) => {
   return (
     <div className="text-container">
       <div className="text-top">
-        <label className="text">ยอดจัดซื้อทั้งหมด (ล้านบาท)</label>
+        <label className="text">มูลค่าจัดซื้อทั้งหมด</label>
         <label className="text">
-          {(data.TOTAL_SPEND / 1000000).toLocaleString("th-TH")}
+          {(data.TOTAL_SPEND).toLocaleString("th-TH")}{" บาท"}
         </label>
       </div>
       <div className="text-bottom">
-        <label className="text">จำนวนใบสั่งซื้อ PO</label>
+        <label className="text">จำนวนใบสั่งซื้อ (PO)</label>
         <label className="text">{data.TOTAL_PO.toLocaleString("th-TH")}</label>
       </div>
     </div>
