@@ -48,7 +48,7 @@ const UploadPage = () => {
       <div className="upload-container">
         <div className="upload-container-L1">
           <div className="upload-module">
-            <h1 className="text-title ">Upload ไฟล์ราคากลาง</h1>
+            <h1 className="text-title ">ข้อมูลยอดใช้งานต่อเดือน (R/M)</h1>
             <form onSubmit={handleUpload}>
               <input type="file" onChange={handleFileChange} />
               <button type="submit">Upload</button>
@@ -56,7 +56,7 @@ const UploadPage = () => {
             {uploadStatus && <p>{uploadStatus}</p>}
           </div>
           <div className="upload-module">
-            <h1 className="text-title ">Upload ไฟล์ RM</h1>
+            <h1 className="text-title ">ข้อมูลยอดจ่ายเข้างานของพัสดุกรณีที่แตกต่างจากปกติ</h1>
             <form onSubmit={handleUpload}>
               <input type="file" onChange={handleFileChange} />
               <button type="submit">Upload</button>
@@ -64,7 +64,7 @@ const UploadPage = () => {
             {uploadStatus && <p>{uploadStatus}</p>}
           </div>
           <div className="upload-module">
-            <h1 className="text-title ">Upload ไฟล์การจัดกลุ่มพัสดุ</h1>
+            <h1 className="text-title ">ข้อมูลราคากลางที่ใช้ในการประมาณการงบประมาณ (Reference price)</h1>
             <form onSubmit={handleUpload}>
               <input type="file" onChange={handleFileChange} />
               <button type="submit">Upload</button>
@@ -72,7 +72,23 @@ const UploadPage = () => {
             {uploadStatus && <p>{uploadStatus}</p>}
           </div>
           <div className="upload-module">
-            <h1 className="text-title ">Upload ไฟล์นับจำนวน Packaging</h1>
+            <h1 className="text-title ">ข้อมูลหน่วยนับ packaging</h1>
+            <form onSubmit={handleUpload}>
+              <input type="file" onChange={handleFileChange} />
+              <button type="submit">Upload</button>
+            </form>
+            {uploadStatus && <p>{uploadStatus}</p>}
+          </div>
+          <div className="upload-module">
+            <h1 className="text-title ">ข้อมูลการจัดกลุ่มประเภทพัสดุ</h1>
+            <form onSubmit={handleUpload}>
+              <input type="file" onChange={handleFileChange} />
+              <button type="submit">Upload</button>
+            </form>
+            {uploadStatus && <p>{uploadStatus}</p>}
+          </div>
+          <div className="upload-module">
+            <h1 className="text-title ">ข้อมูลพัสดุสายไฟที่มีการจ้างรีดที่ส่วนกลางด้วยอลูมิเนียมอินกอท</h1>
             <form onSubmit={handleUpload}>
               <input type="file" onChange={handleFileChange} />
               <button type="submit">Upload</button>
