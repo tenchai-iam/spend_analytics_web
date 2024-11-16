@@ -9,9 +9,9 @@ import { useQuery } from "@tanstack/react-query";
 import {
   getYears,
   getD2TopSupplier,
-  getD2CategorySpend,
-  getD2CategoryPOQuantity,
-  getD2CategoryAverageSpend,
+  getD2CategorySpendByValue,
+  getD2CategoryPOQuantityByValue,
+  getD2CategoryAverageSpendByValue,
   getDateInfo,
 } from "../services/api.js"; // Import your API service function
 
@@ -80,7 +80,7 @@ const Dashboard2 = () => {
         <Card
           key={supplierId}
           SUPPLIER_NAME={supplier.SUPPLIER_NAME}
-          TOTAL_SPEND={supplier.TOTAL_SPEND/1000000}
+          TOTAL_SPEND={supplier.TOTAL_SPEND}
           TOTAL_PO={supplier.TOTAL_PO}
           SPEND_PER_PO={supplier.SPEND_PER_PO}
         />
@@ -95,14 +95,16 @@ const Dashboard2 = () => {
     error: errorBarCategorySpend,
   } = useQuery({
     queryKey: ["barCategorySpend", selectedYear, selectedCategoryGroup], // Unique query key for caching
-    queryFn: () => getD2CategorySpend(selectedYear, selectedCategoryGroup), // API call to fetch data based on year and category_group are selected
+    queryFn: () =>
+      getD2CategorySpendByValue(selectedYear, selectedCategoryGroup), // API call to fetch data based on year and category_group are selected
     enabled: !!selectedYear && selectedCategoryGroup !== null, // Only run query if year and category_group are selected
   });
 
   const dataBarCategorySpend =
     barCategorySpend?.top_suppliers?.map((supplier) => ({
       name: supplier.SUPPLIER_NAME,
-      value: supplier.TOTAL_SPEND / 1000000,
+      valueHQ: supplier.TOTAL_SPEND_HQ / 1000000,
+      valueDistrict: supplier.TOTAL_SPEND_DISTRICT / 1000000,
     })) || [];
 
   const {
@@ -112,14 +114,16 @@ const Dashboard2 = () => {
     error: errorBarCategoryPOQuantity,
   } = useQuery({
     queryKey: ["barCategoryPOQuantity", selectedYear, selectedCategoryGroup], // Unique query key for caching
-    queryFn: () => getD2CategoryPOQuantity(selectedYear, selectedCategoryGroup), // API call to fetch data based on year and category_group are selected
+    queryFn: () =>
+      getD2CategoryPOQuantityByValue(selectedYear, selectedCategoryGroup), // API call to fetch data based on year and category_group are selected
     enabled: !!selectedYear && selectedCategoryGroup !== null, // Only run query if year and category_group are selected
   });
 
   const dataBarCategoryPOQuantity =
-    barCategoryPOQuantity?.top_suppliers?.map((supplier) => ({
+    barCategoryPOQuantity?.top_suppliers_po?.map((supplier) => ({
       name: supplier.SUPPLIER_NAME,
-      value: supplier.TOTAL_PO,
+      valueHQ: Number(supplier.PO_HQ),
+      valueDistrict: Number(supplier.PO_DISTRICT),
     })) || [];
 
   const {
@@ -130,14 +134,15 @@ const Dashboard2 = () => {
   } = useQuery({
     queryKey: ["barCategoryAverageSpend", selectedYear, selectedCategoryGroup], // Unique query key for caching
     queryFn: () =>
-      getD2CategoryAverageSpend(selectedYear, selectedCategoryGroup), // API call to fetch data based on year and category_group are selected
+      getD2CategoryAverageSpendByValue(selectedYear, selectedCategoryGroup), // API call to fetch data based on year and category_group are selected
     enabled: !!selectedYear && selectedCategoryGroup !== null, // Only run query if year and category_group are selected
   });
 
   const dataBarCategoryAverageSpend =
-    barCategoryAverageSpend?.top_suppliers?.map((supplier) => ({
+    barCategoryAverageSpend?.top_suppliers_spend_by_po?.map((supplier) => ({
       name: supplier.SUPPLIER_NAME,
-      value: supplier.SPEND_PER_PO,
+      valueHQ: supplier.SPEND_BY_PO_HQ,
+      valueDistrict: supplier.SPEND_BY_PO_DISTRICT,
     })) || [];
 
   const toggleView = () => {
@@ -178,7 +183,10 @@ const Dashboard2 = () => {
       </div>
       <div className="dashboard2-container">
         <div className="top-container">
-          <h1 className="text-subtitle">เลือกกลุ่มพัสดุและปีที่ต้องการ</h1>
+          <h1 className="text-subtitle">
+            Top 20 suppliers ตามมูลค่าจัดซื้อทั้งหมด จำนวนใบสั่งซื้อ และ
+            มูลค่าจัดซื้อต่อ PO
+          </h1>
           <div className="btn-menu">
             {/* Button Controls */}
             <div className="button-group">
@@ -206,33 +214,41 @@ const Dashboard2 = () => {
             </div>
           </div>
         </div>
-        {/* <div className="middle-container">
-          <h1 className="container-title">ภาพรวมคู่ค้าของกฟภ.</h1>
-          {/* Check if dashboard2Data is available before rendering the values */}
-        {/* {dashboardData ? (
-            <>
-              <h1 className="text-subtitle">
-                จำนวนคู่ค้าทั้งหมดตามกลุ่มพัสดุที่เลือก:{" "}
-                {dashboardData.data.TOTAL_SUPPLIER.toLocaleString("th-TH")}
-              </h1>
-              <h1 className="text-subtitle">
-                จำนวนคู่ค้า Active ตามกลุ่มพัสดุที่เลือก:{" "}
-                {dashboardData.data.TOTAL_CONT_SUPPLIER.toLocaleString("th-TH")}
-              </h1>
-            </>
-          ) : (
-            <h1 className="text-subtitle">Fetching data...</h1> */}
-        {/* )} */}
-        {/* </div> */}
         <div className="bottom-container">
-          <h1 className="text-subtitle">Top 10 Suppliers</h1>
+          <h1 className="text-subtitle">
+            Top 20 suppliers ตามมูลค่าจัดซื้อทั้งหมด จำนวนใบสั่งซื้อ และ
+            มูลค่าจัดซื้อต่อ PO
+          </h1>
+          <p>หมายเหตุ: หน่วยมูลค่าจัดซื้อเป็นหน่วยบาท</p>
           {/* Toggle Button */}
           <button className="chart-button" onClick={toggleView}>
-            {isCardView ? "Graph View" : "Card View"}
+            {isCardView ? "มุมมอง Card" : "มุมมอง Graph"}
           </button>
 
           {/* Chart Container */}
           {isCardView ? (
+            <div className="charts-grid-container">
+              <BarGraphReH
+                data={dataBarCategorySpend}
+                yAxisKey="name"
+                title={`มูลค่าจัดซื้อในปี ${selectedYear}`}
+                height={2000}
+              />
+              <BarGraphReH
+                data={dataBarCategoryPOQuantity}
+                yAxisKey="name"
+                title={`จำนวนใบสั่งซื้อ (PO) ในปี ${selectedYear}`}
+                height={2000}
+              />
+              <BarGraphReH
+                data={dataBarCategoryAverageSpend}
+                yAxisKey="name"
+                barKey="value"
+                title={`มูลค่าจัดซื้อต่อ PO ในปี ${selectedYear}`}
+                height={2000}
+              />
+            </div>
+          ) : (
             <div className="cards-grid-container">
               {isLoadingSuppliers ? (
                 <h1 className="text-subtitle">Loading Top Suppliers...</h1>
@@ -244,34 +260,10 @@ const Dashboard2 = () => {
                 renderTopSuppliers()
               )}
             </div>
-          ) : (
-            <div className="charts-grid-container">
-              <BarGraphReH
-                data={dataBarCategorySpend}
-                yAxisKey="name"
-                barKey="value"
-                title="ยอดจัดซื้อทั้งหมดแบ่งตามประเภทจัดซื้อ (ล้านบาท)"
-                height={1000}
-              />
-              <BarGraphReH
-                data={dataBarCategoryPOQuantity}
-                yAxisKey="name"
-                barKey="value"
-                title="จำนวน PO"
-                height={1000}
-              />
-              <BarGraphReH
-                data={dataBarCategoryAverageSpend}
-                yAxisKey="name"
-                barKey="value"
-                title="มูลค่าต่อ PO (บาท)"
-                height={1000}
-              />
-            </div>
           )}
         </div>
         <div>
-          <h1 className="data-date-home">
+          <h1 className="data-date">
             ข้อมูล ณ วันที่ {dateInfoData?.day}/{dateInfoData?.month}/
             {dateInfoData?.year}
           </h1>
