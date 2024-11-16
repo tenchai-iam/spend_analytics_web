@@ -27,6 +27,12 @@ const Dashboard3 = () => {
   const [selectedDistrict, setSelectedDistrict] = useState(""); // State to hold the selected material
   const [showFirstChart, setShowFirstChart] = useState(true); // State to toggle between the charts
 
+  const priceFormatter = new Intl.NumberFormat("en-US", {
+    style: "decimal",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+
   // Fetch available years using React Query
   const { data: yearsData, isLoading: isYearsLoading } = useQuery({
     queryKey: ["years"],
@@ -223,7 +229,7 @@ const Dashboard3 = () => {
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
               >
-                <option value="">-- เลือกกลุ่มพัสดุ --</option>
+                <option value="">-- เลือกประเภทพัสดุ --</option>
                 {categoryData
                   ?.slice() // Create a shallow copy of the array to avoid modifying the original
                   .sort((a, b) => {
@@ -240,12 +246,13 @@ const Dashboard3 = () => {
             )}
           </div>
           <TableD3Price
-            title="เปรียบเทียบราคาจัดซื้อกฟฟ.เขต vs ส่วนกลาง"
+            title={`เปรียบเทียบราคาจัดซื้อส่วนกลาง vs. กฟข. ในปี ${selectedYear}`}
             data={dataTablePrice}
           />
         </div>
         <div className="bottom-container">
-          <h1 className="text-title">เปรียบเทียบราคาจัดซื้อตามรายการพัสดุ</h1>
+          <h1 className="text-title">{`เปรียบเทียบราคาจัดซื้อพัสดุตามหน่วยงานจัดซื้อ ในปี ${selectedYear}`}
+          </h1>
           <div className="dropdown-cat-group">
             {isLoadingMaterialD3Data ? (
               <p>Loading materials...</p>
@@ -276,7 +283,7 @@ const Dashboard3 = () => {
 
           {/* Toggle Button */}
           <button className="chart-button" onClick={toggleChart}>
-            {showFirstChart ? "แยกตามการไฟฟ้า" : "แยกตามเขต"}
+            {showFirstChart ? "แยกตาม กฟข. หน้างาน" : "แยกตาม กฟข. 12 เขค"}
           </button>
 
           {/* Chart Container */}
@@ -287,34 +294,28 @@ const Dashboard3 = () => {
                 <div>
                   <p className="text-subtitle">
                     ราคาต่ำสุด:{" "}
-                    {materialPriceGroupDistrict?.PRICE_LOWEST.toLocaleString(
-                      "th-TH"
-                    )}{" "}
+                    {priceFormatter.format(materialPriceGroupDistrict?.PRICE_LOWEST)}{" "}
                     บาท
                   </p>
                 </div>
                 <div>
                   <p className="text-subtitle">
                     ราคาเฉลี่ย:{" "}
-                    {materialPriceGroupDistrict?.PRICE_AVERAGE.toLocaleString(
-                      "th-TH"
-                    )}{" "}
+                    {priceFormatter.format(materialPriceGroupDistrict?.PRICE_AVERAGE)}{" "}
                     บาท
                   </p>
                 </div>
                 <div>
                   <p className="text-subtitle">
                     ราคาสูงสุด:{" "}
-                    {materialPriceGroupDistrict?.PRICE_HIGHEST.toLocaleString(
-                      "th-TH"
-                    )}{" "}
+                    {priceFormatter.format(materialPriceGroupDistrict?.PRICE_HIGHEST)}{" "}
                     บาท
                   </p>
                 </div>
               </div>
               <div>
                 <p className="text-subtitle">
-                  หน่วย: บาท/{materialPriceGroupDistrict?.UOM}
+                  หน่วย: บาท ต่อ {materialPriceGroupDistrict?.UOM}
                 </p>
               </div>
             </div>
@@ -345,34 +346,28 @@ const Dashboard3 = () => {
                 <div>
                   <p className="text-subtitle">
                     ราคาต่ำสุด:{" "}
-                    {materialPriceGroupEKGRP?.PRICE_LOWEST.toLocaleString(
-                      "th-TH"
-                    )}{" "}
+                    {priceFormatter.format(materialPriceGroupEKGRP?.PRICE_LOWEST)}{" "}
                     บาท
                   </p>
                 </div>
                 <div>
                   <p className="text-subtitle">
                     ราคาเฉลี่ย:{" "}
-                    {materialPriceGroupEKGRP?.PRICE_AVERAGE.toLocaleString(
-                      "th-TH"
-                    )}{" "}
+                    {priceFormatter.format(materialPriceGroupEKGRP?.PRICE_AVERAGE)}{" "}
                     บาท
                   </p>
                 </div>
                 <div>
                   <p className="text-subtitle">
                     ราคาสูงสุด:{" "}
-                    {materialPriceGroupEKGRP?.PRICE_HIGHEST.toLocaleString(
-                      "th-TH"
-                    )}{" "}
+                    {priceFormatter.format(materialPriceGroupEKGRP?.PRICE_HIGHEST)}{" "}
                     บาท
                   </p>
                 </div>
               </div>
               <div>
                 <p className="text-subtitle">
-                  หน่วย: บาท/{materialPriceGroupEKGRP?.UOM}
+                  หน่วย: บาท ต่อ {materialPriceGroupEKGRP?.UOM}
                 </p>
               </div>
             </div>
@@ -383,19 +378,19 @@ const Dashboard3 = () => {
                 data={dataMaterialPriceByDistrict}
                 xAxisKey="name"
                 barKey="averagePrice"
-                title="ข้อมูลราคาเฉลี่ยของแต่ละเขต"
+                title="ข้อมูลราคาเฉลี่ยตามหน่วยงานจัดซื้อ"
               />
             ) : (
               <D3BarGraphReV
                 data={dataMaterialPriceByEKGRP}
                 xAxisKey="name"
                 barKey="averagePrice"
-                title="ข้อมูลราคาเฉลี่ยของแต่ละการไฟฟ้า"
+                title="ข้อมูลราคาเฉลี่ยตามหน่วยงานจัดซื้อ"
               />
             )}
             <h1 className="text-subtitle">
-              หากไม่มีการจัดซื้อเกิดขึ้นในปีที่เลือกแสดง
-              จะไม่มีการแสดงผลราคาเฉลี่ย ณ เขต หรือ ส่วนกลางในปีนั้นๆ
+              หมายเหตุ: หากไม่มีการจัดซื้อเกิดขึ้น ณ หน่วยงานจัดซื้อนั้นๆในปีที่เลือกแสดง
+              จะไม่มีการแสดงผลราคาเฉลี่ย
             </h1>
           </div>
         </div>

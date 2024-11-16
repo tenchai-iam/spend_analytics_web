@@ -12,11 +12,11 @@ import {
 } from "recharts";
 import "../ComponentsStyles/BarGraphReV.css";
 
-// Safe formatter function with fallback
-const formatCurrency = (value) => {
-  if (value === null || value === undefined) return "-";
-  return value.toLocaleString();
-};
+const priceFormatter = new Intl.NumberFormat("en-US", {
+  style: "decimal",
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
 
 // Custom Tooltip component
 const CustomTooltip = ({ active, payload }) => {
@@ -24,8 +24,8 @@ const CustomTooltip = ({ active, payload }) => {
     const { maxPrice, minPrice } = payload[0].payload;
     return (
       <div className="custom-tooltip">
-        <p>{`ราคาสูงสุด (บาท): ${formatCurrency(maxPrice)}`}</p>
-        <p>{`ราคาต่ำสุด (บาท): ${formatCurrency(minPrice)}`}</p>
+        <p>{`ราคาสูงสุด (บาท): ${priceFormatter.format(maxPrice)}`}</p>
+        <p>{`ราคาต่ำสุด (บาท): ${priceFormatter.format(minPrice)}`}</p>
       </div>
     );
   }
@@ -63,7 +63,7 @@ const D3BarGraphReV = ({ data, xAxisKey, barKey, title, height = 400 }) => {
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey={xAxisKey} />
-          <YAxis tickFormatter={formatCurrency} />
+          <YAxis tickFormatter={(value)=>priceFormatter.format(value)} />
           <Tooltip content={<CustomTooltip />} />
           <Bar dataKey={barKey} fill="#4a0072">
             {data.map((entry, index) => {
@@ -75,7 +75,7 @@ const D3BarGraphReV = ({ data, xAxisKey, barKey, title, height = 400 }) => {
             <LabelList
               dataKey={barKey}
               position="top"
-              formatter={formatCurrency}
+              formatter={priceFormatter.format}
             />
           </Bar>
         </BarChart>

@@ -67,10 +67,10 @@ const TableD3Price = ({ title, data }) => {
                 ชื่อพัสดุ {renderSortArrow("matName")}
               </th>
               <th onClick={() => handleSort("priceHQ")}>
-                ราคาที่ส่วนกลาง (บาท) {renderSortArrow("priceHQ")}
+                ราคาที่ส่วนกลาง {renderSortArrow("priceHQ")}
               </th>
               <th onClick={() => handleSort("priceDistrict")}>
-                ราคาเฉลี่ยที่กฟข. (บาท) {renderSortArrow("priceDistrict")}
+                ราคาเฉลี่ยที่กฟข. {renderSortArrow("priceDistrict")}
               </th>
               <th onClick={() => handleSort("priceDiff")}>
                 % ราคาที่แตกต่าง {renderSortArrow("priceDiff")}
@@ -107,3 +107,4 @@ const TableD3Price = ({ title, data }) => {
 };
 
 export default TableD3Price;
+
