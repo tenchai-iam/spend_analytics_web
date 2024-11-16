@@ -1,9 +1,9 @@
+/* General Layout */
 .data-date {
   font-size: 1rem;
   color: #fff;
 }
 
-/* General Layout */
 .year-dropdown-container {
   display: flex;
   justify-content: flex-end; /* This moves the dropdown to the right */
@@ -164,6 +164,13 @@
   .map-wrapper {
     width: 100%; /* Full width for graphs on smaller screens */
   }
+}
+
+.bubble-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #4a0072; /* Custom color for the title */
+  text-align: center; /* Center the title */
 }
 
 /* iPhone (max-width: 600px) */
