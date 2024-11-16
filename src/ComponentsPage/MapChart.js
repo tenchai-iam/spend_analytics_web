@@ -147,20 +147,18 @@ const MapChart = ({ data, mapStyle }) => {
               reuseMaps
               mapStyle={{
                 version: 8,
-                sources: {
-                  osm: {
-                    type: "raster",
-                    tiles: [
-                      "https://basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", // Dark-themed OSM tiles
-                    ],
-                    tileSize: 256,
+                    sources: {
+                      localTiles: {
+                        type: "raster",
+                        tiles: ["/tiles/{z}/{x}/{y}.png"], // Use local tiles from public folder
+                        tileSize: 256,
                   },
                 },
                 layers: [
                   {
-                    id: "osm-tiles",
+                    id: "local-raster-layer",
                     type: "raster",
-                    source: "osm",
+                    source: "localTiles",
                     minzoom: 0,
                     maxzoom: 22,
                   },
