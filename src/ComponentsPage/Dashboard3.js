@@ -131,6 +131,8 @@ const Dashboard3 = () => {
       maxPrice: district?.PRICE_MAX_REGION,
       averagePrice: district?.PRICE_AVERAGE_REGION,
       minPrice: district?.PRICE_MIN_REGION,
+      maxQuantity: district?.QUANTITY_MAX_DISTRICT,
+      minQuantity: district?.QUANTITY_MIN_DISTRICT,
     })) || [];
 
   const {
@@ -187,6 +189,8 @@ const Dashboard3 = () => {
       maxPrice: ekgrp?.PRICE_MAX_EKGRP,
       averagePrice: ekgrp?.PRICE_AVERAGE_EKGRP,
       minPrice: ekgrp?.PRICE_MIN_EKGRP,
+      maxQuantity: ekgrp?.QUANTITY_MAX_EKGRP,
+      minQuantity: ekgrp?.QUANTITY_MIN_EKGRP,
     })) || [];
 
   const toggleChart = () => {
