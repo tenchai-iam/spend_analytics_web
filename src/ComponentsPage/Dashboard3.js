@@ -98,6 +98,8 @@ const Dashboard3 = () => {
       priceHQ: Number(item.PRICE_HQ),
       priceDistrict: Number(item.PRICE_REGION),
       priceDiff: Number(item.PRICE_DIFF) - 1,
+      quantityHQ: Number(item.QUANTITY_HQ),
+      quantityRegion: Number(item.QUANTITY_REGION),
     })) || [];
 
   const {
