@@ -21,9 +21,9 @@ const thailandLayer = new GeoJsonLayer({
 const INITIAL_VIEW_STATE = {
   longitude: 100.9925,
   latitude: 11.1,
-  zoom: 5.5,
-  minZoom: 5.5,
-  maxZoom: 7.2,
+  zoom: 6.0,
+  minZoom: 6.0,
+  maxZoom: 7.0,
   pitch: 75,
   bearing: -5,
 };
@@ -81,10 +81,10 @@ function getTooltip({ object }) {
 const Legend = () => (
   <div className="legend">
     <div className="legend-item">
-      <span className="color-box po-color"></span> จำนวน PO สะสม
+      <span className="color-box po-color"></span> จำนวน PO สั่งซื้อพัสดุสะสม
     </div>
     <div className="legend-item">
-      <span className="color-box spend-color"></span> ยอดจัดซื้อพัสดุสะสม
+      <span className="color-box spend-color"></span> มูลค่าจัดซื้อพัสดุสะสม
       (ล้านบาท)
     </div>
   </div>
@@ -219,13 +219,14 @@ const DataTable = ({ data }) => {
       <thead>
         <tr>
           <th onClick={() => handleSort("location")}>
-            เขต {renderSortArrow("location")}
+            หน่วยงานจัดซื้อ {renderSortArrow("location")}
           </th>
           <th onClick={() => handleSort("TOTAL_PO_MAT")}>
-            จำนวน PO พัสดุ {renderSortArrow("TOTAL_PO_MAT")}
+            จำนวน PO สั่งซื้อพัสดุสะสม {renderSortArrow("TOTAL_PO_MAT")}
           </th>
           <th onClick={() => handleSort("TOTAL_SPEND_MAT")}>
-            ยอดจัดซื้อพัสดุ (ล้านบาท) {renderSortArrow("TOTAL_SPEND_MAT")}
+            มูลค่าจัดซื้อพัสดุสะสม (ล้านบาท){" "}
+            {renderSortArrow("TOTAL_SPEND_MAT")}
           </th>
         </tr>
       </thead>
