@@ -5,7 +5,7 @@ import "../ComponentsStyles/BubbleChart.css"; // Import CSS
 const BubbleChart = ({ data }) => {
   const svgRef = useRef();
   const containerRef = useRef();
-  const [dimensions, setDimensions] = useState({ width: 600, height: 600 });
+  const [dimensions, setDimensions] = useState({ width: 800, height: 800 });
 
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
@@ -22,6 +22,7 @@ const BubbleChart = ({ data }) => {
 
   const numberFormatter = new Intl.NumberFormat("en-US", {
     style: "decimal",
+    minimumFractionDigits: 3,
     maximumFractionDigits: 3,
   });
 
@@ -62,6 +63,9 @@ const BubbleChart = ({ data }) => {
     if (!data || data.length === 0) return;
 
     const totalValue = d3.sum(data, (d) => d.value); // Calculate the total value
+    const maxValue = d3.max(data, (d) => d.value); // Find the highest value
+
+    const rankedData = [...data].sort((a, b) => b.value - a.value); // Sort data by value
 
     const svg = d3
       .select(svgRef.current)
@@ -103,7 +107,7 @@ const BubbleChart = ({ data }) => {
       .append("g")
       .attr("class", "bubble-group");
 
-    const circles = bubbleGroup
+    bubbleGroup
       .append("circle")
       .attr("class", "bubble")
       .attr("r", (d) => sizeScale(d.value))
@@ -119,14 +123,25 @@ const BubbleChart = ({ data }) => {
 
     bubbleGroup
       .append("text")
+      .attr("class", "bubble-ranking")
+      .attr("text-anchor", "middle")
+      .attr("dy", "-2em") // Place ranking above the label
+      .text(
+        (d) =>
+          `#${rankedData.findIndex((r) => r.name === d.name) + 1}` +
+          (d.value === maxValue ? "👑" : "")
+      );
+
+    bubbleGroup
+      .append("text")
       .attr("class", "bubble-label")
       .attr("text-anchor", "middle")
-      .attr("dy", "-5em") // Move the name upwards
+      .attr("dy", "-4em") // Move the name upwards
       .selectAll("tspan")
       .data((d) => wrapText(d.name, sizeScale(d.value)))
       .join("tspan")
       .attr("x", 0)
-      .attr("dy", (d, i) => `${i}em`) // Align multiple lines properly
+      .attr("dy", (d, i) => `${i}em`)
       .text((d) => d);
 
     bubbleGroup
@@ -136,13 +151,12 @@ const BubbleChart = ({ data }) => {
       .attr("dy", "2.0em") // Move the value below the name
       .text((d) => numberFormatter.format(d.value));
 
-    // Add percentage text below value
     bubbleGroup
       .append("text")
       .attr("class", "bubble-percentage")
       .attr("text-anchor", "middle")
       .attr("dy", "3.5em") // Move the percentage below the value
-      .text((d) => `${((d.value / totalValue) * 100).toFixed(2)}%`);
+      .text((d) => `(${((d.value / totalValue) * 100).toFixed(2)}%)`);
 
     function ticked() {
       bubbleGroup.attr("transform", (d) => {

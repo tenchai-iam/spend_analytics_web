@@ -46,7 +46,7 @@ function NavbarComponent() {
             </Nav.Link>{" "}
             {/* Use Link with to */}
             {/* Dropdown for Admin */}
-            <NavDropdown title="สำหรับผู้บริหาร" id="admin-dropdown">
+            <NavDropdown title="สำหรับพนักงานทั่วไป" id="admin-dropdown">
               <NavDropdown.Item as={Link} to="/dashboard1">
                 ภาพรวมค่าใช้จ่าย
               </NavDropdown.Item>
@@ -55,7 +55,7 @@ function NavbarComponent() {
               </NavDropdown.Item>
             </NavDropdown>
             {/* Dropdown for Planning */}
-            <NavDropdown title="สำหรับกองวางแผน" id="planning-dropdown">
+            <NavDropdown title="สำหรับผู้จัดทำแผนจัดหาพัสดุ" id="planning-dropdown">
               <NavDropdown.Item as={Link} to="/dashboard3">
                 เปรียบเทียบราคาจัดซื้อ
               </NavDropdown.Item>

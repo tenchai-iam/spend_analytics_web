@@ -20,6 +20,12 @@ const TableD3Price = ({ title, data }) => {
       maximumFractionDigits: 2,
     }).format(value);
 
+  const formatQuantity = (value) =>
+    new Intl.NumberFormat("en-US", {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(value);
+
   const sortedData = [...data].sort((a, b) => {
     if (sortConfig.key) {
       const aValue = a[sortConfig.key];
@@ -67,13 +73,21 @@ const TableD3Price = ({ title, data }) => {
                 ชื่อพัสดุ {renderSortArrow("matName")}
               </th>
               <th onClick={() => handleSort("priceHQ")}>
-                ราคาที่ส่วนกลาง (บาท) {renderSortArrow("priceHQ")}
+                ราคาที่ส่วนกลาง {renderSortArrow("priceHQ")}
               </th>
               <th onClick={() => handleSort("priceDistrict")}>
-                ราคาเฉลี่ยที่กฟข. (บาท) {renderSortArrow("priceDistrict")}
+                ราคาเฉลี่ยที่กฟข. {renderSortArrow("priceDistrict")}
               </th>
               <th onClick={() => handleSort("priceDiff")}>
                 % ราคาที่แตกต่าง {renderSortArrow("priceDiff")}
+              </th>
+              <th onClick={() => handleSort("quantityHQ")}>
+                จำนวนพัสดุเฉลี่ยต่อ PO ที่ส่วนกลาง{" "}
+                {renderSortArrow("quantityHQ")}
+              </th>
+              <th onClick={() => handleSort("quantityRegion")}>
+                จำนวนพัสดุเฉลี่ยต่อ PO ที่ กฟข.{" "}
+                {renderSortArrow("quantityRegion")}
               </th>
             </tr>
           </thead>
@@ -97,6 +111,8 @@ const TableD3Price = ({ title, data }) => {
                   </span>
                 </td>
                 <td>{formatPercentage(row.priceDiff)}</td>
+                <td>{formatQuantity(row.quantityHQ)}</td>
+                <td>{formatQuantity(row.quantityRegion)}</td>
               </tr>
             ))}
           </tbody>
@@ -107,3 +123,4 @@ const TableD3Price = ({ title, data }) => {
 };
 
 export default TableD3Price;
+

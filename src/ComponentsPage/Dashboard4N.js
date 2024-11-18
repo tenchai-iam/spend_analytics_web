@@ -213,7 +213,7 @@ const Dashboard4 = () => {
           <div className="donutChart">
             <D4DonutChartRe
               data={dataDonutUsable}
-              title="สัดส่วนรายการพัสดุตามจำนวนเดือนคงเหลือที่ใช้ได้"
+              title="ภาพรวมรายการพัสดุตาม ใช้งานได้ (เดือน)"
               onPrioritySelect={handlePrioritySelect} // Pass the handler
               height={400}
             />
@@ -226,7 +226,7 @@ const Dashboard4 = () => {
           </div> */}
           <div className="table-summary">
             <TableD42
-              title="รายการพัสดุที่ต้องจัดสรรเพิ่มเติม"
+              title="รายการพัสดุที่ ใช้งานได้ <= 3 เดือน"
               data={dataTableRequireMaterialDetail}
             />
           </div>
@@ -236,7 +236,7 @@ const Dashboard4 = () => {
         <div className="btn-container-L1">
           <div className="dropdown-group dropdown-cat-group">
             <h1 className="text-subtitle">
-              เลือกกลุ่มและรายพัสดุที่ต้องการจำลองแผนการจัดซื้อพัสดุเพิ่มเติมระหว่างปี
+            เลือกกลุ่ม และ รายการพัสดุ
             </h1>
             {isCategoriesLoading ? (
               <p>Loading categories...</p>
@@ -292,7 +292,7 @@ const Dashboard4 = () => {
 
           {/* Lead Time Section */}
           <div className="lead-time">
-            <p className="text-subtitle">ระยะเวลาจัดซื้อโดยส่วนกลาง</p>
+            <p className="text-subtitle">เลือกจำนวนเดือนคาดการณ์จัดซื้อโดยส่วนกลาง (ฝวห.)</p>
             <div className="button-group">
               {[
                 "1 เดือน",
@@ -318,7 +318,7 @@ const Dashboard4 = () => {
 
           {/* Demand Time Section */}
           <div className="demand-time">
-            <p className="text-subtitle">ระยะเวลาที่ต้องการใช้พัสดุ</p>
+            <p className="text-subtitle">เลือกจำนวนเดือนคาดการณ์ที่ต้องการใช้พัสดุ</p>
             <div className="button-group">
               {[
                 "1 เดือน",
@@ -364,6 +364,10 @@ const Dashboard4 = () => {
             ข้อมูล ณ วันที่ {dateInfoData?.day}/{dateInfoData?.month}/
             {dateInfoData?.year}
           </h1>
+          <p className="data-date">
+            หมายเหตุ: ข้อมูลภายในระบบ Spend Insight เป็นข้อมูลภายในของกฟภ.
+            ห้ามเผยแพร่ให้กับผู้ภายนอก
+          </p>
         </div>
       </div>
     </div>

@@ -103,16 +103,16 @@ const Table4 = ({ title, data }) => {
                 จัดหาเพิ่ม (หน่วย) {renderSortArrow("newQuantity")}
               </th>
               <th onClick={() => handleSort("unitHQ")}>
-                จัดหาเพิ่มโดยฝวห. (หน่วย) {renderSortArrow("unitHQ")}
+                จัดหาเพิ่มโดย ฝวห. (หน่วย) {renderSortArrow("unitHQ")}
               </th>
               <th onClick={() => handleSort("priceHQ")}>
-                ราคาจัดซื้อที่ฝวห. {renderSortArrow("priceHQ")}
+                ราคาที่ ฝวห. {renderSortArrow("priceHQ")}
               </th>
               <th onClick={() => handleSort("unitDistrict")}>
-                จัดหาเพิ่มโดยกฟข. (หน่วย) {renderSortArrow("unitDistrict")}
+                จัดหาเพิ่มโดย กฟข. (หน่วย) {renderSortArrow("unitDistrict")}
               </th>
               <th onClick={() => handleSort("priceDistrict")}>
-                ราคาจัดซื้อที่กฟข. {renderSortArrow("priceDistrict")}
+                ราคาเฉลี่ยที่ กฟข. {renderSortArrow("priceDistrict")}
               </th>
               <th onClick={() => handleSort("mediumPrice")}>
                 ราคาอ้างอิง {renderSortArrow("mediumPrice")}

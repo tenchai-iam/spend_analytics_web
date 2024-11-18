@@ -27,13 +27,13 @@ const Dashboard = ({ selectedYear }) => {
   return (
     <div className="text-container">
       <div className="text-top">
-        <label className="text">ยอดจัดซื้อทั้งหมด (ล้านบาท)</label>
+        <label className="text">มูลค่าจัดซื้อทั้งหมด</label>
         <label className="text">
-          {(data.TOTAL_SPEND / 1000000).toLocaleString("th-TH")}
+          {(data.TOTAL_SPEND).toLocaleString("th-TH")}{" บาท"}
         </label>
       </div>
       <div className="text-bottom">
-        <label className="text">จำนวนใบสั่งซื้อ PO</label>
+        <label className="text">จำนวนใบสั่งซื้อ (PO)</label>
         <label className="text">{data.TOTAL_PO.toLocaleString("th-TH")}</label>
       </div>
     </div>
@@ -94,8 +94,8 @@ const Home = () => {
         <div className="nav-container">
           {/* First Section */}
           <div className="nav-section">
-            <h1 className="nav-title">Management</h1>
-            <p className="nav-subtitle">Dashboard สำหรับผู้บริหาร</p>
+            <h1 className="nav-title">General</h1>
+            <p className="nav-subtitle">Dashboard ทั่วไป</p>
             <div className="menu-grid">
               <MenuCard
                 image={D1}
@@ -112,19 +112,19 @@ const Home = () => {
             </div>
           </div>
           <div className="nav-section">
-            <h1 className="nav-title">Procurement</h1>
-            <p className="nav-subtitle">Dashboard สำหรับกองวางแผน</p>
+            <h1 className="nav-title">Procurement Planning</h1>
+            <p className="nav-subtitle">Dashboard สำหรับผู้จัดทำแผนพัสดุ</p>
             <div className="menu-grid">
               <MenuCard
                 image={D3}
                 title="เปรียบเทียบราคาจัดซื้อพัสดุ"
-                description="Compare procurement prices"
+                description="Compare material purchase price"
                 link="/dashboard3"
               />
               <MenuCard
                 image={D4}
                 title="ปรับแผนเพิ่มเติมระหว่างปี"
-                description="Adjust purchasing budgets"
+                description="Design procurement plan"
                 link="/dashboard4"
               />
             </div>
@@ -136,9 +136,13 @@ const Home = () => {
             ข้อมูล ณ วันที่ {dateInfoData?.day}/{dateInfoData?.month}/
             {dateInfoData?.year}
           </h1>
+          <p className="data-date-home">
+            หมายเหตุ: ข้อมูลภายในระบบ Spend Insight เป็นข้อมูลภายในของกฟภ.
+            ห้ามเผยแพร่ให้กับผู้ภายนอก
+          </p>
         </div>
+        <NewsTicker data={newsItems} />
       </div>
-      <NewsTicker data={newsItems} />
     </div>
   );
 };
