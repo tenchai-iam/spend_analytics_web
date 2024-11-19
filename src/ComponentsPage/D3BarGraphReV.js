@@ -32,12 +32,12 @@ const CustomTooltip = ({ active, payload }) => {
       <div className="custom-tooltip">
         <p>{`ราคาสูงสุด (บาท): ${priceFormatter.format(maxPrice)}`}</p>
         <p>{`ราคาต่ำสุด (บาท): ${priceFormatter.format(minPrice)}`}</p>
-        <p>{`จำนวนต่อ PO สูงสุด: ${quantityFormatter.format(
+        {/* <p>{`จำนวนต่อ PO สูงสุด: ${quantityFormatter.format(
           maxQuantity
         )}`}</p>
         <p>{`จำนวนต่อ PO ต่ำสุด: ${quantityFormatter.format(
           minQuantity
-        )}`}</p>
+        )}`}</p> */}
       </div>
     );
   }

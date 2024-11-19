@@ -1,8 +1,12 @@
 /* General Layout */
+.data-date {
+  font-size: 1rem;
+  color: #fff;
+}
 .data-date-home {
   font-size: 1rem;
-  padding: 20px;
   color: #fff;
+  margin-bottom: 60px;
 }
 
 .home-container {
