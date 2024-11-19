@@ -2,10 +2,12 @@
 .data-date {
   font-size: 1rem;
   color: #fff;
+  padding-left: 20px;
 }
 .data-date-home {
   font-size: 1rem;
   color: #fff;
+  padding-left: 20px;
   margin-bottom: 60px;
 }
 
