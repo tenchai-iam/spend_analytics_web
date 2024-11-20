@@ -17,26 +17,21 @@ const formatCurrency = (value) => `${value.toLocaleString("th-TH")}`;
 // Generalized Tooltip Component
 const CustomTooltip = ({ active, payload, label, dataKey, title }) => {
   if (active && payload && payload.length) {
-    const item = payload.find((entry) => entry.dataKey === dataKey)?.value || 0;
-    const districts =
-      payload.find((entry) => entry.payload[`${dataKey}Districts`])?.payload[
-        `${dataKey}Districts`
-      ] || {};
+    // Extract the active line's data
+    const item = payload[0]?.payload?.[dataKey] || 0;
+
+    // Extract district breakdown
+    const districts = payload[0]?.payload?.[`${dataKey}Districts`] || {};
 
     // Custom formatter to round values
     const formatRounded = (value) => Math.round(value / 1000) * 1000;
 
-    // Construct list items dynamically
-    const breakdown = [];
-    for (const key in districts) {
-      if (Object.hasOwnProperty.call(districts, key)) {
-        breakdown.push(
-          <li key={key} style={{ fontSize: "12px" }}>
-            {key}: {formatCurrency(formatRounded(districts[key]))}
-          </li>
-        );
-      }
-    }
+    // Construct district breakdown list
+    const breakdown = Object.entries(districts).map(([key, value]) => (
+      <li key={key} style={{ fontSize: "12px" }}>
+        {key}: {formatCurrency(formatRounded(value))}
+      </li>
+    ));
 
     return (
       <div
@@ -65,7 +60,7 @@ const CustomTooltip = ({ active, payload, label, dataKey, title }) => {
   return null;
 };
 
-const LineGraphRe = ({ data, xAxisKey, title, height }) => {
+const LineGraphReNumPO = ({ data, xAxisKey, title, height }) => {
   // Get screen width to dynamically adjust chart styling
   const screenWidth = window.innerWidth;
 
@@ -92,7 +87,7 @@ const LineGraphRe = ({ data, xAxisKey, title, height }) => {
           <Tooltip
             content={<CustomTooltip dataKey="mat" title="สัดส่วนตาม กฟข." />}
           />
-          {/* Material Spend Line */}
+          {/* Material PO Num Line */}
           <Line
             type="monotone"
             dataKey="mat"
@@ -149,5 +144,4 @@ const LineGraphRe = ({ data, xAxisKey, title, height }) => {
   );
 };
 
-export default LineGraphRe;
-
+export default LineGraphReNumPO;

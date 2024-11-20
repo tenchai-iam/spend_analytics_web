@@ -60,9 +60,8 @@
 }
 
 .top-D1-grid-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Default: 2 columns */
-  /* flex-wrap: nowrap; */
+  display: flex;
+  flex-direction: row;
   gap: 20px;
   box-sizing: border-box; /* Ensure padding is included in width */
   width: 100%;
@@ -72,14 +71,16 @@
   background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
   border-radius: 8px;
   padding: 20px;
-  width: 100%;
+  flex: 1 1 60%;
+  max-width: 60%;
 }
 
 .right {
   background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
   border-radius: 8px;
   padding: 20px;
-  width: 100%;
+  flex: 1 1 40%;
+  max-width: 40%;
 }
 
 .middle-D1-container {

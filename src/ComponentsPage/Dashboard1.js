@@ -6,6 +6,7 @@ import "../ComponentsStyles/Dashboard1.css"; // Updated to use Dashboard1.css
 import YearDropdown from "./YearDropdown";
 import MapChart from "./MapChart.js";
 import LineGraphRe from "./LineGraphRe.js";
+import LineGraphReNumPO from "./LineGraphReNumPO.js";
 import BarGraphReV from "./BarGraphReV.js";
 import DonutChartRe from "./DonutChartRe.js";
 import TableD1Price from "./TableD1Price.js";
@@ -68,7 +69,7 @@ const Dashboard1 = () => {
       matName: item.MAKTX,
       priceHQ: Number(item.PRICE_HQ),
       priceDistrict: Number(item.PRICE_REGION),
-      priceDiff: (Number(item.PRICE_DIFF) - 1),
+      priceDiff: Number(item.PRICE_DIFF) - 1,
     })) || [];
 
   const {
@@ -119,9 +120,12 @@ const Dashboard1 = () => {
 
   // Ensure lineSpend data exists before mapping
   const dataLineSpend =
-    lineSpend?.TOTAL_SPEND_MONTHLY?.map((value, index) => ({
-      month: months[index],
-      value: value / 1000000, // Format the value as a localized string for Thailand
+    lineSpend?.monthlySpend?.map((item, index) => ({
+      month: months[index], // Map months to Thai abbreviations
+      mat: item.matSpend / 1000000, // Convert matSpend to millions
+      nonMat: item.nonMatSpend / 1000000, // Convert nonMatSpend to millions
+      matDistricts: item.districtsMat, // Include this in the dataset
+      nonMatDistricts: item.districtsNonMat, // Include this in the dataset
     })) || [];
 
   const {
@@ -136,7 +140,10 @@ const Dashboard1 = () => {
   });
 
   const dataBarSpend = [
-    { name: "พัสดุ", value: (barSpend?.TOTAL_SPEND_MAT || 0) / 1000000 },
+    {
+      name: "พัสดุอุปกรณ์ไฟฟ้า (รหัส 100 - 108)",
+      value: (barSpend?.TOTAL_SPEND_MAT || 0) / 1000000,
+    },
     {
       name: "อื่นๆ",
       value: (barSpend?.TOTAL_SPEND_NON_MAT || 0) / 1000000,
@@ -156,9 +163,12 @@ const Dashboard1 = () => {
 
   // Ensure linePOQuantity data exists before mapping
   const dataLinePOQuantity =
-    linePOQuantity?.TOTAL_PO_MONTHLY?.map((value, index) => ({
-      month: months[index],
-      value: value, // Format the value as a localized string for Thailand
+    linePOQuantity?.monthlySpend?.map((item, index) => ({
+      month: months[index], // Map months to Thai abbreviations
+      mat: item.matPO,
+      nonMat: item.nonMatPO,
+      matDistricts: item.districtsMat,
+      nonMatDistricts: item.districtsNonMat,
     })) || [];
 
   const {
@@ -173,7 +183,10 @@ const Dashboard1 = () => {
   });
 
   const dataBarPurchaseQ = [
-    { name: "พัสดุ", value: barPurchaseQ?.TOTAL_PO_MAT || 0 },
+    {
+      name: "พัสดุอุปกรณ์ไฟฟ้า (รหัส 100 - 108)",
+      value: barPurchaseQ?.TOTAL_PO_MAT || 0,
+    },
     {
       name: "อื่นๆ",
       value: barPurchaseQ?.TOTAL_PO_NON_MAT || 0,
@@ -193,9 +206,12 @@ const Dashboard1 = () => {
 
   // Ensure lineSupplierQuantity data exists before mapping
   const dataLineSupplierQuantity =
-    lineSupplierQuantity?.TOTAL_SUPPLIER_MONTHLY?.map((value, index) => ({
-      month: months[index],
-      value: value, // Format the value as a localized string for Thailand
+    lineSupplierQuantity?.monthlySpend?.map((item, index) => ({
+      month: months[index], // Map months to Thai abbreviations
+      mat: item.matVenders,
+      nonMat: item.nonMatVenders,
+      matDistricts: item.districtsMat, // Include this in the dataset
+      nonMatDistricts: item.districtsNonMat, // Include this in the dataset
     })) || [];
 
   const {
@@ -210,7 +226,10 @@ const Dashboard1 = () => {
   });
 
   const dataBarSupplierQ = [
-    { name: "พัสดุ", value: barSupplierQ?.TOTAL_SUPPLIER_MAT || 0 },
+    {
+      name: "พัสดุอุปกรณ์ไฟฟ้า (รหัส 100 - 108)",
+      value: barSupplierQ?.TOTAL_SUPPLIER_MAT || 0,
+    },
     {
       name: "อื่นๆ",
       value: barSupplierQ?.TOTAL_SUPPLIER_NON_MAT || 0,
@@ -332,7 +351,7 @@ const Dashboard1 = () => {
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
                 >
-                  <option value="">-- เลือกกลุ่มพัสดุ --</option>
+                  <option value="">-- เลือกประเภทพัสดุ --</option>
                   {categoryData
                     ?.slice() // Create a shallow copy of the array to avoid modifying the original
                     .sort((a, b) => {
@@ -349,13 +368,19 @@ const Dashboard1 = () => {
               )}
             </div>
             <TableD1Price
-              title="Top 10 พัสดุที่มีราคาจัดซื้อระหว่างกฟข. และ ส่วนกลางแตกต่างกันมากที่สุด"
+              title={`Top 10 รายการพัสดุที่มีราคาจัดซื้อระหว่างส่วนกลาง และ กฟข. แตกต่างกันมากที่สุด ปี ${selectedYear}`}
               data={dataTablePrice}
             />
+            <p>
+              หมายเหตุ: ราคาที่แสดงเป็นราคาเฉลี่ยในปีปัจจุบัน
+              ยกเว้นหากไม่มีการจัดซื้อในปีที่เลือกแสดง
+              จะใช้ราคาเฉลี่ยของปีก่อนหน้าที่มีการจัดซื้อ{" "}
+            </p>
           </div>
           <div className="table-top-povalue-count">
+            <p></p>
             <TableD1Value
-              title="Top 5 เขตที่มีการจัดซื้อมูลค่าไม่เกิน 500,000 มากที่สุด"
+              title={`การจัดซื้อที่มีมูลค่าไม่เกิน 500,000 บาท ปี ${selectedYear}`}
               data={dataTableValue}
             />
           </div>
@@ -364,10 +389,10 @@ const Dashboard1 = () => {
           <div className="left">
             <LineGraphRe
               data={dataLineSpend}
-              xAxisKey="month"
-              lineKey="value"
-              title="ยอดจัดซื้อทั้งหมด (ล้านบาท)"
-              height={230}
+              xAxisKey="month" // X-axis is month
+              lineKeys={["mat", "nonMat"]}
+              title={`มูลค่าการจัดหาทั้งหมดของ กฟภ. (ล้านบาท) ในปี ${selectedYear}`}
+              height={300} // Adjust height as needed
             />
           </div>
           <div className="right">
@@ -375,18 +400,23 @@ const Dashboard1 = () => {
               data={dataBarSpend}
               xAxisKey="name"
               barKey="value"
-              title="ยอดจัดซื้อทั้งหมดแบ่งตามประเภทจัดซื้อ (ล้านบาท)"
+              title={`มูลค่าการจัดหาทั้งหมดของ กฟภ. (ล้านบาท) ในปี ${selectedYear}`}
               height={330}
             />
+            <p>
+              หมายเหตุ: พัสดุอุปกรณ์ไฟฟ้าคือพัสดุหลัก พัสดุรองที่มีรหัสพัสดุ
+              (รหัส 100 - 108) อื่นๆ หมายถึงงานจ้างบริการต่างๆ งานจัดซื้ออะไหล่
+              และ งานเช่า เป็นต้น
+            </p>
           </div>
         </div>
         <div className="top-D1-grid-container">
           <div className="left">
-            <LineGraphRe
+            <LineGraphReNumPO
               data={dataLinePOQuantity}
               xAxisKey="month"
-              lineKey="value"
-              title="จำนวนใบสั่งซื้อ (PO)"
+              lineKeys={["mat", "nonMat"]}
+              title={`จำนวนใบสั่งซื้อ (PO) ในปี ${selectedYear}`}
               height={230}
             />
           </div>
@@ -395,7 +425,7 @@ const Dashboard1 = () => {
               data={dataBarPurchaseQ}
               xAxisKey="name"
               barKey="value"
-              title="จำนวนใบสั่งซื้อ (PO) แบ่งตามประเภทการจัดซื้อ"
+              title={`จำนวนใบสั่งซื้อ (PO) ในปี ${selectedYear}`}
               height={330}
             />
           </div>
@@ -405,40 +435,40 @@ const Dashboard1 = () => {
             <LineGraphRe
               data={dataLineSupplierQuantity}
               xAxisKey="month"
-              lineKey="value"
-              title="จำนวน Supplier ทั้งหมด"
+              lineKeys={["mat", "nonMat"]}
+              title={`จำนวน Supplier ในปี ${selectedYear}`}
               height={230}
             />
-            <h1 className="text-subtitle">
-              หมายเหตุ: นับเฉพาะ Supplier ที่เคยมีการจัดซื้อกับกฟภ.อย่างน้อย 1
-              ครั้ง
-            </h1>
+            <p>
+              หมายเหตุ: นับเฉพาะ Supplier ที่เคยมีสัญญาจัดซื้อกับ กฟภ. อย่างน้อย
+              1 ครั้งในระยะเวลานั้นๆ
+            </p>
           </div>
           <div className="right">
             <BarGraphReV
               data={dataBarSupplierQ}
               xAxisKey="name"
               barKey="value"
-              title="จำนวน Supplier ทั้งหมดแบ่งตามประเภทจัดซื้อ (ราย)"
+              title={`จำนวน Supplier ในปี ${selectedYear}`}
               height={330}
             />
           </div>
         </div>
         <div className="middle-D1-container">
           <div className="bubble-graph">
-            <h1 className="text-title">
-              ประเภทพัสดุตามมูลค่าจัดซื้อ (ล้านบาท)
+            <h1 className="bubble-title">
+              {`มูลค่าจัดซื้อตามประเภทพัสดุ (ล้านบาท) ในปี ${selectedYear}`}
             </h1>
             <BubbleChart
-              style={{ width: "100%", height: "90%" }}
+              style={{ width: "100%", height: "100%" }}
               data={dataCategorySpend}
             />
           </div>
           <div className="donut-Graph">
             <DonutChartRe
               data={dataDonutSpend}
-              title="ยอดพัสดุตามหน่วยงาน (ล้านบาท)"
-              height={500}
+              title={`มูลค่าจัดซื้อพัสดุตามหน่วยงานจัดซื้อ (ล้านบาท) ในปี ${selectedYear}`}
+              height={800}
             />
           </div>
         </div>
@@ -450,7 +480,7 @@ const Dashboard1 = () => {
           </div>
         </div>
         <div>
-          <h1 className="data-date-home">
+          <h1 className="data-date">
             ข้อมูล ณ วันที่ {dateInfoData?.day}/{dateInfoData?.month}/
             {dateInfoData?.year}
           </h1>
