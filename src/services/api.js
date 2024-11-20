@@ -236,7 +236,7 @@ export const getD2TopSupplier = async (year, category_group) => {
 };
 
 // Fetch total spend data for a specific year and category using a POST request
-export const getD2CategorySpend = async (year, category_group) => {
+export const getD2CategorySpendByValue = async (year, category_group) => {
   const response = await axios.post(
     `${API_URL}/dashboard_2_get_spend_by_category`,
     {
