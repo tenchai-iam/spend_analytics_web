@@ -100,6 +100,17 @@
   margin: 0 auto;
 }
 
+.chart-button-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.chart-button.active {
+  background-color: #8e44ad;
+  color: white;
+}
+
 .cards-grid-container {
   display: grid;
   grid-template-columns: repeat(5, 1fr); /* Default: 5 columns */
