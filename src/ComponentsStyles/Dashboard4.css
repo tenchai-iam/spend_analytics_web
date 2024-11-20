@@ -39,10 +39,8 @@
   padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
   box-sizing: border-box; /* Ensure padding is included in width */
   color: black;
-  align-items: center;
 }
 
 .table-summary {
@@ -53,10 +51,8 @@
   padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
   box-sizing: border-box; /* Ensure padding is included in width */
   color: black;
-  align-items: center;
 }
 
 .btn-container-L1 {
