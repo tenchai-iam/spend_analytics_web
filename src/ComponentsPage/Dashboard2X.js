@@ -12,6 +12,12 @@ import {
   getD2CategorySpendByValue,
   getD2CategoryPOQuantityByValue,
   getD2CategoryAverageSpendByValue,
+  getD2CategorySpendByPO,
+  getD2CategoryPOQuantityByPO,
+  getD2CategoryAverageSpendByPO,
+  getD2CategorySpendByAveragePO,
+  getD2CategoryPOQuantityByAveragePO,
+  getD2CategoryAverageSpendByAveragePO,
   getDateInfo,
 } from "../services/api.js"; // Import your API service function
 
@@ -20,6 +26,7 @@ const Dashboard2 = () => {
   const [selectedCategoryGroup, setSelectedCategoryGroup] = useState(1); // State to hold the selected category id
   const [selectedButton, setSelectedButton] = useState(0); // Track selected button index
   const [isCardView, setIsCardView] = useState(true); // State to toggle between card and graph view
+  const [currentBarView, setCurrentBarView] = useState(1); // State to toggle between card and graph view
 
   // Fetch available years using React Query
   const { data: yearsData, isLoading } = useQuery({
@@ -145,8 +152,155 @@ const Dashboard2 = () => {
       valueDistrict: supplier.SPEND_BY_PO_DISTRICT,
     })) || [];
 
+  const {
+    data: barCategorySpendByPO,
+    isLoading: isLoadingBarCategorySpendByPO,
+    isError: isErrorBarCategorySpendByPO,
+    error: errorBarCategorySpendByPO,
+  } = useQuery({
+    queryKey: ["barCategorySpendByPO", selectedYear, selectedCategoryGroup], // Unique query key for caching
+    queryFn: () => getD2CategorySpendByPO(selectedYear, selectedCategoryGroup), // API call to fetch data based on year and category_group are selected
+    enabled: !!selectedYear && selectedCategoryGroup !== null, // Only run query if year and category_group are selected
+  });
+
+  const dataBarCategorySpendByPO =
+    barCategorySpendByPO?.top_suppliers?.map((supplier) => ({
+      name: supplier.SUPPLIER_NAME,
+      valueHQ: supplier.TOTAL_SPEND_HQ / 1000000,
+      valueDistrict: supplier.TOTAL_SPEND_DISTRICT / 1000000,
+    })) || [];
+
+  const {
+    data: barCategoryPOQuantityByPO,
+    isLoading: isLoadingBarCategoryPOQuantitydByPO,
+    isError: isErrorBarCategoryPOQuantityByPO,
+    error: errorBarCategoryPOQuantityByPO,
+  } = useQuery({
+    queryKey: [
+      "barCategoryPOQuantityByPO",
+      selectedYear,
+      selectedCategoryGroup,
+    ], // Unique query key for caching
+    queryFn: () =>
+      getD2CategoryPOQuantityByPO(selectedYear, selectedCategoryGroup), // API call to fetch data based on year and category_group are selected
+    enabled: !!selectedYear && selectedCategoryGroup !== null, // Only run query if year and category_group are selected
+  });
+
+  const dataBarCategoryPOQuantityByPO =
+    barCategoryPOQuantityByPO?.top_suppliers_po?.map((supplier) => ({
+      name: supplier.SUPPLIER_NAME,
+      valueHQ: supplier.PO_HQ,
+      valueDistrict: supplier.PO_DISTRICT,
+    })) || [];
+
+  // View 2.3 Average PO Rank by Average PO
+
+  const {
+    data: barCategoryAverageSpendByPO,
+    isLoading: isLoadingBarCategoryAverageSpendByPO,
+    isError: isErrorBarCategoryAverageSpendByPO,
+    error: errorBarCategoryAverageSpendByPO,
+  } = useQuery({
+    queryKey: [
+      "barCategoryAverageSpendByPO",
+      selectedYear,
+      selectedCategoryGroup,
+    ], // Unique query key for caching
+    queryFn: () =>
+      getD2CategoryAverageSpendByPO(selectedYear, selectedCategoryGroup), // API call to fetch data based on year and category_group are selected
+    enabled: !!selectedYear && selectedCategoryGroup !== null, // Only run query if year and category_group are selected
+  });
+
+  const dataBarCategoryAverageSpendByPO =
+    barCategoryAverageSpendByPO?.top_suppliers_spend_by_po?.map((supplier) => ({
+      name: supplier.SUPPLIER_NAME,
+      valueHQ: supplier.SPEND_BY_PO_HQ,
+      valueDistrict: supplier.SPEND_BY_PO_DISTRICT,
+    })) || [];
+
+  // View 3.1 Average PO Rank by Average PO
+
+  const {
+    data: barCategoryAverageSpendByAveragePO,
+    isLoading: isLoadingBarCategoryAverageSpendByAveragePO,
+    isError: isErrorBarCategoryAverageSpendByAveragePO,
+    error: errorBarCategoryAverageSpendByAveragePO,
+  } = useQuery({
+    queryKey: [
+      "barCategoryAverageSpendByAveragePO",
+      selectedYear,
+      selectedCategoryGroup,
+    ], // Unique query key for caching
+    queryFn: () =>
+      getD2CategoryAverageSpendByAveragePO(selectedYear, selectedCategoryGroup), // API call to fetch data based on year and category_group are selected
+    enabled: !!selectedYear && selectedCategoryGroup !== null, // Only run query if year and category_group are selected
+  });
+
+  const dataBarCategoryAverageSpendByAveragePO =
+    barCategoryAverageSpendByAveragePO?.top_suppliers_spend_by_po?.map(
+      (supplier) => ({
+        name: supplier.SUPPLIER_NAME,
+        valueHQ: supplier.SPEND_BY_PO_HQ,
+        valueDistrict: supplier.SPEND_BY_PO_DISTRICT,
+      })
+    ) || [];
+
+  // View 3.2 Spend Rank by Average PO
+
+  const {
+    data: barCategorySpendByAveragePO,
+    isLoading: isLoadingBarCategorySpendByAveragePO,
+    isError: isErrorBarCategorySpendByAveragePO,
+    error: errorBarCategorySpendByAveragePO,
+  } = useQuery({
+    queryKey: [
+      "barCategorySpendByAveragePO",
+      selectedYear,
+      selectedCategoryGroup,
+    ], // Unique query key for caching
+    queryFn: () =>
+      getD2CategoryAverageSpendByAveragePO(selectedYear, selectedCategoryGroup), // API call to fetch data based on year and category_group are selected
+    enabled: !!selectedYear && selectedCategoryGroup !== null, // Only run query if year and category_group are selected
+  });
+
+  const dataBarCategorySpendByAveragePO =
+    barCategorySpendByPO?.top_suppliers?.map((supplier) => ({
+      name: supplier.SUPPLIER_NAME,
+      valueHQ: supplier.TOTAL_SPEND_HQ / 1000000,
+      valueDistrict: supplier.TOTAL_SPEND_DISTRICT / 1000000,
+    })) || [];
+
+  // View 3.3 PO Quantity Rank by Average PO
+
+  const {
+    data: barCategoryPOQuantityByAveragePO,
+    isLoading: isLoadingBarCategoryPOQuantitydByAveragePO,
+    isError: isErrorBarCategoryPOQuantityByAveragePO,
+    error: errorBarCategoryPOQuantityByAveragePO,
+  } = useQuery({
+    queryKey: [
+      "barCategoryPOQuantityByAveragePO",
+      selectedYear,
+      selectedCategoryGroup,
+    ], // Unique query key for caching
+    queryFn: () =>
+      getD2CategoryPOQuantityByAveragePO(selectedYear, selectedCategoryGroup), // API call to fetch data based on year and category_group are selected
+    enabled: !!selectedYear && selectedCategoryGroup !== null, // Only run query if year and category_group are selected
+  });
+
+  const dataBarCategoryPOQuantityByAveragePO =
+    barCategoryPOQuantityByAveragePO?.top_suppliers?.map((supplier) => ({
+      name: supplier.SUPPLIER_NAME,
+      valueHQ: supplier.PO_HQ,
+      valueDistrict: supplier.PO_DISTRICT,
+    })) || [];
+
   const toggleView = () => {
     setIsCardView(!isCardView); // Toggle between true (card view) and false (chart view)
+  };
+
+  const handleViewChange = (view) => {
+    setCurrentBarView(view); // Change to the selected view
   };
 
   const handleCategorySelect = (index, categoryGroup) => {
@@ -225,28 +379,105 @@ const Dashboard2 = () => {
             {isCardView ? "มุมมอง Card" : "มุมมอง Graph"}
           </button>
 
+          {/* Buttons for View Selection */}
+          {isCardView && (
+            <div className="chart-button-group">
+              <button
+                className={`chart-button ${
+                  currentBarView === 1 ? "active" : ""
+                }`}
+                onClick={() => handleViewChange(1)}
+              >
+                เรียงลำดับตามมูลค่าจัดซื้อ
+              </button>
+              <button
+                className={`chart-button ${
+                  currentBarView === 2 ? "active" : ""
+                }`}
+                onClick={() => handleViewChange(2)}
+              >
+                เรียงลำดับตามจำนวนใบสั่งซื้อ(PO)
+              </button>
+              <button
+                className={`chart-button ${
+                  currentBarView === 3 ? "active" : ""
+                }`}
+                onClick={() => handleViewChange(3)}
+              >
+                เรียงลำดับตามมูลค่าจัดซื้อต่อ PO
+              </button>
+            </div>
+          )}
+
           {/* Chart Container */}
           {isCardView ? (
             <div className="charts-grid-container">
-              <BarGraphReH
-                data={dataBarCategorySpend}
-                yAxisKey="name"
-                title={`มูลค่าจัดซื้อในปี ${selectedYear}`}
-                height={2000}
-              />
-              <BarGraphReH
-                data={dataBarCategoryPOQuantity}
-                yAxisKey="name"
-                title={`จำนวนใบสั่งซื้อ (PO) ในปี ${selectedYear}`}
-                height={2000}
-              />
-              <BarGraphReH
-                data={dataBarCategoryAverageSpend}
-                yAxisKey="name"
-                barKey="value"
-                title={`มูลค่าจัดซื้อต่อ PO ในปี ${selectedYear}`}
-                height={2000}
-              />
+              {currentBarView === 1 && (
+                <>
+                  <BarGraphReH
+                    data={dataBarCategorySpend}
+                    yAxisKey="name"
+                    title={`มูลค่าจัดซื้อในปี ${selectedYear}`}
+                    height={2000}
+                  />
+                  <BarGraphReH
+                    data={dataBarCategoryPOQuantity}
+                    yAxisKey="name"
+                    title={`จำนวนใบสั่งซื้อ (PO) ในปี ${selectedYear}`}
+                    height={2000}
+                  />
+                  <BarGraphReH
+                    data={dataBarCategoryAverageSpend}
+                    yAxisKey="name"
+                    title={`มูลค่าจัดซื้อต่อ PO ในปี ${selectedYear}`}
+                    height={2000}
+                  />
+                </>
+              )}
+              {currentBarView === 2 && (
+                <>
+                  <BarGraphReH
+                    data={dataBarCategoryPOQuantityByPO}
+                    yAxisKey="name"
+                    title={`จำนวนใบสั่งซื้อ (PO) ในปี ${selectedYear}`}
+                    height={2000}
+                  />
+                  <BarGraphReH
+                    data={dataBarCategorySpendByPO}
+                    yAxisKey="name"
+                    title={`มูลค่าจัดซื้อในปี ${selectedYear}`}
+                    height={2000}
+                  />
+                  <BarGraphReH
+                    data={dataBarCategoryAverageSpendByPO}
+                    yAxisKey="name"
+                    title={`มูลค่าจัดซื้อต่อ PO ในปี ${selectedYear}`}
+                    height={2000}
+                  />
+                </>
+              )}
+              {currentBarView === 3 && (
+                <>
+                  <BarGraphReH
+                    data={dataBarCategoryAverageSpend}
+                    yAxisKey="name"
+                    title={`มูลค่าจัดซื้อต่อ PO ในปี ${selectedYear}`}
+                    height={2000}
+                  />
+                  <BarGraphReH
+                    data={dataBarCategorySpendByAveragePO}
+                    yAxisKey="name"
+                    title={`มูลค่าจัดซื้อในปี ${selectedYear}`}
+                    height={2000}
+                  />
+                  <BarGraphReH
+                    data={dataBarCategoryPOQuantityByAveragePO}
+                    yAxisKey="name"
+                    title={`จำนวนใบสั่งซื้อ (PO) ในปี ${selectedYear}`}
+                    height={2000}
+                  />
+                </>
+              )}
             </div>
           ) : (
             <div className="cards-grid-container">
