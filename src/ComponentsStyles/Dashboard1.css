@@ -24,9 +24,8 @@
 }
 
 .table-container-L1 {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Default: 2 columns */
-  /* flex-wrap: nowrap; */
+  display: flex;
+  flex-direction: row;
   gap: 20px;
   box-sizing: border-box; /* Ensure padding is included in width */
   width: 100%;
