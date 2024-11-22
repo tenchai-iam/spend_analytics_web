@@ -25,17 +25,17 @@
 .summary-container-L1 {
   display: flex;
   flex-direction: row;
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
-  border-radius: 8px;
   gap: 20px;
   box-sizing: border-box; /* Ensure padding is included in width */
   margin: 0 auto;
   width: 100%;
 }
 
-.donutChart {
+.donut-Chart {
   flex: 1 1 40%;
   max-width: 1 1 40%;
+  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  border-radius: 8px;
   padding: 20px;
   box-sizing: border-box; /* Ensure padding is included in width */
   color: black;
@@ -44,6 +44,8 @@
 .table-summary {
   flex: 1 1 60%;
   max-width: 1 1 60%;
+  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  border-radius: 8px;
   padding: 20px;
   box-sizing: border-box; /* Ensure padding is included in width */
   color: black;
