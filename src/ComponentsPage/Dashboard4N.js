@@ -210,7 +210,7 @@ const Dashboard4 = () => {
       <div className="dashboard4-container">
         {/* Summary Section */}
         <div className="summary-container-L1">
-          <div className="donutChart">
+          <div className="donut-Chart">
             <D4DonutChartRe
               data={dataDonutUsable}
               title="ภาพรวมรายการพัสดุตาม ใช้งานได้ (เดือน)"
@@ -218,12 +218,6 @@ const Dashboard4 = () => {
               height={400}
             />
           </div>
-          {/*           <div className="text-summary">
-            <h1 className="text-label">
-              จำนวนพัสดุที่ต้องจัดสรรเพิ่มเติม{" "}
-              {requireMaterialNum?.MAT_Q_REQ.toLocaleString("th-TH")} รายการ
-            </h1>
-          </div> */}
           <div className="table-summary">
             <TableD42
               title="รายการพัสดุที่ ใช้งานได้ <= 3 เดือน"
