@@ -20,9 +20,9 @@ const thailandLayer = new GeoJsonLayer({
 
 const INITIAL_VIEW_STATE = {
   longitude: 100.9925,
-  latitude: 11.1,
-  zoom: 6.0,
-  minZoom: 6.0,
+  latitude: 9.1,
+  zoom: 5.5,
+  minZoom: 5.5,
   maxZoom: 7.0,
   pitch: 75,
   bearing: -5,
@@ -66,7 +66,7 @@ const quantityFormatter = new Intl.NumberFormat("en-US", {
 });
 
 const priceFormatter = new Intl.NumberFormat("en-US", {
-  minimumFractionDigits: 0,
+  minimumFractionDigits: 3,
   maximumFractionDigits: 3,
 });
 
@@ -136,7 +136,7 @@ const MapChart = ({ data, mapStyle }) => {
       <div className="map-and-table">
         <div className="map-section">
           <DeckGL
-            layers={[columnLayer]}
+            layers={[thailandLayer, columnLayer]}
             effects={[lightingEffect]}
             initialViewState={INITIAL_VIEW_STATE}
             controller={{ dragRotate: false }}
@@ -147,11 +147,11 @@ const MapChart = ({ data, mapStyle }) => {
               reuseMaps
               mapStyle={{
                 version: 8,
-                    sources: {
-                      localTiles: {
-                        type: "raster",
-                        tiles: ["/tiles/{z}/{x}/{y}.png"], // Use local tiles from public folder
-                        tileSize: 256,
+                sources: {
+                  localTiles: {
+                    type: "raster",
+                    tiles: ["/tiles/{z}/{x}/{y}.png"], // Use local tiles from public folder
+                    tileSize: 256,
                   },
                 },
                 layers: [
@@ -218,9 +218,7 @@ const DataTable = ({ data }) => {
     <table className="data-table">
       <thead>
         <tr>
-          <th onClick={() => handleSort("location")}>
-            หน่วยงานจัดซื้อ {renderSortArrow("location")}
-          </th>
+          <th>หน่วยงานจัดซื้อ</th>
           <th onClick={() => handleSort("TOTAL_PO_MAT")}>
             จำนวน PO สั่งซื้อพัสดุสะสม {renderSortArrow("TOTAL_PO_MAT")}
           </th>

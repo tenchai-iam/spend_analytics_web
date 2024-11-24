@@ -60,8 +60,8 @@ const TableD1Value = ({ title, data }) => {
         <table>
           <thead>
             <tr>
-              <th onClick={() => handleSort("district")}>
-                หน่วยงานจัดซื้อ {renderSortArrow("district")}
+              <th>
+                หน่วยงานจัดซื้อ
               </th>
               <th onClick={() => handleSort("lessThanQuantity")}>
                 จำนวน PO มูลค่าไม่เกิน 500,000 บาท{" "}
