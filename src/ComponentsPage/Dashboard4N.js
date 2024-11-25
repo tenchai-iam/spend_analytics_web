@@ -348,7 +348,7 @@ const Dashboard4 = () => {
               data={dataTableSimMaterialPlan}
             />
             <D4GroupBarRe
-              title="คาดการณ์ยอดจัดหาพัสดุ (ล้านบาท)"
+              title="มูลค่าจัดหาพัสดุ (ล้านบาท)"
               data={dataTableSimMaterialPlan}
             />
           </div>
