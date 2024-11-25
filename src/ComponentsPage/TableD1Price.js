@@ -88,14 +88,14 @@ const TableD1Price = ({ title, data }) => {
                   <span
                     className={row.priceHQ < row.priceDistrict && row.priceHQ > 0 ? "lower" : ""}
                   >
-                    {formatPrice(row.priceHQ)}
+                    {row.priceHQ === 0 ? "-" : formatPrice(row.priceHQ)}{" "}
                   </span>
                 </td>
                 <td data-label="ราคาเฉลี่ยที่กฟข. (บาท)">
                   <span
                     className={row.priceDistrict < row.priceHQ && row.priceDistrict > 0 ? "lower" : ""}
                   >
-                    {formatPrice(row.priceDistrict)}{" "}
+                    {row.priceDistrict === 0 ? "-" : formatPrice(row.priceDistrict)}{" "}
                   </span>
                 </td>
                 <td data-label="% ราคาที่แตกต่าง">

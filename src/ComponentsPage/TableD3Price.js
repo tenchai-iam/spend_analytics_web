@@ -100,14 +100,14 @@ const TableD3Price = ({ title, data }) => {
                   <span
                     className={row.priceHQ < row.priceDistrict && row.priceHQ > 0 ? "lower" : ""}
                   >
-                    {formatPrice(row.priceHQ)}
+                    {row.priceHQ === 0 ? "-" : formatPrice(row.priceHQ)}{" "}
                   </span>
                 </td>
                 <td>
                   <span
                     className={row.priceDistrict < row.priceHQ && row.priceDistrict > 0 ? "lower" : ""}
                   >
-                    {formatPrice(row.priceDistrict)}
+                    {row.priceDistrict === 0 ? "-" : formatPrice(row.priceDistrict)}{" "}
                   </span>
                 </td>
                 <td>{formatPercentage(row.priceDiff)}</td>
