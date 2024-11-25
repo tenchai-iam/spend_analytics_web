@@ -279,42 +279,34 @@ const Dashboard1 = () => {
     },
   ];
 
-  const query = useQuery({
-    queryKey: ["PONumSpend", selectedYear],
-    queryFn: () => getD1PONumSpend(selectedYear),
-    enabled: !!selectedYear, // Ensure query runs only if a year is selected
-  });
-
+  // Fetch PO Number Spend data for MapChart
   const {
     data: PONumSpend,
-    isLoadingPONumbSpend,
-    isErrorPONumSpend,
-    errorPONumSpend,
-  } = query;
+    isLoading: isLoadingPONumSpend,
+    isError: isErrorPONumSpend,
+    error: errorPONumSpend,
+  } = useQuery({
+    queryKey: ["PONumSpend", selectedYear],
+    queryFn: () => getD1PONumSpend(selectedYear),
+    enabled: !!selectedYear,
+  });
 
-  if (isLoadingPONumbSpend) return <div>Loading map data...</div>;
-  if (isErrorPONumSpend) return <div>Error: {error.message}</div>;
-
-  // Safely access EKGRP_RESULTS or use an empty object if unavailable
-  const ekgrpResults = PONumSpend?.EKGRP_RESULTS || {};
-
-  // Transform the data for the MapChart
-  const dataPONumSpend = Object.entries(ekgrpResults).flatMap(
-    ([key, value]) => [
+  // Transform data for MapChart
+  const dataPONumSpend =
+    PONumSpend?.map((item) => [
       {
-        location: key,
+        location: item.EKGRP,
         type: "TOTAL_PO_MAT",
-        position: getLocationCoordinates(key),
-        value: Number(value?.TOTAL_PO_MAT || 0), // Default to 0 if undefined
+        position: getLocationCoordinates(item.EKGRP),
+        value: Number(item.TOTAL_PO_MAT || 0),
       },
       {
-        location: key,
+        location: item.EKGRP,
         type: "TOTAL_SPEND_MAT",
-        position: getLocationCoordinates(key),
-        value: Number(value?.TOTAL_SPEND_MAT) / 1000000 || 0, // Default to 0 if undefined
+        position: getLocationCoordinates(item.EKGRP),
+        value: Number(item.TOTAL_SPEND_MAT || 0) / 1_000_000,
       },
-    ]
-  );
+    ])?.flat() || [];
 
   const datadate = 1;
 
