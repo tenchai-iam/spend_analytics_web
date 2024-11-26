@@ -348,7 +348,7 @@ const Dashboard4 = () => {
               data={dataTableSimMaterialPlan}
             />
             <D4GroupBarRe
-              title="คาดการณ์ยอดจัดหาพัสดุ (ล้านบาท)"
+              title="มูลค่าจัดหาพัสดุ (ล้านบาท)"
               data={dataTableSimMaterialPlan}
             />
           </div>
@@ -360,7 +360,7 @@ const Dashboard4 = () => {
           </h1>
           <p className="data-date">
             หมายเหตุ: ข้อมูลภายในระบบ Spend Insight เป็นข้อมูลภายในของกฟภ.
-            ห้ามเผยแพร่ให้กับผู้ภายนอก
+            ห้ามเผยแพร่ให้กับผู้ใช้งานภายนอก
           </p>
         </div>
       </div>

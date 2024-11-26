@@ -76,7 +76,7 @@ const TableD3Price = ({ title, data }) => {
                 ราคาที่ส่วนกลาง {renderSortArrow("priceHQ")}
               </th>
               <th onClick={() => handleSort("priceDistrict")}>
-                ราคาเฉลี่ยที่กฟข. {renderSortArrow("priceDistrict")}
+                ราคาเฉลี่ยที่ กฟข. {renderSortArrow("priceDistrict")}
               </th>
               <th onClick={() => handleSort("priceDiff")}>
                 % ราคาที่แตกต่าง {renderSortArrow("priceDiff")}
@@ -98,16 +98,16 @@ const TableD3Price = ({ title, data }) => {
                 <td>{row.matName}</td>
                 <td>
                   <span
-                    className={row.priceHQ < row.priceDistrict ? "lower" : ""}
+                    className={row.priceHQ < row.priceDistrict && row.priceHQ > 0 ? "lower" : ""}
                   >
-                    {formatPrice(row.priceHQ)}
+                    {row.priceHQ === 0 ? "-" : formatPrice(row.priceHQ)}{" "}
                   </span>
                 </td>
                 <td>
                   <span
-                    className={row.priceDistrict < row.priceHQ ? "lower" : ""}
+                    className={row.priceDistrict < row.priceHQ && row.priceDistrict > 0 ? "lower" : ""}
                   >
-                    {formatPrice(row.priceDistrict)}
+                    {row.priceDistrict === 0 ? "-" : formatPrice(row.priceDistrict)}{" "}
                   </span>
                 </td>
                 <td>{formatPercentage(row.priceDiff)}</td>

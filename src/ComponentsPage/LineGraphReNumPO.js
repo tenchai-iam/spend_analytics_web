@@ -135,7 +135,7 @@ const LineGraphReNumPO = ({ data, xAxisKey, title, height }) => {
               offset={10}
               position="top"
               formatter={(value) => formatCurrency(value)}
-              style={{ fontSize: labelFontSize, fill: "#4a0072" }}
+              style={{ fontSize: labelFontSize, fill: "#00724a" }}
             />
           </Line>
         </LineChart>
