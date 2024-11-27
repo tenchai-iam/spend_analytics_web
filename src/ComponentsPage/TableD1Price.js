@@ -1,6 +1,3 @@
-import React, { useState } from "react";
-import "../ComponentsStyles/table.css";
-
 const TableD1Price = ({ title, data }) => {
   const [sortConfig, setSortConfig] = useState({
     key: null,
@@ -55,6 +52,21 @@ const TableD1Price = ({ title, data }) => {
     return null;
   };
 
+  const specialMatNRs = [
+    "1020010002",
+    "1020010007",
+    "1020010009",
+    "1020020002",
+    "1020020007",
+    "1020050000",
+    "1020050004",
+    "1020050100",
+    "1020050104",
+    "1020070000",
+    "1020070002",
+    "1020070004",
+  ];
+
   return (
     <div className="table-container">
       <h2 className="table-title">{title}</h2>
@@ -82,7 +94,9 @@ const TableD1Price = ({ title, data }) => {
           <tbody>
             {sortedData.map((row, index) => (
               <tr key={index}>
-                <td data-label="รหัสพัสดุ">{row.matNR}</td>
+                <td data-label="รหัสพัสดุ">
+                  {specialMatNRs.includes(row.matNR) ? `${row.matNR}*` : row.matNR}
+                </td>
                 <td data-label="ชื่อพัสดุ">{row.matName}</td>
                 <td data-label="ราคาที่ส่วนกลาง (บาท)">
                   <span
@@ -99,7 +113,7 @@ const TableD1Price = ({ title, data }) => {
                   </span>
                 </td>
                 <td data-label="% ราคาที่แตกต่าง">
-                    {row.priceDiff < 0 ? "-" : formatPercentage(row.priceDiff)}
+                  {row.priceDiff < 0 ? "-" : formatPercentage(row.priceDiff)}
                 </td>
               </tr>
             ))}
