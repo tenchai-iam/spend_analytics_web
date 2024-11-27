@@ -110,7 +110,9 @@ const TableD3Price = ({ title, data }) => {
                     {row.priceDistrict === 0 ? "-" : formatPrice(row.priceDistrict)}{" "}
                   </span>
                 </td>
-                <td>{formatPercentage(row.priceDiff)}</td>
+                <td>
+                  {row.priceDiff < 0 ? "-" : formatPercentage(row.priceDiff)}
+                </td>
                 <td>{formatQuantity(row.quantityHQ)}</td>
                 <td>{formatQuantity(row.quantityRegion)}</td>
               </tr>
