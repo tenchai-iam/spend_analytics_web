@@ -1,3 +1,6 @@
+import React, { useState } from "react";
+import "../ComponentsStyles/table.css";
+
 const TableD1Price = ({ title, data }) => {
   const [sortConfig, setSortConfig] = useState({
     key: null,
