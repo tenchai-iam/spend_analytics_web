@@ -300,8 +300,8 @@ const Dashboard3 = () => {
 
           {showFirstChart ? (
             <div>
-              <div className="price-summary">
-                /*<div>
+              {/*<div className="price-summary">
+                <div>
                   <p className="text-subtitle">
                     ราคาต่ำสุด:{" "}
                     {priceFormatter.format(materialPriceGroupDistrict?.PRICE_LOWEST)}{" "}
@@ -322,7 +322,7 @@ const Dashboard3 = () => {
                     บาท
                   </p>
                 </div>
-              </div>*/
+              </div>*/}
               <div>
                 <p className="text-subtitle">
                   หน่วย: บาท ต่อ {materialPriceGroupDistrict?.UOM}
@@ -352,8 +352,8 @@ const Dashboard3 = () => {
                   </select>
                 )}
               </div>
-              <div className="price-summary">
-                /*<div>
+              {/*<div className="price-summary">
+                <div>
                   <p className="text-subtitle">
                     ราคาต่ำสุด:{" "}
                     {priceFormatter.format(materialPriceGroupEKGRP?.PRICE_LOWEST)}{" "}
@@ -374,7 +374,7 @@ const Dashboard3 = () => {
                     บาท
                   </p>
                 </div>
-              </div>*/
+              </div>*/}
               <div>
                 <p className="text-subtitle">
                   หน่วย: บาท ต่อ {materialPriceGroupEKGRP?.UOM}
