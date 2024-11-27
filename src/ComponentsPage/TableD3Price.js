@@ -59,6 +59,21 @@ const TableD3Price = ({ title, data }) => {
     return "";
   };
 
+    const specialMatNRs = [
+    "1020010002",
+    "1020010007",
+    "1020010009",
+    "1020020002",
+    "1020020007",
+    "1020050000",
+    "1020050004",
+    "1020050100",
+    "1020050104",
+    "1020070000",
+    "1020070002",
+    "1020070004",
+  ];
+
   return (
     <div className="table-container">
       <h2 className="table-title">{title}</h2>
@@ -95,7 +110,9 @@ const TableD3Price = ({ title, data }) => {
             {sortedData.map((row, index) => (
               <tr key={index}>
                 <td>{row.matNR}</td>
-                <td>{row.matName}</td>
+                <td>
+                    {specialMatNRs.includes(row.matNR) ? `${row.matNR}*` : row.matNR}
+                </td>
                 <td>
                   <span
                     className={row.priceHQ < row.priceDistrict && row.priceHQ > 0 ? "lower" : ""}
