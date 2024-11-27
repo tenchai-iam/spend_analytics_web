@@ -404,7 +404,7 @@ const Dashboard1 = () => {
         </div>
         <div className="top-D1-grid-container">
           <div className="left">
-            <LineGraphRe
+            <LineGraphReNumPO
               data={dataLinePOQuantity}
               xAxisKey="month"
               lineKeys={["mat", "nonMat"]}
@@ -424,7 +424,7 @@ const Dashboard1 = () => {
         </div>
         <div className="top-D1-grid-container">
           <div className="left">
-            <LineGraphRe
+            <LineGraphReNumPO
               data={dataLineSupplierQuantity}
               xAxisKey="month"
               lineKeys={["mat", "nonMat"]}
