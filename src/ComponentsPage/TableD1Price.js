@@ -99,7 +99,7 @@ const TableD1Price = ({ title, data }) => {
                   </span>
                 </td>
                 <td data-label="% ราคาที่แตกต่าง">
-                  {formatPercentage(row.priceDiff)}
+                    {row.priceDiff < 0 ? "-" : formatPercentage(row.priceDiff)}
                 </td>
               </tr>
             ))}
