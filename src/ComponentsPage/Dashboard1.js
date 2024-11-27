@@ -404,7 +404,7 @@ const Dashboard1 = () => {
         </div>
         <div className="top-D1-grid-container">
           <div className="left">
-            <LineGraphReNumPO
+            <LineGraphRe
               data={dataLinePOQuantity}
               xAxisKey="month"
               lineKeys={["mat", "nonMat"]}
