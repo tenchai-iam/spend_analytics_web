@@ -274,7 +274,7 @@ const Dashboard1 = () => {
       value: donutSpend?.TOTAL_SPEND_HQ_OTHER / 1000000 || 0,
     },
     {
-      name: "กฟข. (หน้างาน)",
+      name: "กฟข. / กฟฟ. หน้างาน",
       value: donutSpend?.TOTAL_SPEND_REGION / 1000000 || 0,
     },
   ];
