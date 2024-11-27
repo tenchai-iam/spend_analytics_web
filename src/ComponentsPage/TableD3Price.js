@@ -109,9 +109,9 @@ const TableD3Price = ({ title, data }) => {
           <tbody>
             {sortedData.map((row, index) => (
               <tr key={index}>
-                <td>{row.matNR}</td>
+                <td>{specialMatNRs.includes(row.matNR) ? `${row.matNR}*` : row.matNR}</td>
                 <td>
-                    {specialMatNRs.includes(row.matNR) ? `${row.matNR}*` : row.matNR}
+                    {row.matName}
                 </td>
                 <td>
                   <span
