@@ -24,7 +24,7 @@ const CustomTooltip = ({ active, payload, label, dataKey, title }) => {
       ] || {};
 
     // Custom formatter to round values
-    const formatRounded = (value) => Math.round(value / 1000) * 1000;
+    const formatMillion = (value) => value / 1000000;
 
     // Construct list items dynamically
     const breakdown = [];
@@ -32,7 +32,7 @@ const CustomTooltip = ({ active, payload, label, dataKey, title }) => {
       if (Object.hasOwnProperty.call(districts, key)) {
         breakdown.push(
           <li key={key} style={{ fontSize: "12px" }}>
-            {key}: {formatCurrency(districts[key])}
+            {key}: {formatCurrency(formatMillion(districts[key]))}
           </li>
         );
       }
