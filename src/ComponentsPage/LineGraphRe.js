@@ -32,7 +32,7 @@ const CustomTooltip = ({ active, payload, label, dataKey, title }) => {
       if (Object.hasOwnProperty.call(districts, key)) {
         breakdown.push(
           <li key={key} style={{ fontSize: "12px" }}>
-            {key}: {formatCurrency(formatRounded(districts[key]))}
+            {key}: {formatCurrency(districts[key])}
           </li>
         );
       }
