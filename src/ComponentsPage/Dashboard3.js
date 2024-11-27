@@ -301,28 +301,28 @@ const Dashboard3 = () => {
           {showFirstChart ? (
             <div>
               <div className="price-summary">
-              //   <div>
-              //     <p className="text-subtitle">
-              //       ราคาต่ำสุด:{" "}
-              //       {priceFormatter.format(materialPriceGroupDistrict?.PRICE_LOWEST)}{" "}
-              //       บาท
-              //     </p>
-              //   </div>
-              //   <div>
-              //     <p className="text-subtitle">
-              //       ราคาเฉลี่ย:{" "}
-              //       {priceFormatter.format(materialPriceGroupDistrict?.PRICE_AVERAGE)}{" "}
-              //       บาท
-              //     </p>
-              //   </div>
-              //   <div>
-              //     <p className="text-subtitle">
-              //       ราคาสูงสุด:{" "}
-              //       {priceFormatter.format(materialPriceGroupDistrict?.PRICE_HIGHEST)}{" "}
-              //       บาท
-              //     </p>
-              //   </div>
-              // </div>
+                /*<div>
+                  <p className="text-subtitle">
+                    ราคาต่ำสุด:{" "}
+                    {priceFormatter.format(materialPriceGroupDistrict?.PRICE_LOWEST)}{" "}
+                    บาท
+                  </p>
+                </div>
+                <div>
+                  <p className="text-subtitle">
+                    ราคาเฉลี่ย:{" "}
+                    {priceFormatter.format(materialPriceGroupDistrict?.PRICE_AVERAGE)}{" "}
+                    บาท
+                  </p>
+                </div>
+                <div>
+                  <p className="text-subtitle">
+                    ราคาสูงสุด:{" "}
+                    {priceFormatter.format(materialPriceGroupDistrict?.PRICE_HIGHEST)}{" "}
+                    บาท
+                  </p>
+                </div>
+              </div>*/
               <div>
                 <p className="text-subtitle">
                   หน่วย: บาท ต่อ {materialPriceGroupDistrict?.UOM}
@@ -353,34 +353,34 @@ const Dashboard3 = () => {
                 )}
               </div>
               <div className="price-summary">
-            //     <div>
-            //       <p className="text-subtitle">
-            //         ราคาต่ำสุด:{" "}
-            //         {priceFormatter.format(materialPriceGroupEKGRP?.PRICE_LOWEST)}{" "}
-            //         บาท
-            //       </p>
-            //     </div>
-            //     <div>
-            //       <p className="text-subtitle">
-            //         ราคาเฉลี่ย:{" "}
-            //         {priceFormatter.format(materialPriceGroupEKGRP?.PRICE_AVERAGE)}{" "}
-            //         บาท
-            //       </p>
-            //     </div>
-            //     <div>
-            //       <p className="text-subtitle">
-            //         ราคาสูงสุด:{" "}
-            //         {priceFormatter.format(materialPriceGroupEKGRP?.PRICE_HIGHEST)}{" "}
-            //         บาท
-            //       </p>
-            //     </div>
-            //   </div>
-            //   <div>
-            //     <p className="text-subtitle">
-            //       หน่วย: บาท ต่อ {materialPriceGroupEKGRP?.UOM}
-            //     </p>
-            //   </div>
-            // </div>
+                /*<div>
+                  <p className="text-subtitle">
+                    ราคาต่ำสุด:{" "}
+                    {priceFormatter.format(materialPriceGroupEKGRP?.PRICE_LOWEST)}{" "}
+                    บาท
+                  </p>
+                </div>
+                <div>
+                  <p className="text-subtitle">
+                    ราคาเฉลี่ย:{" "}
+                    {priceFormatter.format(materialPriceGroupEKGRP?.PRICE_AVERAGE)}{" "}
+                    บาท
+                  </p>
+                </div>
+                <div>
+                  <p className="text-subtitle">
+                    ราคาสูงสุด:{" "}
+                    {priceFormatter.format(materialPriceGroupEKGRP?.PRICE_HIGHEST)}{" "}
+                    บาท
+                  </p>
+                </div>
+              </div>*/
+              <div>
+                <p className="text-subtitle">
+                  หน่วย: บาท ต่อ {materialPriceGroupEKGRP?.UOM}
+                </p>
+              </div>
+            </div>
           )}
           <div>
             {showFirstChart ? (
