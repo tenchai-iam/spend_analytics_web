@@ -96,6 +96,19 @@ const Dashboard4 = () => {
     setSelectedMaterialGroup(priority); // Update state with selected priority
   };
 
+  const getTableTitle = (priority) => {
+  switch (priority) {
+    case "High":
+      return "รายการพัสดุที่ ใช้งานได้ <= 3 เดือน";
+    case "Medium":
+      return "รายการพัสดุที่ ใช้งานได้ 3-6 เดือน";
+    case "Low":
+      return "รายการพัสดุที่ ใช้งานได้ > 6 เดือน";
+    default:
+      return "รายการพัสดุ";
+  }
+};
+
   const {
     data: requireMaterialDetail,
     isLoading: isLoadingRequireMaterialDetail,
@@ -166,8 +179,6 @@ const Dashboard4 = () => {
 
   console.log("dataTableSimMaterialPlan:", dataTableSimMaterialPlan);
 
-  console.log("dataTableSimMaterialPlan:", dataTableSimMaterialPlan);
-
   const handleSelectHQLeadTime = (index) => {
     console.log("selectedHQLeadTime", index);
     setSelectedHQLeadTime(index);
@@ -220,7 +231,7 @@ const Dashboard4 = () => {
           </div>
           <div className="table-summary">
             <TableD42
-              title="รายการพัสดุที่ ใช้งานได้ <= 3 เดือน"
+              title={getTableTitle(selectedMaterialGroup)} // Dynamic title
               data={dataTableRequireMaterialDetail}
             />
           </div>
