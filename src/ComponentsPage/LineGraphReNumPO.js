@@ -23,13 +23,10 @@ const CustomTooltip = ({ active, payload, label, dataKey, title }) => {
     // Extract district breakdown
     const districts = payload[0]?.payload?.[`${dataKey}Districts`] || {};
 
-    // Custom formatter to round values
-    const formatRounded = (value) => Math.round(value / 1000) * 1000;
-
     // Construct district breakdown list
     const breakdown = Object.entries(districts).map(([key, value]) => (
       <li key={key} style={{ fontSize: "12px" }}>
-        {key}: {formatCurrency(formatRounded(value))}
+        {key}: {formatCurrency(value)}
       </li>
     ));
 
