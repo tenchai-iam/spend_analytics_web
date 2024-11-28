@@ -213,7 +213,7 @@ export const getD1DonutSpend = async (year) => {
 // Fetch yearly spend data and number of PO by district for a specific year using a POST request
 export const getD1PONumSpend = async (year) => {
   const response = await axios.post(
-    `${API_URL}/dashboard_1_get_spend_region_map`,
+    `${API_URL}/dashboard_1_spend_po_by_ekgrp`,
     {
       year: year, // Pass the year value in the request body
     },
