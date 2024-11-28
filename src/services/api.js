@@ -165,7 +165,7 @@ export const getD1BarPurchaseQ = async (year) => {
 // Fetch monthly supplier data for a specific year using a POST request
 export const getD1LineSupplierQuantity = async (year) => {
   const response = await axios.post(
-    `${API_URL}/dashboard_1_vender_month_by_year`,
+    `${API_URL}/dashboard_1_vendor_month_by_year`,
     {
       year: year, // Pass the year value in the request body
     },
