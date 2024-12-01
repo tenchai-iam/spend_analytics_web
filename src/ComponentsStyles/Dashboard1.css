@@ -23,6 +23,13 @@
   padding: 20px;
 }
 
+.D1-CSV-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-left: auto;
+}
+
 .download-button {
   padding: 20px;
   align-items: center;
