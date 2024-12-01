@@ -219,7 +219,7 @@ const Dashboard4 = () => {
     { label: "จัดหาเพิ่มโดย ฝวห. (หน่วย)", key: "unitHQ" },
     { label: "ราคาที่ ฝวห.", key: "priceHQ" },
     { label: "จัดหาเพิ่มโดย กฟข. (หน่วย)", key: "unitDistrict" },
-    { label: "าคาเฉลี่ยที่ กฟข.", key: "priceDistrict" },
+    { label: "ราคาเฉลี่ยที่ กฟข.", key: "priceDistrict" },
     { label: "ราคาอ้างอิง", key: "mediumPrice" },
     { label: "งบประมาณที่ต้องใช้ ", key: "budget" },
   ];
