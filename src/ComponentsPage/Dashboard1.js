@@ -28,10 +28,36 @@ import {
   getCategory,
   getDateInfo,
 } from "../services/api.js"; // Import your API service function
+import { CSVLink } from "react-csv"; // Import CSVLink from react-csv
 
 const Dashboard1 = () => {
   const [selectedYear, setSelectedYear] = useState(""); // State to hold the selected year
   const [selectedCategory, setSelectedCategory] = useState(""); // State to hold the selected category
+
+  const formatPrice = (value) =>
+    new Intl.NumberFormat("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(value);
+
+  const formatQuantity = (value) =>
+    new Intl.NumberFormat("en-US", {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(value);
+
+  const formatPercentage = (value) =>
+    new Intl.NumberFormat("en-US", {
+      style: "percent",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(value / 100);
+
+  const formatTotal = (value) =>
+    new Intl.NumberFormat("en-US", {
+      minimumFractionDigits: 3,
+      maximumFractionDigits: 3,
+    }).format(value);
 
   // Fetch available years using React Query
   const { data: yearsData, isLoading } = useQuery({
@@ -71,6 +97,26 @@ const Dashboard1 = () => {
       priceDistrict: Number(item.PRICE_REGION),
       priceDiff: Number(item.PRICE_DIFF) - 1,
     })) || [];
+  
+    const csvTablePriceHeaders = [
+    { label: "รหัสพัสดุ", key: "matNR" },
+    { label: "ชื่อพัสดุ", key: "matName" },
+    { label: "ราคาที่ส่วนกลาง", key: "priceHQ" },
+    { label: "ราคาเฉลี่ยที่ กฟข.", key: "priceDistrict" },
+    { label: "% ราคาที่แตกต่าง", key: "priceDiff" },
+  ];
+
+  // Format the data for CSV
+  const formatCSVTablePriceData = (data) =>
+    data.map((item) => ({
+      matNR: item.matNR,
+      matName: item.matName,
+      priceHQ: formatPrice(item.priceHQ),
+      priceDistrict: formatPrice(item.priceDistrict),
+      priceDiff: formatPercentage(item.priceDiff),
+    }));
+
+  const csvTablePriceData = formatCSVTablePriceData(dataTablePrice); // Use your table data as CSV data
 
   const {
     data: top5POValue,
@@ -90,6 +136,24 @@ const Dashboard1 = () => {
       totalQuantity: Number(item.TOTAL_PO),
       percentQuantity: Number(item.PO_LESS_EQUAL_500K_QUANTITY),
     })) || [];
+  
+  const csvTableValueHeaders = [
+    { label: "หน่วยงานจัดซื้อ", key: "district" },
+    { label: "จำนวน PO มูลค่าไม่เกิน 500,000 บาท", key: "lessThanQuantity" },
+    { label: "จำนวน PO ทั้งหมด", key: "totalQuantity" },
+    { label: "% PO มูลค่าไม่เกิน 500,000 บาท", key: "percentQuantity" },
+  ];
+
+  // Format the data for CSV
+  const formatCSVTableValueData = (data) =>
+    data.map((item) => ({
+      district: item.district,
+      lessThanQuantity: formatQuantity(item.lessThanQuantity),
+      totalQuantity: formatQuantity(item.totalQuantity),
+      percentQuantity: formatPercentage(item.percentQuantity),
+    }));
+
+  const csvTableValueData = formatCSVTableValueData(dataTableValue); // Use your table data as CSV data
 
   // Data mappings
   const months = [
@@ -307,6 +371,22 @@ const Dashboard1 = () => {
         value: Number(item.TOTAL_SPEND_MAT || 0) / 1_000_000,
       },
     ])?.flat() || [];
+  
+    const csvMapHeaders = [
+    { label: "หน่วยงานจัดซื้อ", key: "location" },
+    { label: "จำนวน PO สั่งซื้อพัสดุสะสม", key: "valuePO" },
+    { label: "มูลค่าจัดซื้อพัสดุสะสม (ล้านบาท)", key: "valueSpend" },
+  ];
+
+  // Format the data for CSV
+  const formatCSVTableMapData = (data) =>
+    data.map((item) => ({
+      location: item.EKGRP,
+      valuePO: formatQuantity(item.TOTAL_PO_MAT),
+      valueSpend: formatTotal(item.TOTAL_SPEND_MAT),
+    }));
+
+  const csvMapData = formatCSVTableMapData(dataPONumSpend); // Use your table data as CSV data
 
   const datadate = 1;
 
@@ -368,13 +448,32 @@ const Dashboard1 = () => {
               ยกเว้นหากไม่มีการจัดซื้อในปีที่เลือกแสดง
               จะใช้ราคาเฉลี่ยของปีก่อนหน้าที่มีการจัดซื้อ{" "}
             </p>
+            <div className="download-button">
+              <CSVLink
+                data={csvTablePriceData}
+                headers={csvTablePriceHeaders}
+                filename={`HQvsDistrictPriceComparison_${selectedYear}_${selectedCategory}.csv`}
+                style={getButtonStyle(false)} // Apply the button style
+              >
+                Download CSV
+              </CSVLink>
+            </div>
           </div>
           <div className="table-top-povalue-count">
-            <p></p>
             <TableD1Value
               title={`การจัดซื้อที่มีมูลค่าไม่เกิน 500,000 บาท ปี ${selectedYear}`}
               data={dataTableValue}
             />
+            <div className="download-button">
+              <CSVLink
+                data={csvTableValueData}
+                headers={csvTableValueHeaders}
+                filename={`DistrictPOValueComparison_${selectedYear}.csv`}
+                style={getButtonStyle(false)} // Apply the button style
+              >
+                Download CSV
+              </CSVLink>
+            </div>
           </div>
         </div>
         <div className="top-D1-grid-container">
@@ -469,6 +568,16 @@ const Dashboard1 = () => {
             <div className="map-container">
               <MapChart data={dataPONumSpend} />
             </div>
+          </div>
+          <div className="download-button">
+            <CSVLink
+              data={csvMapData}
+              headers={csvMapHeaders}
+              filename={`PurchaseUnitbyPONumAndValue_${selectedYear}.csv`}
+              style={getButtonStyle(false)} // Apply the button style
+            >
+              Download CSV
+            </CSVLink>
           </div>
         </div>
         <div>
