@@ -51,6 +51,11 @@
   color: black;
 }
 
+.download-button {
+  padding: 20px;
+  align-items: center;
+}
+
 .btn-container-L1 {
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* Default: 3 columns */
