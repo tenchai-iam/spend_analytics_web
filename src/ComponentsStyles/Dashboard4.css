@@ -160,8 +160,6 @@
   align-items: center;
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 .text-summary {
   flex: 1 1 calc(20% - 30px);
   max-width: calc(20% - 30px); /* Corrected spacing for calc */
@@ -176,18 +174,11 @@
   align-items: center; /* Center items horizontally */
 }
 
-=======
->>>>>>> 9d0c72da8874d896368048b42f8a09f0aa82650b
-=======
->>>>>>> 2056233ea4e5776546453c616763bcae20af3d63
 .text-label {
   font-size: 2rem;
   text-align: center;
 }
 
-<<<<<<< HEAD
-=======
->>>>>>> e78c1dc3e809f30a74c8b8ca42d81ce89ca601d6
 .table-summary {
   flex: 1 1 calc(60% - 30px);
   max-width: calc(60%-30px);
@@ -202,8 +193,6 @@
   align-items: center;
 }
 
-=======
->>>>>>> 2056233ea4e5776546453c616763bcae20af3d63
 .table-container-L1 {
   display: flex;
   flex-wrap: nowrap;
