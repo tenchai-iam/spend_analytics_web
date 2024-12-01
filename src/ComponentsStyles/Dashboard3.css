@@ -19,6 +19,12 @@
   flex-wrap: wrap; /* Allow wrapping for responsiveness */
 }
 
+.D3-CSV-container {
+  display: flex;
+  align-items: flex-end;
+  margin-left: auto;
+}
+
 .text-title {
   font-size: 24px;
   margin-bottom: 10px;
