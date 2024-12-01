@@ -3,6 +3,11 @@
   color: #fff;
 }
 
+.download-button {
+  padding: 20px;
+  align-items: center;
+}
+
 .dashboard3-container {
   position: relative;
   display: flex;
