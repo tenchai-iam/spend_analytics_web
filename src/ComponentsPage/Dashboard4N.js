@@ -430,20 +430,22 @@ const Dashboard4 = () => {
         {/* Table and Chart Section */}
         <div className="table-container-L1">
           <div className="table-compare">
+            <div className="D3-CSV-container">
+              <div className="download-button">
+                <CSVLink
+                  data={csvTableD42Data}
+                  headers={csvTableD42Headers}
+                  filename={`SimMaterialPlan_${selectedYear}.csv`}
+                  style={getButtonStyle(false)} // Apply the button style
+                >
+                  Download CSV
+                </CSVLink>
+              </div>
+            </div>
             <Table4
               title="ตารางจำลองแผนจัดซื้อพัสดุเพิ่มเติมระหว่างปี"
               data={dataTableSimMaterialPlan}
             />
-            <div className="download-button">
-              <CSVLink
-                data={csvTableD42Data}
-                headers={csvTableD42Headers}
-                filename={`SimMaterialPlan_${selectedYear}.csv`}
-                style={getButtonStyle(false)} // Apply the button style
-              >
-                Download CSV
-              </CSVLink>
-            </div>
             <D4GroupBarRe
               title="มูลค่าจัดหาพัสดุ (ล้านบาท)"
               data={dataTableSimMaterialPlan}
