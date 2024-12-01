@@ -134,7 +134,7 @@ const Table4 = ({ title, data }) => {
                 <td>{formatMonth(row.availMonth)}</td>
                 <td>{formatQuantity(row.quantityAllocate)}</td>
                 <td>{formatMonth(row.availMonthAfter)}</td>
-                <td>{formatQuantity(row.newMonth)}</td>
+                <td>{formatMonth(row.newMonth)}</td>
                 <td>{formatQuantity(row.newQuantity)}</td>
                 <td>{formatQuantity(row.unitHQ)}</td>
                 <td>{formatPrice(row.priceHQ)}</td>
