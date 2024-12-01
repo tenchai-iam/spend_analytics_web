@@ -34,6 +34,25 @@ const Dashboard3 = () => {
     maximumFractionDigits: 2,
   });
 
+  const formatPrice = (value) =>
+    new Intl.NumberFormat("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(value);
+
+  const formatQuantity = (value) =>
+    new Intl.NumberFormat("en-US", {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(value);
+
+  const formatPercentage = (value) =>
+    new Intl.NumberFormat("en-US", {
+      style: "percent",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(value);
+
   // Fetch available years using React Query
   const { data: yearsData, isLoading: isYearsLoading } = useQuery({
     queryKey: ["years"],
