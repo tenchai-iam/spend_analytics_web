@@ -48,6 +48,7 @@
   gap: 20px;
   box-sizing: border-box; /* Ensure padding is included in width */
   color: black;
+  align-items: center;
 }
 
 .table-top-povalue-count {
@@ -61,6 +62,7 @@
   gap: 20px;
   box-sizing: border-box; /* Ensure padding is included in width */
   color: black;
+  align-items: center;
 }
 
 .top-D1-grid-container {
@@ -121,7 +123,7 @@
   width: 100%;
   gap: 20px;
   padding: 20px;
-  width: 100%;
+  align-items: center;
 }
 
 .map-wrapper {
