@@ -372,21 +372,58 @@ const Dashboard1 = () => {
       },
     ])?.flat() || [];
   
-    const csvMapHeaders = [
+  const {
+    data: PONumSpendCSV,
+    isLoading: isLoadingPONumSpendCSV,
+    isError: isErrorPONumSpendCSV,
+    error: errorPONumSpendCSV,
+  } = useQuery({
+    queryKey: ["PONumSpendCSV", selectedYear],
+    queryFn: () => getD1PONumSpend(selectedYear),
+    enabled: !!selectedYear,
+  });
+
+  const dataPONumSpendCSV =
+    PONumSpendCSV?.map((item) => [
+      {
+        location: item.EKGRP,
+        valuePO: Number(item.TOTAL_PO_MAT || 0),
+        valueSpend: Number(item.TOTAL_SPEND_MAT || 0) / 1_000_000,
+      },
+    ])?.flat() || [];
+
+  const csvMapHeaders = [
     { label: "หน่วยงานจัดซื้อ", key: "location" },
     { label: "จำนวน PO สั่งซื้อพัสดุสะสม", key: "valuePO" },
     { label: "มูลค่าจัดซื้อพัสดุสะสม (ล้านบาท)", key: "valueSpend" },
   ];
 
+  const LOCATION_NAMES = {
+    A: "กฟน.1",
+    B: "กฟน.2",
+    C: "กฟน.3",
+    D: "กฟฉ.1",
+    E: "กฟฉ.2",
+    F: "กฟฉ.3",
+    G: "กฟก.1",
+    H: "กฟก.2",
+    I: "กฟก.3",
+    J: "กฟต.1",
+    K: "กฟต.2",
+    L: "กฟต.3",
+    U: "ตัวอย่าง", // Example text in Thai
+    Z: "ส่วนกลาง",
+  };
+
   // Format the data for CSV
   const formatCSVTableMapData = (data) =>
     data.map((item) => ({
-      location: item.EKGRP,
-      valuePO: formatQuantity(item.TOTAL_PO_MAT),
-      valueSpend: formatTotal(item.TOTAL_SPEND_MAT),
+      location: LOCATION_NAMES[item.location] || item.location,
+      valuePO: formatQuantity(item.valuePO),
+      valueSpend: formatTotal(item.valueSpend),
     }));
 
-  const csvMapData = formatCSVTableMapData(dataPONumSpend); // Use your table data as CSV data
+  const csvMapData = formatCSVTableMapData(dataPONumSpendCSV); // Use your table data as CSV data
 
   const datadate = 1;
 
