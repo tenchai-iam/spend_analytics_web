@@ -9,8 +9,8 @@ const TableD42 = ({ title, data }) => {
 
   const formatQuantity = (value) =>
     new Intl.NumberFormat("en-US", {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 1,
     }).format(value);
 
   const handleSort = (key) => {
