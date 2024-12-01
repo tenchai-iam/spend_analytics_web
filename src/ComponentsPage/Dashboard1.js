@@ -402,6 +402,18 @@ const Dashboard1 = () => {
     enabled: !!selectedYear, // Only run query if both year and category_group are selected
   });
 
+    const getButtonStyle = (isSelected) => ({
+    backgroundColor: isSelected ? "#8e44ad" : "#f0f0f0",
+    color: isSelected ? "white" : "black",
+    textDecoration: "none", // Remove underline
+    border: "1px solid #ccc",
+    borderRadius: "4px",
+    padding: "10px 15px",
+    cursor: "pointer",
+    textAlign: "center",
+    display: "inline-block", // Ensure button-like appearance
+  });
+
   return (
     <div>
       <BackgroundComponent />
