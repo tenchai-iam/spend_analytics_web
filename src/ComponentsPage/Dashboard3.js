@@ -19,6 +19,7 @@ import {
   getD3MaterialPriceByEKGRP,
   getDateInfo,
 } from "../services/api.js"; // Import your API service function
+import { CSVLink } from "react-csv"; // Import CSVLink from react-csv
 
 const Dashboard3 = () => {
   const [selectedYear, setSelectedYear] = useState(""); // State to hold the selected year
@@ -135,6 +136,26 @@ const Dashboard3 = () => {
       minQuantity: district?.QUANTITY_MIN_DISTRICT,
     })) || [];
 
+    const csvBarDistrictHeaders = [
+    { label: "หน่วยจัดซื้อ", key: "name" },
+    { label: "ราคาเฉลี่ย", key: "averagePrice" },
+    { label: "ราคาสูงสุด", key: "maxPrice" },
+    { label: "ราคาต่ำสุด", key: "minPrice" },
+  ];
+
+  // Format the data for CSV
+  const formatCSVBarDistrictData = (data) =>
+    data.map((item) => ({
+      name: item.name,
+      averagePrice: formatPrice(item.averagePrice),
+      maxPrice: formatPrice(item.maxPrice),
+      minPrice: formatPrice(item.minPrice),
+    }));
+
+  const csvBarDistrictData = formatCSVBarDistrictData(
+    dataMaterialPriceByDistrict
+  ); // Use your table data as CSV data
+
   const {
     data: materialPriceGroupEKGRP,
     isLoading: isLoadingMaterialPriceGroupEKGRP,
@@ -192,6 +213,24 @@ const Dashboard3 = () => {
       maxQuantity: ekgrp?.QUANTITY_MAX_EKGRP,
       minQuantity: ekgrp?.QUANTITY_MIN_EKGRP,
     })) || [];
+  
+  const csvBarEKGRPHeaders = [
+    { label: "หน่วยจัดซื้อ", key: "name" },
+    { label: "ราคาเฉลี่ย", key: "averagePrice" },
+    { label: "ราคาสูงสุด", key: "maxPrice" },
+    { label: "ราคาต่ำสุด", key: "minPrice" },
+  ];
+
+  // Format the data for CSV
+  const formatCSVBarEKGRPData = (data) =>
+    data.map((item) => ({
+      name: item.name,
+      averagePrice: formatPrice(item.averagePrice),
+      maxPrice: formatPrice(item.maxPrice),
+      minPrice: formatPrice(item.minPrice),
+    }));
+
+  const csvBarEKGRPData = formatCSVBarEKGRPData(dataMaterialPriceByEKGRP); // Use your table data as CSV data
 
   const toggleChart = () => {
     setShowFirstChart(!showFirstChart); // Toggle between true and false
@@ -209,6 +248,18 @@ const Dashboard3 = () => {
     queryKey: ["dateInfoData", datadate], // Unique query key for caching
     queryFn: () => getDateInfo(datadate), // API call to fetch data based on datadate
     enabled: !!selectedYear, // Only run query if both year and category_group are selected
+  });
+
+    const getButtonStyle = (isSelected) => ({
+      backgroundColor: isSelected ? "#8e44ad" : "#f0f0f0",
+      color: isSelected ? "white" : "black",
+      textDecoration: "none", // Remove underline
+      border: "1px solid #ccc",
+      borderRadius: "4px",
+      padding: "10px 15px",
+      cursor: "pointer",
+      textAlign: "center",
+      display: "inline-block", // Ensure button-like appearance
   });
 
   return (
@@ -382,21 +433,45 @@ const Dashboard3 = () => {
               </div>
             </div>
           )}
-          <div>
+          <div className="D3BarChart-container">
             {showFirstChart ? (
-              <D3BarGraphReV
-                data={dataMaterialPriceByDistrict}
-                xAxisKey="name"
-                barKey="averagePrice"
-                title="ข้อมูลราคาเฉลี่ยตามหน่วยงานจัดซื้อ"
-              />
+              <>
+                <D3BarGraphReV
+                  data={dataMaterialPriceByDistrict}
+                  xAxisKey="name"
+                  barKey="averagePrice"
+                  title="ข้อมูลราคาเฉลี่ยตามหน่วยงานจัดซื้อ"
+                />
+                <div className="download-button">
+                  <CSVLink
+                    data={csvBarDistrictData}
+                    headers={csvBarDistrictHeaders}
+                    filename={`PriceBreakdownByDistrict_${selectedYear}_${selectedMaterial}.csv`}
+                    style={getButtonStyle(false)} // Apply the button style
+                  >
+                    Download CSV
+                  </CSVLink>
+                </div>
+              </>
             ) : (
-              <D3BarGraphReV
-                data={dataMaterialPriceByEKGRP}
-                xAxisKey="name"
-                barKey="averagePrice"
-                title="ข้อมูลราคาเฉลี่ยตามหน่วยงานจัดซื้อ"
-              />
+              <>
+                <D3BarGraphReV
+                  data={dataMaterialPriceByEKGRP}
+                  xAxisKey="name"
+                  barKey="averagePrice"
+                  title="ข้อมูลราคาเฉลี่ยตามหน่วยงานจัดซื้อ"
+                />
+                <div className="download-button">
+                  <CSVLink
+                    data={csvBarEKGRPData}
+                    headers={csvBarEKGRPHeaders}
+                    filename={`PriceBreakdownByEKGRP_${selectedYear}_${selectedMaterial}.csv`}
+                    style={getButtonStyle(false)} // Apply the button style
+                  >
+                    Download CSV
+                  </CSVLink>
+                </div>
+              </>
             )}
             <h1 className="text-subtitle">
               หมายเหตุ: หากไม่มีการจัดซื้อเกิดขึ้น ณ หน่วยงานจัดซื้อนั้นๆในปีที่เลือกแสดง
