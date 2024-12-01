@@ -54,6 +54,7 @@
   padding: 20px;
   gap: 20px;
   box-sizing: border-box; /* Ensure padding is included in width */
+  align-items: center;
 }
 
 .bottom-container {
@@ -65,6 +66,13 @@
   flex-direction: column;
   gap: 20px;
   box-sizing: border-box; /* Ensure padding is included in width */
+}
+
+.D3BarChart-container {
+  max-width: 100%; /* Maximum width set to 100% */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .dropdown-cat-group {
