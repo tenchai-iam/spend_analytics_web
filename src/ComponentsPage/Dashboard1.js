@@ -464,6 +464,18 @@ const Dashboard1 = () => {
       <div className="dashboard1-container">
         <div className="table-container-L1">
           <div className="table-top-price-diff">
+              <div className="D1-CSV-container">
+                <div className="download-button">
+                  <CSVLink
+                    data={csvTablePriceData}
+                    headers={csvTablePriceHeaders}
+                    filename={`HQvsDistrictPriceComparison_${selectedYear}_${selectedCategory}.csv`}
+                    style={getButtonStyle(false)} // Apply the button style
+                  >
+                    Download CSV
+                  </CSVLink>
+                </div>
+              </div>
             <div className="dropdown-cat-group">
               {isCategoriesLoading ? (
                 <p>Loading categories...</p>
@@ -497,32 +509,24 @@ const Dashboard1 = () => {
               ยกเว้นหากไม่มีการจัดซื้อในปีที่เลือกแสดง
               จะใช้ราคาเฉลี่ยของปีก่อนหน้าที่มีการจัดซื้อ{" "}
             </p>
-            <div className="download-button">
-              <CSVLink
-                data={csvTablePriceData}
-                headers={csvTablePriceHeaders}
-                filename={`HQvsDistrictPriceComparison_${selectedYear}_${selectedCategory}.csv`}
-                style={getButtonStyle(false)} // Apply the button style
-              >
-                Download CSV
-              </CSVLink>
-            </div>
           </div>
           <div className="table-top-povalue-count">
+              <div className="D1-CSV-container">
+                <div className="download-button">
+                  <CSVLink
+                    data={csvTableValueData}
+                    headers={csvTableValueHeaders}
+                    filename={`DistrictPOValueComparison_${selectedYear}.csv`}
+                    style={getButtonStyle(false)} // Apply the button style
+                  >
+                    Download CSV
+                  </CSVLink>
+                </div>
+              </div>
             <TableD1Value
               title={`การจัดซื้อที่มีมูลค่าไม่เกิน 500,000 บาท ปี ${selectedYear}`}
               data={dataTableValue}
             />
-            <div className="download-button">
-              <CSVLink
-                data={csvTableValueData}
-                headers={csvTableValueHeaders}
-                filename={`DistrictPOValueComparison_${selectedYear}.csv`}
-                style={getButtonStyle(false)} // Apply the button style
-              >
-                Download CSV
-              </CSVLink>
-            </div>
           </div>
         </div>
         <div className="top-D1-grid-container">
@@ -614,19 +618,21 @@ const Dashboard1 = () => {
         </div>
         <div className="bottom-D1-container">
           <div className="map-wrapper">
+            <div className="D1-CSV-container">
+              <div className="download-button">
+                <CSVLink
+                  data={csvMapData}
+                  headers={csvMapHeaders}
+                  filename={`PurchaseUnitbyPONumAndValue_${selectedYear}.csv`}
+                  style={getButtonStyle(false)} // Apply the button style
+                >
+                  Download CSV
+                </CSVLink>
+              </div>
+            </div>
             <div className="map-container">
               <MapChart data={dataPONumSpend} />
             </div>
-          </div>
-          <div className="download-button">
-            <CSVLink
-              data={csvMapData}
-              headers={csvMapHeaders}
-              filename={`PurchaseUnitbyPONumAndValue_${selectedYear}.csv`}
-              style={getButtonStyle(false)} // Apply the button style
-            >
-              Download CSV
-            </CSVLink>
           </div>
         </div>
         <div>
