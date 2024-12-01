@@ -491,41 +491,45 @@ const Dashboard3 = () => {
           <div className="D3BarChart-container">
             {showFirstChart ? (
               <>
+                <div className="D3-CSV-container">
+                  <div className="download-button">
+                    <CSVLink
+                      data={csvBarDistrictData}
+                      headers={csvBarDistrictHeaders}
+                      filename={`PriceBreakdownByDistrict_${selectedYear}_${selectedMaterial}.csv`}
+                      style={getButtonStyle(false)} // Apply the button style
+                    >
+                      Download CSV
+                    </CSVLink>
+                  </div>
+                </div>
                 <D3BarGraphReV
                   data={dataMaterialPriceByDistrict}
                   xAxisKey="name"
                   barKey="averagePrice"
                   title="ข้อมูลราคาเฉลี่ยตามหน่วยงานจัดซื้อ"
                 />
-                <div className="download-button">
-                  <CSVLink
-                    data={csvBarDistrictData}
-                    headers={csvBarDistrictHeaders}
-                    filename={`PriceBreakdownByDistrict_${selectedYear}_${selectedMaterial}.csv`}
-                    style={getButtonStyle(false)} // Apply the button style
-                  >
-                    Download CSV
-                  </CSVLink>
-                </div>
               </>
             ) : (
               <>
+                <div className="D3-CSV-container">
+                  <div className="download-button">
+                    <CSVLink
+                      data={csvBarEKGRPData}
+                      headers={csvBarEKGRPHeaders}
+                      filename={`PriceBreakdownByEKGRP_${selectedYear}_${selectedMaterial}.csv`}
+                      style={getButtonStyle(false)} // Apply the button style
+                    >
+                      Download CSV
+                    </CSVLink>
+                  </div>
+                </div>
                 <D3BarGraphReV
                   data={dataMaterialPriceByEKGRP}
                   xAxisKey="name"
                   barKey="averagePrice"
                   title="ข้อมูลราคาเฉลี่ยตามหน่วยงานจัดซื้อ"
                 />
-                <div className="download-button">
-                  <CSVLink
-                    data={csvBarEKGRPData}
-                    headers={csvBarEKGRPHeaders}
-                    filename={`PriceBreakdownByEKGRP_${selectedYear}_${selectedMaterial}.csv`}
-                    style={getButtonStyle(false)} // Apply the button style
-                  >
-                    Download CSV
-                  </CSVLink>
-                </div>
               </>
             )}
             <h1 className="text-subtitle">
