@@ -141,7 +141,6 @@ const Home = () => {
             ห้ามเผยแพร่ให้กับผู้ใช้งานภายนอก
           </p>
         </div>
-        <NewsTicker data={newsItems} />
       </div>
     </div>
   );
