@@ -18,6 +18,7 @@ import {
   getD4SimMaterialPlan,
   getDateInfo,
 } from "../services/api.js"; // Import your API service function
+import { CSVLink } from "react-csv"; // Import CSVLink from react-csv
 
 const Dashboard4 = () => {
   const [selectedYear, setSelectedYear] = useState(""); // State to hold the selected year
@@ -26,6 +27,30 @@ const Dashboard4 = () => {
   const [selectedMaterial, setSelectedMaterial] = useState(""); // State to hold the selected material
   const [selectedHQLeadTime, setSelectedHQLeadTime] = useState(null);
   const [selectedDemandMonth, setSelectedDemandMonth] = useState(null);
+
+  const formatQuantity = (value) =>
+    new Intl.NumberFormat("en-US", {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(value);
+
+  const formatMonth = (value) =>
+    new Intl.NumberFormat("en-US", {
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 1,
+    }).format(value);
+
+  const formatPrice = (value) =>
+    new Intl.NumberFormat("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(value);
+
+  const formatTotal = (value) =>
+    new Intl.NumberFormat("en-US", {
+      minimumFractionDigits: 3,
+      maximumFractionDigits: 3,
+    }).format(value);
 
   // Fetch available years using React Query
   const { data: yearsData, isLoading } = useQuery({
@@ -179,6 +204,50 @@ const Dashboard4 = () => {
 
   console.log("dataTableSimMaterialPlan:", dataTableSimMaterialPlan);
 
+    const csvTableD42Headers = [
+    { label: "กฟฟ.", key: "region" },
+    { label: "อัตราการใช้งานต่อเดือน (R/M)", key: "usage" },
+    { label: "ยอดคงคล้ง", key: "stock" },
+    { label: "PR ที่ยังไม่เป็น PO", key: "quantityPR" },
+    { label: "สัญญาค้างรับ", key: "contract" },
+    { label: "ยอดคงเหลือ", key: "availStock" },
+    { label: "ใช้งานได้ (เดือน)", key: "availMonth" },
+    { label: "คาดการณ์จัดสรรจากส่วนกลาง", key: "quantityAllocate" },
+    { label: "ใช้งานได้ (เดือน)", key: "availMonthAfter" },
+    { label: "จัดหาเพิ่ม (เดือน)", key: "newMonth" },
+    { label: "จัดหาเพิ่ม (หน่วย)", key: "newQuantity" },
+    { label: "จัดหาเพิ่มโดย ฝวห. (หน่วย)", key: "unitHQ" },
+    { label: "ราคาที่ ฝวห.", key: "priceHQ" },
+    { label: "จัดหาเพิ่มโดย กฟข. (หน่วย)", key: "unitDistrict" },
+    { label: "าคาเฉลี่ยที่ กฟข.", key: "priceDistrict" },
+    { label: "ราคาอ้างอิง", key: "mediumPrice" },
+    { label: "งบประมาณที่ต้องใช้ ", key: "budget" },
+  ];
+
+  // Format the data for CSV
+  const formatCSVData = (data) =>
+    data.map((item) => ({
+      region: item.region,
+      usage: formatQuantity(item.usage),
+      stock: formatQuantity(item.stock),
+      quantityPR: formatQuantity(item.quantityPR),
+      contract: formatQuantity(item.contract),
+      availStock: formatQuantity(item.availStock),
+      availMonth: formatMonth(item.availMonth),
+      quantityAllocate: formatQuantity(item.quantityAllocate),
+      availMonthAfter: formatMonth(item.availMonthAfter),
+      newMonth: formatMonth(item.newMonth),
+      newQuantity: formatQuantity(item.newQuantity),
+      unitHQ: formatQuantity(item.unitHQ),
+      priceHQ: formatPrice(item.priceHQ),
+      unitDistrict: formatQuantity(item.unitDistrict),
+      priceDistrict: formatPrice(item.priceDistrict),
+      mediumPrice: formatPrice(item.mediumPrice),
+      budget: formatTotal(item.budget),
+    }));
+
+  const csvTableD42Data = formatCSVData(dataTableSimMaterialPlan); // Use your table data as CSV data
+
   const handleSelectHQLeadTime = (index) => {
     console.log("selectedHQLeadTime", index);
     setSelectedHQLeadTime(index);
@@ -187,6 +256,13 @@ const Dashboard4 = () => {
   const getButtonStyle = (isSelected) => ({
     backgroundColor: isSelected ? "#8e44ad" : "#f0f0f0",
     color: isSelected ? "white" : "black",
+    textDecoration: "none", // Remove underline
+    border: "1px solid #ccc",
+    borderRadius: "4px",
+    padding: "10px 15px",
+    cursor: "pointer",
+    textAlign: "center",
+    display: "inline-block", // Ensure button-like appearance
   });
 
   const handleSelectDemandMonth = (index) => {
@@ -358,6 +434,16 @@ const Dashboard4 = () => {
               title="ตารางจำลองแผนจัดซื้อพัสดุเพิ่มเติมระหว่างปี"
               data={dataTableSimMaterialPlan}
             />
+            <div className="download-button">
+              <CSVLink
+                data={csvTableD42Data}
+                headers={csvTableD42Headers}
+                filename={`SimMaterialPlan_${selectedYear}.csv`}
+                style={getButtonStyle(false)} // Apply the button style
+              >
+                Download CSV
+              </CSVLink>
+            </div>
             <D4GroupBarRe
               title="มูลค่าจัดหาพัสดุ (ล้านบาท)"
               data={dataTableSimMaterialPlan}
