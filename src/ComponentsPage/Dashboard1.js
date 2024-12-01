@@ -617,7 +617,6 @@ const Dashboard1 = () => {
           </div>
         </div>
         <div className="bottom-D1-container">
-          <div className="map-wrapper">
             <div className="D1-CSV-container">
               <div className="download-button">
                 <CSVLink
@@ -630,6 +629,7 @@ const Dashboard1 = () => {
                 </CSVLink>
               </div>
             </div>
+          <div className="map-wrapper">
             <div className="map-container">
               <MapChart data={dataPONumSpend} />
             </div>
