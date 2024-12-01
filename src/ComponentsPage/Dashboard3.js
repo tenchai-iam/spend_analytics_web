@@ -321,14 +321,26 @@ const Dashboard3 = () => {
               </select>
             )}
           </div>
-          <p>
-            หมายเหตุ: หากไม่มีการจัดซื้อเกิดขึ้น ณ
-            หน่วยงานจัดซื้อนั้นๆในปีที่เลือกแสดง จะไม่มีการแสดงผลราคาเฉลี่ย{" "}
-          </p>
+          <div className="D3-CSV-container">
+            <div className="download-button">
+              <CSVLink
+                data={csvTablePriceData}
+                headers={csvTablePriceHeaders}
+                filename={`HQvsDistrictPriceAndQuantityComparison_${selectedYear}_${selectedCategory}.csv`}
+                style={getButtonStyle(false)} // Apply the button style
+              >
+                Download CSV
+              </CSVLink>
+            </div>
+          </div>
           <TableD3Price
             title={`เปรียบเทียบราคาจัดซื้อส่วนกลาง vs. กฟข. ในปี ${selectedYear}`}
             data={dataTablePrice}
           />
+          <p>
+            หมายเหตุ: หากไม่มีการจัดซื้อเกิดขึ้น ณ
+            หน่วยงานจัดซื้อนั้นๆในปีที่เลือกแสดง จะไม่มีการแสดงผลราคาเฉลี่ย{" "}
+          </p>
         </div>
         <div className="bottom-container">
           <h1 className="text-title">{`เปรียบเทียบราคาจัดซื้อพัสดุตามหน่วยงานจัดซื้อ ในปี ${selectedYear}`}
