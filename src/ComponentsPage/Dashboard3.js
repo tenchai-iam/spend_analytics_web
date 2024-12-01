@@ -122,6 +122,30 @@ const Dashboard3 = () => {
       quantityRegion: Number(item.QUANTITY_REGION),
     })) || [];
 
+    const csvTablePriceHeaders = [
+    { label: "รหัสพัสดุ", key: "matNR" },
+    { label: "ชื่อพัสดุ", key: "matName" },
+    { label: "ราคาที่ส่วนกลาง", key: "priceHQ" },
+    { label: "ราคาเฉลี่ยที่ กฟข.", key: "priceDistrict" },
+    { label: "% ราคาที่แตกต่าง", key: "priceDiff" },
+    { label: "จำนวนพัสดุเฉลี่ยต่อ PO ที่ส่วนกลาง", key: "quantityHQ" },
+    { label: "จำนวนพัสดุเฉลี่ยต่อ PO ที่ กฟข.", key: "quantityRegion" },
+  ];
+
+  // Format the data for CSV
+  const formatCSVTablePriceData = (data) =>
+    data.map((item) => ({
+      matNR: item.matNR,
+      matName: item.matName,
+      priceHQ: formatPrice(item.priceHQ),
+      priceDistrict: formatPrice(item.priceDistrict),
+      priceDiff: formatPercentage(item.priceDiff),
+      quantityHQ: formatQuantity(item.quantityHQ),
+      quantityRegion: formatQuantity(item.quantityRegion),
+    }));
+
+  const csvTablePriceData = formatCSVTablePriceData(dataTablePrice); // Use your table data as CSV data
+
   const {
     data: materialPriceGroupDistrict,
     isLoading: isLoadingMaterialPriceGroupDistrict,
