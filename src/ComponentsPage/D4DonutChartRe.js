@@ -22,7 +22,7 @@ const D4DonutChartRe = ({ data, title, height = 400, onPrioritySelect }) => {
       const { name, value } = payload[0];
       return (
         <div
-          className="custom-tooltip"
+          className="custom-tooltip donut-text"
           style={{
             backgroundColor: "#fff",
             padding: "10px",
@@ -30,7 +30,7 @@ const D4DonutChartRe = ({ data, title, height = 400, onPrioritySelect }) => {
             boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",
           }}
         >
-          <p className="label" style={{ margin: 0 }}>
+          <p className="label donut-text" style={{ margin: 0 }}>
             <strong>{name}:</strong> {numberFormatter.format(value)}
           </p>
         </div>
