@@ -22,7 +22,7 @@
 
 /* Table Title */
 .table-title {
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 600;
   color: #4a0072;
   text-align: center;
@@ -45,12 +45,14 @@ th {
   background-color: #4c0033;
   color: #fff;
   position: sticky;
+  font-size: 0.9rem;
   top: 0;
   z-index: 2;
 }
 
 td {
   background-color: #ebd3f8;
+  font-size: 0.8rem;
 }
 
 /* Responsive layout for smaller screens */
