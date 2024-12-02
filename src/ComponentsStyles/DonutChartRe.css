@@ -1,6 +1,9 @@
 .donut-title {
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: 1rem;
   color: #4a0072; /* Custom color for the title */
   text-align: center; /* Center the title */
+}
+
+.donut-text {
+  font-size: 0.9rem;
 }
