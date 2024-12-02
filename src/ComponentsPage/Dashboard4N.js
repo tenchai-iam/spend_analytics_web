@@ -450,6 +450,10 @@ const Dashboard4 = () => {
               title="มูลค่าจัดหาพัสดุ (ล้านบาท)"
               data={dataTableSimMaterialPlan}
             />
+            <p>
+              หมายเหตุ: Savings เกิดจากผลลัพธ์ของ Base case จากการจัดซื้อที่
+              กฟข. ทั้งหมด เทียบกับ Target case จากการจัดซื้อตามการจำลอง
+            </p>
           </div>
         </div>
         <div>
