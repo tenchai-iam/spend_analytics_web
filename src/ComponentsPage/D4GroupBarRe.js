@@ -30,15 +30,19 @@ const D4GroupBarRe = ({
 
   useEffect(() => {
     if (data && data.length > 0) {
-      const totalUnitHQCost = data.reduce(
-        (sum, item) => sum + (item.unitHQ * item.priceHQ) / 1000000,
+      const totalUnitTargetCost = data.reduce(
+        (sum, item) =>
+          sum +
+          (item.unitHQ * item.priceHQ +
+            item.unitDistrict * item.priceDistrict) /
+            1000000,
         0
       );
-      const totalUnitDistrictCost = data.reduce(
-        (sum, item) => sum + (item.unitHQ * item.priceDistrict) / 1000000,
+      const totalUnitBaseCost = data.reduce(
+        (sum, item) => sum + (item.newQuantity * item.priceDistrict) / 1000000,
         0
       );
-      const difference = totalUnitDistrictCost - totalUnitHQCost;
+      const difference = totalUnitBaseCost - totalUnitTargetCost;
 
       // Pre-calculate differences for each region for tooltip display
       const differences = data.map((item) => ({
@@ -50,9 +54,9 @@ const D4GroupBarRe = ({
 
       setAggregatedData([
         {
-          CostAtHQPrice: totalUnitHQCost,
-          CostAtDistrictPrice: totalUnitDistrictCost,
-          Placeholder: totalUnitHQCost, // Placeholder for offsetting Difference
+          baseCost: totalUnitBaseCost,
+          targetCost: totalUnitTargetCost,
+          Placeholder: totalUnitTargetCost, // Placeholder for offsetting Difference
           Difference: difference,
         },
       ]);
@@ -96,23 +100,19 @@ const D4GroupBarRe = ({
               </div>
             )}
           />
-          <Legend />
+          <Legend/>
 
           {/* Render bars for HQ Cost and District Cost */}
-          <Bar dataKey="CostAtHQPrice" fill={hqColor} name="จัดหาโดยส่วนกลาง">
+          <Bar dataKey="baseCost" fill={hqColor} name="Base Case">
             <LabelList
-              dataKey="CostAtHQPrice"
+              dataKey="baseCost"
               position="top"
               formatter={formatValue}
             />
           </Bar>
-          <Bar
-            dataKey="CostAtDistrictPrice"
-            fill={districtColor}
-            name="จัดหาโดยกฟข."
-          >
+          <Bar dataKey="targetCost" fill={districtColor} name="Target Case">
             <LabelList
-              dataKey="CostAtDistrictPrice"
+              dataKey="targetCost"
               position="top"
               formatter={formatValue}
             />
