@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../ComponentsStyles/table.css";
+import "../ComponentsStyles/D4tableTop.css";
 
 const TableD42 = ({ title, data }) => {
   const [sortConfig, setSortConfig] = useState({
