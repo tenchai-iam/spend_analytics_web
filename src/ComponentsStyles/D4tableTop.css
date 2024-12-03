@@ -1,17 +1,6 @@
 /* General table styling */
-.table-container {
-  width: 100%;
-  margin: 20px auto;
-  padding: 20px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
-  border-radius: 8px;
-  overflow-x: auto;
-  max-height: 400px; /* Set your preferred max height */
-}
-
 .table-wrapper {
-  max-height: 300px; /* Set your preferred max height */
+  max-height: 400px; /* Set your preferred max height */
   overflow-y: auto; /* Enable vertical scrolling */
   border: 1px solid #ddd; /* Optional: Add a border around the table */
 }
@@ -46,7 +35,7 @@ th {
   background-color: #4c0033;
   color: #fff;
   position: sticky;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   top: 0;
   z-index: 2;
 }
@@ -79,7 +68,7 @@ td {
   td {
     display: flex;
     justify-content: space-between;
-    padding: 8px 10px;
+    padding: 6px 10px;
     border: none;
     border-bottom: 1px solid #ccc;
   }
