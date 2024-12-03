@@ -20,6 +20,12 @@
   border: 1px solid #ddd; /* Optional: Add a border around the table */
 }
 
+.tableD4-wrapper-NS {
+  max-height: 1200px; /* Set your preferred max height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  border: 1px solid #ddd; /* Optional: Add a border around the table */
+}
+
 /* Table Title */
 .table-title {
   font-size: 1rem;
