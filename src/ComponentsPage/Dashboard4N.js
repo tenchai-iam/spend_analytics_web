@@ -322,24 +322,18 @@ const Dashboard4 = () => {
             {isCategoriesLoading ? (
               <p>Loading categories...</p>
             ) : (
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-              >
-                <option value="">-- เลือกกลุ่มพัสดุ --</option>
-                {categoryData
-                  ?.slice() // Create a shallow copy of the array to avoid modifying the original
-                  .sort((a, b) => {
-                    if (a.CATEGORY_GROUP === "102") return -1; // Move `102` to the top
-                    if (b.CATEGORY_GROUP === "102") return 1;
-                    return a.CATEGORY_GROUP.localeCompare(b.CATEGORY_GROUP); // Default alphabetical sort by ID
-                  })
-                  .map((category, index) => (
-                    <option key={index} value={category.CATEGORY_GROUP}>
-                      {`${category.CATEGORY_GROUP}: ${category.CATEGORY_GROUP_NAME}`}
-                    </option>
-                  ))}
-              </select>
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                >
+                  <option value="">-- เลือกกลุ่มพัสดุ --</option>
+                  {categoryData
+                    ?.map((category, index) => (
+                      <option key={index} value={category.CATEGORY_GROUP}>
+                        {`${category.CATEGORY_GROUP}: ${category.CATEGORY_GROUP_NAME}`}
+                      </option>
+                    ))}
+                </select>
             )}
             {isLoadingMaterialD4Data ? (
               <p>Loading materials...</p>
