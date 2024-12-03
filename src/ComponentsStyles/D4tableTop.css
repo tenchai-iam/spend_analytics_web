@@ -27,7 +27,6 @@ table {
 th,
 td {
   padding: 6px 10px;
-  text-align: left;
   border: 1px solid #2e073f;
 }
 
@@ -36,6 +35,7 @@ th {
   color: #fff;
   position: sticky;
   font-size: 0.8rem;
+  text-align: left;
   top: 0;
   z-index: 2;
 }
@@ -43,6 +43,7 @@ th {
 td {
   background-color: #ebd3f8;
   font-size: 0.8rem;
+   text-align: right;
 }
 
 /* Responsive layout for smaller screens */
