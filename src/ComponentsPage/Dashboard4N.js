@@ -330,13 +330,13 @@ const Dashboard4 = () => {
                 {categoryData
                   ?.slice() // Create a shallow copy of the array to avoid modifying the original
                   .sort((a, b) => {
-                    if (a.CATEGORY_ID === "102") return -1; // Move `102` to the top
-                    if (b.CATEGORY_ID === "102") return 1;
-                    return a.CATEGORY_ID.localeCompare(b.CATEGORY_ID); // Default alphabetical sort by ID
+                    if (a.CATEGORY_GROUP === "102") return -1; // Move `102` to the top
+                    if (b.CATEGORY_GROUP === "102") return 1;
+                    return a.CATEGORY_GROUP.localeCompare(b.CATEGORY_GROUP); // Default alphabetical sort by ID
                   })
                   .map((category, index) => (
-                    <option key={index} value={category.CATEGORY_ID}>
-                      {`${category.CATEGORY_ID}: ${category.CATEGORY_NAME}`}
+                    <option key={index} value={category.CATEGORY_GROUP}>
+                      {`${category.CATEGORY_GROUP}: ${category.CATEGORY_GROUP_NAME}`}
                     </option>
                   ))}
               </select>
