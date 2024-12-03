@@ -53,7 +53,6 @@
   max-width: 1 1 60%;
   background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
   border-radius: 8px;
-  padding: 20px;
   box-sizing: border-box; /* Ensure padding is included in width */
   color: black;
 }
