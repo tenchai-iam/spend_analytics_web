@@ -65,7 +65,7 @@ const Table4 = ({ title, data }) => {
   return (
     <div className="table-container">
       <h2 className="table-title">{title}</h2>
-      <div className="table-wrapper-NS">
+      <div className="table-wrapper">
         <table>
           <thead>
             <tr>
