@@ -330,10 +330,12 @@ const Dashboard3 = () => {
                 onChange={(e) => setSelectedCategory(e.target.value)}
               >
                 <option value="">-- เลือกกลุ่มพัสดุ --</option>
-                {categoryData?.map((category, index) => (
-                  <option key={index} value={category.CATEGORY_ID}>
-                    {`${category.CATEGORY_ID}: ${category.CATEGORY_NAME}`}
-                  </option>
+                  {categoryData
+                  ?.filter((category) => category.CATEGORY_ID !== "999") // Exclude CATEGORY_ID 999
+                  .map((category, index) => (
+                    <option key={index} value={category.CATEGORY_ID}>
+                      {`${category.CATEGORY_ID}: ${category.CATEGORY_NAME}`}
+                    </option>
                 ))}
               </select>
             )}
