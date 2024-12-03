@@ -34,7 +34,7 @@ export const getCategories = async () => {
 
 // Fetch cateogories from the API
 export const getD4Categories = async () => {
-  const response = await axios.get(`${API_URL}/get_category_group_name`);
+  const response = await axios.get(`${API_URL}/dashboard_3_categories`);
   return response.data; // Return the data received from the API
 };
 
