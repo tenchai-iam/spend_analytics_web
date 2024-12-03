@@ -24,7 +24,9 @@
     "recharts": "2.12.7",
     "react-select": "5.8.1",
     "keycloak-js": "26.0.2",
-    "react-csv": "2.2.2"
+    "react-csv": "2.2.2",
+    "file-saver": "2.0.5",
+    "xlsx-js-style": "1.2.0"
   },
   "devDependencies": {
     "@types/react": "18.2.38",
