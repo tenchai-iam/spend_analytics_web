@@ -215,7 +215,7 @@ const Dashboard4 = () => {
     { label: "ยอดคงเหลือ", key: "availStock" },
     { label: "ใช้งานได้ (เดือน)", key: "availMonth" },
     { label: "คาดการณ์จัดสรรจากส่วนกลาง", key: "quantityAllocate" },
-    { label: "ใช้งานได้ (เดือน)", key: "availMonthAfter" },
+    { label: "ใช้งานได้หลังจัดสรร (เดือน)", key: "availMonthAfter" },
     { label: "จัดหาเพิ่ม (เดือน)", key: "newMonth" },
     { label: "จัดหาเพิ่ม (หน่วย)", key: "newQuantity" },
     { label: "จัดหาเพิ่มโดย ฝวห. (หน่วย)", key: "unitHQ" },
