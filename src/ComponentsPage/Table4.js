@@ -94,7 +94,7 @@ const Table4 = ({ title, data }) => {
                 คาดการณ์จัดสรรจากส่วนกลาง {renderSortArrow("quantityAllocate")}
               </th>
               <th onClick={() => handleSort("availMonthAfter")}>
-                ใช้งานได้ (เดือน) {renderSortArrow("availMonthAfter")}
+                ใช้งานได้หลังจัดสรร (เดือน) {renderSortArrow("availMonthAfter")}
               </th>
               <th onClick={() => handleSort("newMonth")}>
                 จัดหาเพิ่ม (เดือน) {renderSortArrow("newMonth")}
