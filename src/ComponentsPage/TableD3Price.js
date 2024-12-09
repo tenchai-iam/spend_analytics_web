@@ -18,7 +18,7 @@ const TableD3Price = ({ title, data }) => {
       style: "percent",
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
-    }).format(value)
+    }).format(value);
 
 
   const formatQuantity = (value) =>
