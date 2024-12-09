@@ -51,7 +51,7 @@ const Dashboard1 = () => {
       style: "percent",
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
-    }).format(value);
+    }).format(value / 100);
 
   const formatTotal = (value) =>
     new Intl.NumberFormat("en-US", {
