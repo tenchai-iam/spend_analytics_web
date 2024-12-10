@@ -15,7 +15,6 @@ import {
   getD2CategorySpendByPO,
   getD2CategoryPOQuantityByPO,
   getD2CategoryAverageSpendByPO,
-  getD2CategorySpendByAveragePO,
   getD2CategoryPOQuantityByAveragePO,
   getD2CategoryAverageSpendByAveragePO,
   getDateInfo,
@@ -418,19 +417,19 @@ const Dashboard2 = () => {
                     data={dataBarCategorySpend}
                     yAxisKey="name"
                     title={`มูลค่าจัดซื้อในปี ${selectedYear}`}
-                    height={2000}
+                    height={600}
                   />
                   <BarGraphReH
                     data={dataBarCategoryPOQuantity}
                     yAxisKey="name"
                     title={`จำนวนใบสั่งซื้อ (PO) ในปี ${selectedYear}`}
-                    height={2000}
+                    height={600}
                   />
                   <BarGraphReH
                     data={dataBarCategoryAverageSpend}
                     yAxisKey="name"
                     title={`มูลค่าจัดซื้อต่อ PO ในปี ${selectedYear}`}
-                    height={2000}
+                    height={600}
                   />
                 </>
               )}
@@ -440,19 +439,19 @@ const Dashboard2 = () => {
                     data={dataBarCategoryPOQuantityByPO}
                     yAxisKey="name"
                     title={`จำนวนใบสั่งซื้อ (PO) ในปี ${selectedYear}`}
-                    height={2000}
+                    height={600}
                   />
                   <BarGraphReH
                     data={dataBarCategorySpendByPO}
                     yAxisKey="name"
                     title={`มูลค่าจัดซื้อในปี ${selectedYear}`}
-                    height={2000}
+                    height={600}
                   />
                   <BarGraphReH
                     data={dataBarCategoryAverageSpendByPO}
                     yAxisKey="name"
                     title={`มูลค่าจัดซื้อต่อ PO ในปี ${selectedYear}`}
-                    height={2000}
+                    height={600}
                   />
                 </>
               )}
@@ -462,19 +461,19 @@ const Dashboard2 = () => {
                     data={dataBarCategoryAverageSpend}
                     yAxisKey="name"
                     title={`มูลค่าจัดซื้อต่อ PO ในปี ${selectedYear}`}
-                    height={2000}
+                    height={600}
                   />
                   <BarGraphReH
                     data={dataBarCategorySpendByAveragePO}
                     yAxisKey="name"
                     title={`มูลค่าจัดซื้อในปี ${selectedYear}`}
-                    height={2000}
+                    height={600}
                   />
                   <BarGraphReH
                     data={dataBarCategoryPOQuantityByAveragePO}
                     yAxisKey="name"
                     title={`จำนวนใบสั่งซื้อ (PO) ในปี ${selectedYear}`}
-                    height={2000}
+                    height={600}
                   />
                 </>
               )}
