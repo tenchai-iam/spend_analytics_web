@@ -77,7 +77,7 @@ const D3BarGraphReV = ({ data, xAxisKey, barKey, title, height = 400 }) => {
           <XAxis dataKey={xAxisKey} />
           <YAxis tickFormatter={(value) => priceFormatter.format(value)} />
           <Tooltip content={<CustomTooltip />} />
-          <Bar dataKey={barKey} fill="#4a0072">
+          <Bar dataKey={barKey} fill="#4a0072" barSize={75}>
             {data.map((entry, index) => {
               let color = "#4a0072"; // Default color
               if (entry.maxPrice === highestMaxPrice) color = "red";
