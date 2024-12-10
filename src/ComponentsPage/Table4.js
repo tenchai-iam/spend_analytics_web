@@ -39,21 +39,26 @@ const Table4 = ({ title, data }) => {
     setSortConfig({ key, direction });
   };
 
-  const sortedData = [...data].sort((a, b) => {
-    const aValue = a[sortConfig.key];
-    const bValue = b[sortConfig.key];
+const sortedData = [
+  ...[...data]
+    .filter((row) => row.region !== "รวม")
+    .sort((a, b) => {
+      const aValue = a[sortConfig.key];
+      const bValue = b[sortConfig.key];
 
-    if (typeof aValue === "string") {
-      return sortConfig.direction === "ascending"
-        ? aValue.localeCompare(bValue)
-        : bValue.localeCompare(aValue);
-    } else if (typeof aValue === "number" && typeof bValue === "number") {
-      return sortConfig.direction === "ascending"
-        ? aValue - bValue
-        : bValue - aValue;
-    }
-    return 0;
-  });
+      if (typeof aValue === "string") {
+        return sortConfig.direction === "ascending"
+          ? aValue.localeCompare(bValue)
+          : bValue.localeCompare(aValue);
+      } else if (typeof aValue === "number" && typeof bValue === "number") {
+        return sortConfig.direction === "ascending"
+          ? aValue - bValue
+          : bValue - aValue;
+      }
+      return 0;
+    }),
+  ...data.filter((row) => row.region === "รวม")
+];
 
   const renderSortArrow = (columnKey) => {
     if (sortConfig.key === columnKey) {
@@ -69,8 +74,8 @@ const Table4 = ({ title, data }) => {
         <table>
           <thead>
             <tr>
-              <th onClick={() => handleSort("region")}>
-                กฟฟ. {renderSortArrow("region")}
+              <th>
+                กฟฟ.
               </th>
               <th onClick={() => handleSort("usage")}>
                 อัตราการใช้งานต่อเดือน (R/M) {renderSortArrow("usage")}
