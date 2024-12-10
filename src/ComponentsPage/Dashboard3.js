@@ -318,9 +318,18 @@ const Dashboard3 = () => {
       <div className="dashboard3-container">
         {/* Left Container */}
         <div className="top-container">
-          <h1 className="text-title">
-            เปรียบเทียบราคาจัดซื้อพัสดุส่วนกลาง vs. กฟข.
-          </h1>
+          <div className="D3-CSV-container">
+            <div className="download-button">
+              <CSVLink
+                data={csvTablePriceData}
+                headers={csvTablePriceHeaders}
+                filename={`HQvsDistrictPriceAndQuantityComparison_${selectedYear}_${selectedCategory}.csv`}
+                style={getButtonStyle(false)} // Apply the button style
+              >
+                Download CSV
+              </CSVLink>
+            </div>
+          </div>
           <div className="dropdown-cat-group">
             {isCategoriesLoading ? (
               <p>Loading categories...</p>
@@ -339,18 +348,6 @@ const Dashboard3 = () => {
                 ))}
               </select>
             )}
-          </div>
-          <div className="D3-CSV-container">
-            <div className="download-button">
-              <CSVLink
-                data={csvTablePriceData}
-                headers={csvTablePriceHeaders}
-                filename={`HQvsDistrictPriceAndQuantityComparison_${selectedYear}_${selectedCategory}.csv`}
-                style={getButtonStyle(false)} // Apply the button style
-              >
-                Download CSV
-              </CSVLink>
-            </div>
           </div>
           <TableD3Price
             title={`เปรียบเทียบราคาจัดซื้อส่วนกลาง vs. กฟข. ในปี ${selectedYear}`}
