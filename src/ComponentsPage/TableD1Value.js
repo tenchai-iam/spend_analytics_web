@@ -18,7 +18,7 @@ const TableD1Value = ({ title, data }) => {
       style: "percent",
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
-    }).format(value / 100);
+    }).format(value);
 
   const sortedData = [...data].sort((a, b) => {
     if (sortConfig.key) {
