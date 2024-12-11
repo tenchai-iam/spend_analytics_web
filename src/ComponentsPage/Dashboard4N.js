@@ -197,9 +197,9 @@ const Dashboard4 = () => {
       newMonth: Number(item.TO_PROCURE_MONTH),
       newQuantity: Number(item.TO_PROCURE_UNIT),
       unitHQ: Number(item.TO_PROCURE_HQ),
-      priceHQ: Number(item.PRICE_HQ),
+      priceHQ: Number(formatPrice(item.PRICE_HQ)),
       unitDistrict: Number(item.TO_PROCURE_DISTRICT),
-      priceDistrict: Number(item.PRICE_DISTRICT),
+      priceDistrict: Number(formatPrice(item.PRICE_DISTRICT)),
       mediumPrice: Number(item.MEDIUM_PRICE),
       budget: Number(item.BUDGET),
     })) || [];
