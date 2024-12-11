@@ -134,7 +134,7 @@ const Dashboard1 = () => {
       district: item.DISTRICT_NAME,
       lessThanQuantity: Number(item.PERCENT_PO_LESS),
       totalQuantity: Number(item.TOTAL_PO),
-      percentQuantity: Number(item.PO_LESS_EQUAL_500K_QUANTITY),
+      percentQuantity: Number(item.PO_LESS_EQUAL_500K_QUANTITY)/100,
     })) || [];
   
   const csvTableValueHeaders = [
