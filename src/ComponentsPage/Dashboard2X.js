@@ -458,7 +458,7 @@ const Dashboard2 = () => {
               {currentBarView === 3 && (
                 <>
                   <BarGraphReH
-                    data={dataBarCategoryAverageSpend}
+                    data={dataBarCategoryAverageSpendByAveragePO}
                     yAxisKey="name"
                     title={`มูลค่าจัดซื้อต่อ PO ในปี ${selectedYear}`}
                     height={600}
