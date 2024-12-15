@@ -271,7 +271,7 @@ const Dashboard2 = () => {
 
   // View 3.3 PO Quantity Rank by Average PO
 
-  const {
+const {
     data: barCategoryPOQuantityByAveragePO,
     isLoading: isLoadingBarCategoryPOQuantitydByAveragePO,
     isError: isErrorBarCategoryPOQuantityByAveragePO,
