@@ -12,22 +12,20 @@ import DonutChartRe from "./DonutChartRe.js";
 import TableD1Price from "./TableD1Price.js";
 import TableD1Value from "./TableD1Value.js";
 import { useQuery } from "@tanstack/react-query";
+import { getYears, getCategory, getDateInfo } from "../services/api.js"; // Import your API service function
 import {
-  getYears,
   getD1Top10SpendDiff,
   getD1Top5POValue,
-  getD1BarSpend,
-  getD1BarPurchaseQ,
-  getD1BarSupplierQ,
   getD1LineSpend,
+  getD1BarSpend,
   getD1LinePOQuantity,
+  getD1BarPurchaseQ,
   getD1LineSupplierQuantity,
+  getD1BarSupplierQ,
+  getD1CategorySpend,
   getD1DonutSpend,
   getD1PONumSpend,
-  getD1CategorySpend,
-  getCategory,
-  getDateInfo,
-} from "../services/api.js"; // Import your API service function
+} from "../services/api_D1.js";
 import { CSVLink } from "react-csv"; // Import CSVLink from react-csv
 
 const Dashboard1 = () => {
