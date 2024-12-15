@@ -217,7 +217,7 @@ const Dashboard2 = () => {
       valueDistrict: supplier.SPEND_BY_PO_DISTRICT,
     })) || [];
 
-  // View 3.1 Average PO Rank by Average PO
+  // View 3.1 Average PO Value Rank by Average PO
 
   const {
     data: barCategoryAverageSpendByAveragePO,
@@ -263,7 +263,7 @@ const Dashboard2 = () => {
   });
 
   const dataBarCategorySpendByAveragePO =
-    barCategorySpendByPO?.top_suppliers?.map((supplier) => ({
+    barCategorySpendByAveragePO?.top_suppliers?.map((supplier) => ({
       name: supplier.SUPPLIER_NAME,
       valueHQ: supplier.TOTAL_SPEND_HQ / 1000000,
       valueDistrict: supplier.TOTAL_SPEND_DISTRICT / 1000000,
@@ -271,7 +271,7 @@ const Dashboard2 = () => {
 
   // View 3.3 PO Quantity Rank by Average PO
 
-const {
+  const {
     data: barCategoryPOQuantityByAveragePO,
     isLoading: isLoadingBarCategoryPOQuantitydByAveragePO,
     isError: isErrorBarCategoryPOQuantityByAveragePO,
