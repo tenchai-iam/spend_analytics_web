@@ -6,8 +6,8 @@ import YearDropdown from "./YearDropdown";
 import NavbarComponent from "../ComponentsPage/NavbarComponent";
 import BarGraphReH from "./BarGraphReH";
 import { useQuery } from "@tanstack/react-query";
+import { getYears, getDateInfo } from "../services/api.js"; // Import your API service function
 import {
-  getYears,
   getD2TopSupplier,
   getD2CategorySpendByValue,
   getD2CategoryPOQuantityByValue,
@@ -15,10 +15,10 @@ import {
   getD2CategorySpendByPO,
   getD2CategoryPOQuantityByPO,
   getD2CategoryAverageSpendByPO,
+  getD2CategorySpendByAveragePO,
   getD2CategoryPOQuantityByAveragePO,
   getD2CategoryAverageSpendByAveragePO,
-  getDateInfo,
-} from "../services/api.js"; // Import your API service function
+} from "../services/api_D2.js";
 
 const Dashboard2 = () => {
   const [selectedYear, setSelectedYear] = useState(""); // State to hold the selected year
