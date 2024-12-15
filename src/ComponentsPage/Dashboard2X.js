@@ -258,7 +258,7 @@ const Dashboard2 = () => {
       selectedCategoryGroup,
     ], // Unique query key for caching
     queryFn: () =>
-      getD2CategoryAverageSpendByAveragePO(selectedYear, selectedCategoryGroup), // API call to fetch data based on year and category_group are selected
+      getD2CategorySpendByAveragePO(selectedYear, selectedCategoryGroup), // API call to fetch data based on year and category_group are selected
     enabled: !!selectedYear && selectedCategoryGroup !== null, // Only run query if year and category_group are selected
   });
 
@@ -288,7 +288,7 @@ const Dashboard2 = () => {
   });
 
   const dataBarCategoryPOQuantityByAveragePO =
-    barCategoryPOQuantityByAveragePO?.top_suppliers?.map((supplier) => ({
+    barCategoryPOQuantityByAveragePO?.top_suppliers_po?.map((supplier) => ({
       name: supplier.SUPPLIER_NAME,
       valueHQ: supplier.PO_HQ,
       valueDistrict: supplier.PO_DISTRICT,
