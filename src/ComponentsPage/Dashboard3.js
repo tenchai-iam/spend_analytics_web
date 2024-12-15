@@ -7,18 +7,17 @@ import D3BarGraphReV from "./D3BarGraphReV";
 import TableD3Price from "./TableD3Price";
 import Select from "react-select"; // Import react-select
 import { useQuery } from "@tanstack/react-query";
+import { getYears, getDateInfo } from "../services/api.js"; // Import your API service function
 import {
-  getYears,
-  getCategories,
-  getMaterials,
+  getD3Categories,
+  getD3Materials,
   getD3Districts,
   getD3CategoryPriceTable,
   getD3MaterialPriceGroupDistrict,
   getD3MaterialPriceByDistrict,
   getD3MaterialPriceGroupEKGRP,
   getD3MaterialPriceByEKGRP,
-  getDateInfo,
-} from "../services/api.js"; // Import your API service function
+} from "../services/api_D3.js";
 import { CSVLink } from "react-csv"; // Import CSVLink from react-csv
 
 const Dashboard3 = () => {
@@ -69,7 +68,7 @@ const Dashboard3 = () => {
 
   const { data: categoryData, isLoading: isCategoriesLoading } = useQuery({
     queryKey: ["categories"],
-    queryFn: getCategories,
+    queryFn: getD3Categories,
   });
 
   const {
@@ -79,7 +78,7 @@ const Dashboard3 = () => {
     error: errorMaterialD3Data,
   } = useQuery({
     queryKey: ["materials", selectedYear, selectedCategory], // Unique query key for caching
-    queryFn: () => getMaterials(selectedYear, selectedCategory), // API call to fetch data based on year
+    queryFn: () => getD3Materials(selectedYear, selectedCategory), // API call to fetch data based on year
     enabled: Boolean(selectedYear) && Boolean(selectedCategory) !== null, // Only run query if year and category are selected
   });
 
