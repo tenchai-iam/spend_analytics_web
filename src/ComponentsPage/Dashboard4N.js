@@ -9,15 +9,14 @@ import TableD42 from "./TableD42.js";
 import D4GroupBarRe from "./D4GroupBarRe";
 import Select from "react-select"; // Import react-select
 import { useQuery } from "@tanstack/react-query";
+import { getYears, getDateInfo } from "../services/api.js"; // Import your API service function
 import {
-  getYears,
   getD4Categories,
   getD4Materials,
   getD4UsableMaterialGroup,
   getD4RequireMaterialDetail,
   getD4SimMaterialPlan,
-  getDateInfo,
-} from "../services/api.js"; // Import your API service function
+} from "../services/api_D4.js";
 import { CSVLink } from "react-csv"; // Import CSVLink from react-csv
 import XLSX from "xlsx-js-style";
 import { saveAs } from "file-saver";
