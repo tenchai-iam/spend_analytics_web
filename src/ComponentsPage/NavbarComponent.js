@@ -5,6 +5,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import spendinsight from "../pic/spend_insight_m.png";
 import "../ComponentsStyles/NavbarStyles.css"; // Import the custom Navbar CSS file
 
+const API_URL = "https://dev-spendi-tcc.pea.co.th/api";
+
 function NavbarComponent() {
   return (
     <Navbar
@@ -16,22 +18,13 @@ function NavbarComponent() {
       <Container fluid>
         {/* Logo */}
         <Navbar.Brand as={Link} to="/home">
-          {" "}
-          {/* Use Link instead of href */}
-          {/*           <img
-            src={pealogo} // Replace with the path to your logo
-            width="70"
-            height="35"
-            className="d-inline-block align-top"
-            alt="PEA Logo"
-          />{" "} */}
           <img
             src={spendinsight} // Replace with the path to your logo
             width="40"
             height="40"
             className="d-inline-block align-top"
             alt="Spend Insight"
-          />{" "}
+          />
         </Navbar.Brand>
 
         {/* Responsive Toggle */}
@@ -39,12 +32,12 @@ function NavbarComponent() {
 
         {/* Collapsible Links */}
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="ml-auto">
+          <Nav className="ms-auto">
             {/* Main Links */}
             <Nav.Link as={Link} to="/home">
               หน้าหลัก
-            </Nav.Link>{" "}
-            {/* Use Link with to */}
+            </Nav.Link>
+
             {/* Dropdown for Admin */}
             <NavDropdown title="สำหรับพนักงานทั่วไป" id="admin-dropdown">
               <NavDropdown.Item as={Link} to="/dashboard1">
@@ -54,8 +47,12 @@ function NavbarComponent() {
                 ภาพรวม Supplier
               </NavDropdown.Item>
             </NavDropdown>
+
             {/* Dropdown for Planning */}
-            <NavDropdown title="สำหรับผู้จัดทำแผนจัดหาพัสดุ" id="planning-dropdown">
+            <NavDropdown
+              title="สำหรับผู้จัดทำแผนจัดหาพัสดุ"
+              id="planning-dropdown"
+            >
               <NavDropdown.Item as={Link} to="/dashboard3">
                 เปรียบเทียบราคาจัดซื้อ
               </NavDropdown.Item>
@@ -63,11 +60,21 @@ function NavbarComponent() {
                 ปรับแผนเพิ่มเติมระหว่างปี
               </NavDropdown.Item>
             </NavDropdown>
+
             {/* Link for Data Management */}
             <Nav.Link as={Link} to="/upload">
               การจัดการข้อมูล
-            </Nav.Link>{" "}
-            {/* Use Link with to */}
+            </Nav.Link>
+
+            {/* Logout Button */}
+            <Button
+              className="logout-button ms-2"
+              onClick={() => {
+                window.location.href = `${API_URL}/logout`;
+              }}
+            >
+              ออกจากระบบ
+            </Button>
           </Nav>
         </Navbar.Collapse>
       </Container>
