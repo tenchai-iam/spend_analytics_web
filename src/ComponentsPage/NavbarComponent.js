@@ -28,10 +28,10 @@ function NavbarComponent() {
         </Navbar.Brand>
 
         {/* Responsive Toggle */}
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Toggle aria-controls="basic-navbar-nav" className="me-2"/>
 
         {/* Collapsible Links */}
-        <Navbar.Collapse id="basic-navbar-nav">
+        <Navbar.Collapse id="basic-navbar-nav" className="d-flex flex-grow-1">
           <Nav className="ms-auto">
             {/* Main Links */}
             <Nav.Link as={Link} to="/home">
@@ -67,6 +67,14 @@ function NavbarComponent() {
             </Nav.Link>
 
             {/* Logout Button */}
+            <Button
+              className="logout-button ms-2"
+              onClick={() => {
+                window.location.href = `${API_URL}/logout`;
+              }}
+            >
+              Logout
+            </Button>
           </Nav>
         </Navbar.Collapse>
       </Container>
