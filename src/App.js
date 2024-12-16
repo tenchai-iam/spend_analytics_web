@@ -27,10 +27,10 @@ export default function App() {
           <Routes>
             <Route path="/" element={<ProtectedRoute element={Home} />} />
             <Route path="/dashboard1" element={<ProtectedRoute element={Dashboard1} />} />
-            <Route path="/dashboard2" element={<Dashboard2 />} />
-            <Route path="/dashboard3" element={<Dashboard3 />} />
-            <Route path="/dashboard4" element={<Dashboard4 />} />
-            <Route path="/upload" element={<Upload />} />
+            <Route path="/dashboard2" element={<ProtectedRoute element={Dashboard2} />} />
+            <Route path="/dashboard3" element={<ProtectedRoute element={Dashboard3} />} />
+            <Route path="/dashboard4" element={<ProtectedRoute element={Dashboard4} />} />
+            <Route path="/upload" element={<ProtectedRoute element={Upload} />} />
             <Route path="/callback" element={<Callback />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
