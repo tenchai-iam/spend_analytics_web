@@ -20,6 +20,22 @@
   font-weight: 500;
 }
 
-/* .navbar-brand img {
-  filter: brightness(0) invert(1); 
-} */
+.logout-button {
+  background-color: transparent;
+  color: #ffffff; /* Yellowish text color */
+  font-size: 0.9rem; /* Adjust text size */
+  font-weight: bold; /* Bold text */
+  border: 2px solid #ffffff; /* Border color matches text */
+  border-radius: 10px; /* Rounded corners */
+  padding: 5px 10px; /* Spacing inside the button */
+  cursor: pointer; /* Cursor pointer on hover */
+  text-transform: capitalize; /* Ensure "Download" has first-letter caps */
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Hover Effect */
+.logout-button:hover {
+  background-color: #f0d28e; /* Yellowish background on hover */
+  color: #5c4577; /* Purple text on hover */
+  border: 2px solid #5c4577; /* Purple border */
+}
