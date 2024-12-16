@@ -67,14 +67,6 @@ function NavbarComponent() {
             </Nav.Link>
 
             {/* Logout Button */}
-            <Button
-              className="logout-button ms-2"
-              onClick={() => {
-                window.location.href = `${API_URL}/logout`;
-              }}
-            >
-              ออกจากระบบ
-            </Button>
           </Nav>
         </Navbar.Collapse>
       </Container>
