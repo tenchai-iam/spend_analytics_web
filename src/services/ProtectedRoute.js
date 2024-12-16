@@ -1,15 +1,26 @@
 import React from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 
 const ProtectedRoute = ({ element: Component }) => {
-  const token = sessionStorage.getItem("access_token");
+  const location = useLocation();
 
-  // If no token, redirect to the login route
-  if (!token) {
-    window.location.href = "https://dev-spendi-tcc.pea.co.th/api/login";
-    return null;
+  // Define public routes that do not require authentication
+  const publicRoutes = ["/callback"];
+
+  // Skip protection for public routes
+  if (publicRoutes.includes(location.pathname)) {
+    return <Component />;
   }
 
+  // Example: Replace this with your actual authentication check
+  const isAuthenticated = !!localStorage.getItem("accessToken");
+
+  // Redirect unauthenticated users to login
+  if (!isAuthenticated) {
+    return <Navigate to="/api/login" replace />;
+  }
+
+  // Render the protected component if authenticated
   return <Component />;
 };
 
