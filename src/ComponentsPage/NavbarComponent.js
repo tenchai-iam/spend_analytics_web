@@ -1,5 +1,5 @@
 import React from "react";
-import { Navbar, Nav, NavDropdown, Container } from "react-bootstrap";
+import { Navbar, Nav, NavDropdown, Container, Button } from "react-bootstrap";
 import { Link } from "react-router-dom"; // Import Link from react-router-dom
 import "bootstrap/dist/css/bootstrap.min.css";
 import spendinsight from "../pic/spend_insight_m.png";
@@ -15,7 +15,7 @@ function NavbarComponent() {
       variant="dark"
       sticky="top"
     >
-      <Container fluid>
+      <Container fluid className="d-flex align-items-center">
         {/* Logo */}
         <Navbar.Brand as={Link} to="/home">
           <img
