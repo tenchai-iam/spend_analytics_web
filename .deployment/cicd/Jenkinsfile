@@ -250,4 +250,3 @@ podTemplate(cloud: 'kubernetes', containers: [
         }
     }
 }
-
