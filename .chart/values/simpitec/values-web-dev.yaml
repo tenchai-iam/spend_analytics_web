@@ -83,7 +83,7 @@ autoscaling:
 
 # nodeSelector: {}
 
-nodeSelector:  {}
+nodeSelector: {}
 
 tolerations: []
 
