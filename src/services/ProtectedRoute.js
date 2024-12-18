@@ -6,7 +6,7 @@ const ProtectedRoute = ({ element: Component }) => {
 
   // If no token, redirect to the login route
   if (!token) {
-    window.location.href = "https://spendi-tcc.pea.co.th/api/login";
+    window.location.href = "https://dev-spendi-tcc.pea.co.th/api/login";
     return null;
   }
 
