@@ -59,9 +59,9 @@ podTemplate(cloud: 'kubernetes', containers: [
     ]) {
     node(POD_LABEL) {
 
-        def gitBranch = 'master'
+        def gitBranch = 'master'  //develop
         def cmd = ''
-        def mode = 'master'
+        def mode = 'master'  //develop
         def tag = 'latest'
         def gitRevision = ''
         def workspace = ''
