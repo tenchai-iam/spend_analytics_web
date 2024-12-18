@@ -5,7 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import spendinsight from "../pic/spend_insight_m.png";
 import "../ComponentsStyles/NavbarStyles.css"; // Import the custom Navbar CSS file
 
-const API_URL = "https://spendi-tcc.pea.co.th/api";
+const API_URL = "https://dev-spendi-tcc.pea.co.th/api";
 
 function NavbarComponent() {
   return (
