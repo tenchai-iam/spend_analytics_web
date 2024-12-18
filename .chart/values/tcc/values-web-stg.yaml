@@ -58,9 +58,9 @@ ingress:
     nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "1024m"
   hosts:
-    - host: cardinal-analytic-spend.thepostway.com
+    - host: #cardinal-analytic-spend.thepostway.com
       paths:
-        - /(.*)
+        - #/(.*)
 
 resources:
   # We usually recommend not to specify default resources and to leave this as a conscious
