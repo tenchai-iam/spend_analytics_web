@@ -26,7 +26,8 @@
     "keycloak-js": "26.0.2",
     "react-csv": "2.2.2",
     "file-saver": "2.0.5",
-    "xlsx-js-style": "1.2.0"
+    "xlsx-js-style": "1.2.0",
+    "env-cmd": "10.1.0"
   },
   "devDependencies": {
     "@types/react": "18.2.38",
