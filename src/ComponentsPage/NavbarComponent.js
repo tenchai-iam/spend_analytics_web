@@ -70,7 +70,7 @@ function NavbarComponent() {
             <Button
               className="logout-button ms-2"
               onClick={() => {
-                window.location.href = {logout_url};
+                window.location.href = logout_url;
               }}
             >
               Logout
