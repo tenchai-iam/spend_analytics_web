@@ -8,7 +8,7 @@ const ProtectedRoute = ({ element: Component }) => {
 
   // If no token, redirect to the login route
   if (!token) {
-    window.location.href = { login_url };
+    window.location.href = login_url;
     return null;
   }
 
