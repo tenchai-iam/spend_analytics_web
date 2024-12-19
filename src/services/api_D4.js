@@ -15,6 +15,7 @@ export const getD4Materials = async (year, category_id) => {
     {
       year: year, // Pass the year value in the request body
       category_id: String(category_id), // Pass the category ID value in the request body
+      priority: String(priority),
     },
     { timeout: 5000 }
   );
