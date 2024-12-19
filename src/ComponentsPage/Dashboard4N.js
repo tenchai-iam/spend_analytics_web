@@ -78,8 +78,8 @@ const Dashboard4 = () => {
     isError: isErrorMaterialD4Data,
     error: errorMaterialD4Data,
   } = useQuery({
-    queryKey: ["materials", selectedYear, selectedCategory], // Unique query key for caching
-    queryFn: () => getD4Materials(selectedYear, selectedCategory), // API call to fetch data based on year and category
+    queryKey: ["materials", selectedYear, selectedCategory, selectedMaterialGroup], // Unique query key for caching
+    queryFn: () => getD4Materials(selectedYear, selectedCategory,selectedMaterialGroup), // API call to fetch data based on year and category
     enabled: Boolean(selectedYear) && Boolean(selectedCategory), // Only run query if year and category are selected
   });
 
