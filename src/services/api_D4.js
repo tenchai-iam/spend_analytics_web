@@ -9,7 +9,7 @@ export const getD4Categories = async () => {
 };
 
 // Fetch materials data for a specific category using a POST request
-export const getD4Materials = async (year, category_id) => {
+export const getD4Materials = async (year, category_id, priority) => {
   const response = await axios.post(
     `${API_URL}/dashboard_4_matnr_maktx`,
     {
