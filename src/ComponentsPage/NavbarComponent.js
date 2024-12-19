@@ -5,7 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import spendinsight from "../pic/spend_insight_m.png";
 import "../ComponentsStyles/NavbarStyles.css"; // Import the custom Navbar CSS file
 
-const API_URL = "https://dev-spendi-tcc.pea.co.th/api";
+const logout_url = process.env.REACT_APP_LOGOUT_URL
 
 function NavbarComponent() {
   return (
@@ -70,7 +70,7 @@ function NavbarComponent() {
             <Button
               className="logout-button ms-2"
               onClick={() => {
-                window.location.href = `${API_URL}/logout`;
+                window.location.href = {logout_url};
               }}
             >
               Logout
