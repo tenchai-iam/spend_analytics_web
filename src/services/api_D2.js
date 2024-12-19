@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://dev-spendi-tcc.pea.co.th/api";
+const API_URL = process.env.REACT_APP_API_URL;
 
 // Fetch top supplier data for a specific year and category using a POST request
 export const getD2TopSupplier = async (year, category_group) => {
