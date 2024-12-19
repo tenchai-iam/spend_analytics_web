@@ -136,7 +136,7 @@ podTemplate(cloud: 'kubernetes', containers: [
                         } else if (mode == 'staging') {
                             sh "npm run build:staging"
                         } else if (mode == 'production') {
-                            sh "npm run build:prod"
+                            sh "npm run build"
                         } else {
                             sh "npm run build:dev"
                         }
