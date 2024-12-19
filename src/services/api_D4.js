@@ -3,9 +3,15 @@ import axios from "axios";
 const API_URL = "https://dev-spendi-tcc.pea.co.th/api";
 
 // Fetch cateogories from the API
-export const getD4Categories = async () => {
-  const response = await axios.get(`${API_URL}/get_category_group_name`);
-  return response.data; // Return the data received from the API
+export const getD4Categories = async (priority) => {
+  const response = await axios.post(
+    `${API_URL}/get_category_group_name`,
+    {
+      priority: String(priority), // Pass the category ID value in the request body
+    },
+    { timeout: 5000 }
+  );
+  return response.data;
 };
 
 // Fetch materials data for a specific category using a POST request
@@ -14,8 +20,8 @@ export const getD4Materials = async (year, category_id, priority) => {
     `${API_URL}/dashboard_4_matnr_maktx`,
     {
       year: year, // Pass the year value in the request body
-      category_id: String(category_id), // Pass the category ID value in the request body
-      priority: String(priority),
+      category_id: String(category_id),
+      priority: String(priority), // Pass the category ID value in the request body
     },
     { timeout: 5000 }
   );
