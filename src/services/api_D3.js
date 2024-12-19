@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://dev-spendi-tcc.pea.co.th/api";
+const API_URL = process.env.REACT_APP_API_URL;
 
 // Fetch cateogories from the API
 export const getD3Categories = async () => {

@@ -317,36 +317,38 @@ const Dashboard3 = () => {
       <div className="dashboard3-container">
         {/* Left Container */}
         <div className="top-container">
-          <div className="D3-CSV-container">
-            <div className="download-button">
-              <CSVLink
-                data={csvTablePriceData}
-                headers={csvTablePriceHeaders}
-                filename={`HQvsDistrictPriceAndQuantityComparison_${selectedYear}_${selectedCategory}.csv`}
-                style={getButtonStyle(false)} // Apply the button style
-              >
-                Download CSV
-              </CSVLink>
+          <div className="dropdown-download">
+            <div className="dropdown-cat-group">
+              {isCategoriesLoading ? (
+                <p>Loading categories...</p>
+              ) : (
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                >
+                  <option value="">-- เลือกกลุ่มพัสดุ --</option>
+                    {categoryData
+                    ?.filter((category) => category.CATEGORY_ID !== "999") // Exclude CATEGORY_ID 999
+                    .map((category, index) => (
+                      <option key={index} value={category.CATEGORY_ID}>
+                        {`${category.CATEGORY_ID}: ${category.CATEGORY_NAME}`}
+                      </option>
+                  ))}
+                </select>
+              )}
             </div>
-          </div>
-          <div className="dropdown-cat-group">
-            {isCategoriesLoading ? (
-              <p>Loading categories...</p>
-            ) : (
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-              >
-                <option value="">-- เลือกกลุ่มพัสดุ --</option>
-                  {categoryData
-                  ?.filter((category) => category.CATEGORY_ID !== "999") // Exclude CATEGORY_ID 999
-                  .map((category, index) => (
-                    <option key={index} value={category.CATEGORY_ID}>
-                      {`${category.CATEGORY_ID}: ${category.CATEGORY_NAME}`}
-                    </option>
-                ))}
-              </select>
-            )}
+            <div className="D3-CSV-container">
+              <div className="download-button">
+                <CSVLink
+                  data={csvTablePriceData}
+                  headers={csvTablePriceHeaders}
+                  filename={`HQvsDistrictPriceAndQuantityComparison_${selectedYear}_${selectedCategory}.csv`}
+                  style={getButtonStyle(false)} // Apply the button style
+                >
+                  Download CSV
+                </CSVLink>
+              </div>
+            </div>
           </div>
           <TableD3Price
             title={`เปรียบเทียบราคาจัดซื้อส่วนกลาง vs. กฟข. ในปี ${selectedYear}`}

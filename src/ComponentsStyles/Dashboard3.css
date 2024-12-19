@@ -3,11 +3,6 @@
   color: #fff;
 }
 
-.download-button {
-  padding: 20px;
-  align-items: center;
-}
-
 .dashboard3-container {
   position: relative;
   display: flex;
@@ -17,6 +12,25 @@
   width: 100%;
   margin: 0 auto;
   flex-wrap: wrap; /* Allow wrapping for responsiveness */
+}
+
+.dropdown-download {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between; /* Moves items to opposite ends */
+  align-items: center;
+}
+
+.dropdown-cat-group {
+  font-size: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+
+.dropdown-group label {
+  font-weight: bold;
+  margin-bottom: 5px;
 }
 
 .D3-CSV-container {
@@ -78,18 +92,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.dropdown-cat-group {
-  font-size: 0.9rem;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-.dropdown-group label {
-  font-weight: bold;
-  margin-bottom: 5px;
 }
 
 .price-summary {

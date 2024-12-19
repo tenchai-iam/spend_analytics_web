@@ -129,7 +129,17 @@ podTemplate(cloud: 'kubernetes', containers: [
             container("node") {
                 ansiColor('xterm') {
                     script {
-                        sh "npm run build"
+                        // sh "npm run build"
+
+                        if (mode == 'develop') {
+                            sh "npm run build:dev"
+                        } else if (mode == 'staging') {
+                            sh "npm run build:staging"
+                        } else if (mode == 'production') {
+                            sh "npm run build"
+                        } else {
+                            sh "npm run build:dev"
+                        }
                     }
                 }
             }
