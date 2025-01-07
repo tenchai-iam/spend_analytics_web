@@ -79,7 +79,6 @@ const UploadPage = () => {
   return (
     <div>
       <NavbarComponent />
-      <BackgroundComponent />
       <div className="upload-container">
         <div className="upload-container-L1">
           {uploadSections.map((section, index) => (

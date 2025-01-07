@@ -451,7 +451,6 @@ const Dashboard1 = () => {
 
   return (
     <div>
-      <BackgroundComponent />
       <NavbarComponent />
       <div className="year-dropdown-container">
         <YearDropdown

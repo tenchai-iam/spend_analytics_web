@@ -307,7 +307,6 @@ const Dashboard3 = () => {
   return (
     <div>
       <NavbarComponent />
-      <BackgroundComponent />
       <div className="year-dropdown-container">
         <YearDropdown
           onSelectYear={setSelectedYear}
