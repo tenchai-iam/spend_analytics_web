@@ -1,12 +1,12 @@
 /* General Layout */
 .data-date {
-  font-size: 1rem;
-  color: #fff;
+  font-size: 0.8rem;
+  color: #3e3e3e;
   padding-left: 20px;
 }
 .data-date-home {
-  font-size: 1rem;
-  color: #fff;
+  font-size: 0.8rem;
+  color: #3e3e3e;
   padding-left: 20px;
   margin-bottom: 60px;
 }
@@ -38,36 +38,34 @@
 
 .text-container {
   display: grid;
-  grid-template-rows: repeat(2, 1fr); /* Two rows for the two text items */
-  gap: 10px; /* Space between text items */
+  grid-template-columns: repeat(2, 1fr); /* Two rows for the two text items */
+  gap: 20px; /* Space between text items */
   justify-items: center; /* Center align the text items */
-  padding: 30px 20px 10px 20px; /* Padding around the container */
-  width: 40%;
+  padding: 20px;
+  width: 50%;
 }
 
-.text-top {
+.text-subcontainer {
   display: grid;
-  grid-template-columns: repeat(
-    2,
-    1fr
-  ); /* Two columns for the two text items */
-  gap: 10px; /* Space between text items */
+  grid-template-rows: repeat(2, 1fr); /* Two columns for the two text items */
+  background-color: rgba(118, 118, 128, 0.04); /* Base dark color */
+  gap: 20px; /* Space between text items */
   justify-items: left;
+  padding: 20px;
   width: 100%;
-}
-
-.text-bottom {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  justify-items: left;
-  width: 100%;
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.04),
+    /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .text {
-  color: white;
-  font-size: 1.1rem;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  color: #3e3e3e;
+  font-size: 1rem;
+}
+
+.number {
+  color: #3e3e3e;
+  font-size: 1.5rem;
+  font-weight: 600;
 }
 
 .nav-container {
@@ -78,26 +76,28 @@
 }
 
 .nav-section {
-  background-color: #fff;
+  background-color: rgba(118, 118, 128, 0.04); /* Base dark color */
   padding: 30px;
   margin-bottom: 20px;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  flex: 1; /* Allow sections to grow equally */
-  min-width: 300px; /* Minimum width for each section */
-  opacity: 75%;
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.04),
+    /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
+  color: #fff; /* Text color for contrast */
+  flex: 1;
+  min-width: 300px;
 }
 
 .nav-title {
-  font-size: 24px;
+  font-size: 1.5rem;
+  font-weight: 600;
   margin-bottom: 10px;
-  color: black;
+  color: #3e3e3e;
 }
 
 .nav-subtitle {
-  font-size: 18px;
+  font-size: 1rem;
   margin-bottom: 20px;
-  color: black;
+  color: #3e3e3e;
 }
 
 .menu-grid {
@@ -108,10 +108,7 @@
 }
 
 .menu-card {
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
   padding: 5px; /* Smaller padding for smaller cards */
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   text-align: center; /* Center content including images */
   display: flex;
   flex-direction: column;

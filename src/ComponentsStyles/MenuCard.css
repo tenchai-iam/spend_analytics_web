@@ -1,20 +1,5 @@
-.menu-card {
-  position: relative;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding-top: 20px;
-  text-align: left;
-  transition: transform 0.2s, box-shadow 0.2s; /* Add some hover effect */
-}
-
-.menu-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-}
-
 .menu-card-image {
-  width: 50%;
+  width: 80%;
   height: auto; /* Make sure the image scales */
   border-radius: 8px;
   margin-bottom: 15px;
@@ -32,13 +17,19 @@
 }
 
 .menu-card-button {
-  background-color: #4a0072;
+  background-color: #7718bc;
+  font-size: 0.8rem;
   color: white;
   padding: 10px 15px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  width: 100%; /* Make the button full width on small screens */
+  width: 70%; /* Make the button full width on small screens */
+}
+
+.menu-card-button:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
 }
 
 @media (max-width: 768px) {

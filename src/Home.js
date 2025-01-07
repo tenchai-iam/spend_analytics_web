@@ -1,10 +1,8 @@
 import React, { useState, useEffect, Suspense } from "react";
 import MenuCard from "./ComponentsPage/MenuCard";
 import "./ComponentsStyles/Home.css";
-import BackgroundComponent from "./ComponentsPage/BackgroundComponent";
 import NavbarComponent from "./ComponentsPage/NavbarComponent";
 import YearDropdown from "./ComponentsPage/YearDropdown";
-import NewsTicker from "./ComponentsPage/NewsTicker";
 import D1 from "./pic/01 - Spend.png";
 import D2 from "./pic/02 - Supplier.png";
 import D3 from "./pic/03 - Price.png";
@@ -26,15 +24,18 @@ const Dashboard = ({ selectedYear }) => {
 
   return (
     <div className="text-container">
-      <div className="text-top">
+      <div className="text-subcontainer">
         <label className="text">มูลค่าจัดซื้อทั้งหมด</label>
-        <label className="text">
-          {(data.TOTAL_SPEND).toLocaleString("th-TH")}{" บาท"}
+        <label className="number">
+          {data.TOTAL_SPEND.toLocaleString("th-TH")}
+          {" บาท"}
         </label>
       </div>
-      <div className="text-bottom">
+      <div className="text-subcontainer">
         <label className="text">จำนวนใบสั่งซื้อ (PO)</label>
-        <label className="text">{data.TOTAL_PO.toLocaleString("th-TH")}</label>
+        <label className="number">
+          {data.TOTAL_PO.toLocaleString("th-TH")}
+        </label>
       </div>
     </div>
   );
@@ -57,13 +58,6 @@ const Home = () => {
       setSelectedYear(mostRecentYear.toString()); // Set as default selected year
     }
   }, [yearsData]);
-
-  const newsItems = [
-    "New budget allocations for Q4 have been approved.",
-    "Supplier contracts are up for review next month.",
-    "PEA dashboard maintenance scheduled for this weekend.",
-    "New training sessions available for procurement team.",
-  ];
 
   const datadate = 1;
 
@@ -98,14 +92,12 @@ const Home = () => {
             <div className="menu-grid">
               <MenuCard
                 image={D1}
-                title="ภาพรวมค่าใช้จ่ายของกฟภ."
-                description="Visualize the overall expenses"
+                buttonTitle="ภาพรวมค่าใช้จ่าย"
                 link="/dashboard1"
               />
               <MenuCard
                 image={D2}
-                title="ภาพรวม Supplier ของกฟภ."
-                description="Overview of all suppliers"
+                buttonTitle="ภาพรวม Supplier"
                 link="/dashboard2"
               />
             </div>
@@ -116,14 +108,12 @@ const Home = () => {
             <div className="menu-grid">
               <MenuCard
                 image={D3}
-                title="เปรียบเทียบราคาจัดซื้อพัสดุ"
-                description="Compare material purchase price"
+                buttonTitle="เปรียบเทียบราคาจัดซื้อ"
                 link="/dashboard3"
               />
               <MenuCard
                 image={D4}
-                title="ปรับแผนเพิ่มเติมระหว่างปี"
-                description="Design procurement plan"
+                buttonTitle="ปรับแผนเพิ่มเติมระหว่างปี"
                 link="/dashboard4"
               />
             </div>
