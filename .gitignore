@@ -177,6 +177,7 @@ sketch
 .kaniko
 .deployment
 .codesandbox
+yarn.lock
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,react,node
 
