@@ -58,8 +58,7 @@
 }
 
 .download-button {
-  padding: 20px;
-  align-items: center;
+  white-space: nowrap; /* Prevent the text from wrapping */
 }
 
 .btn-container-L1 {
@@ -85,7 +84,7 @@
   color: black;
 }
 
-.dropdown-cat-group {
+.D4-dropdown-cat-group {
   font-size: 0.9rem;
   display: flex;
   flex-direction: column;

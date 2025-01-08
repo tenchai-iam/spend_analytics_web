@@ -56,10 +56,3 @@
 .spend-color {
   background-color: #6f2e90;
 }
-
-body,
-.data-table,
-.legend,
-.map-container {
-  font-family: "Sarabun" !important;
-}

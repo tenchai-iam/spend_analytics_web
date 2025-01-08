@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import NavbarComponent from "../ComponentsPage/NavbarComponent";
-import BackgroundComponent from "../ComponentsPage/BackgroundComponent";
 import "../ComponentsStyles/Dashboard4.css"; // Updated to use Dashboard3.css
 import YearDropdown from "./YearDropdown";
 import Table4 from "./Table4.js";
@@ -67,7 +66,7 @@ const Dashboard4 = () => {
     }
   }, [yearsData]);
 
-const { data: categoryData, isLoading: isCategoriesLoading } = useQuery({
+  const { data: categoryData, isLoading: isCategoriesLoading } = useQuery({
     queryKey: ["categories", selectedMaterialGroup],
     queryFn: () => getD4Categories(selectedMaterialGroup), // API call to fetch data based on year and category
     enabled: Boolean(selectedYear), // Only run query if year and category are selected
@@ -130,17 +129,17 @@ const { data: categoryData, isLoading: isCategoriesLoading } = useQuery({
   };
 
   const getTableTitle = (priority) => {
-  switch (priority) {
-    case "High":
-      return "รายการพัสดุที่ ใช้งานได้ <= 3 เดือน";
-    case "Medium":
-      return "รายการพัสดุที่ ใช้งานได้ 3-6 เดือน";
-    case "Low":
-      return "รายการพัสดุที่ ใช้งานได้ > 6 เดือน";
-    default:
-      return "รายการพัสดุ";
-  }
-};
+    switch (priority) {
+      case "High":
+        return "รายการพัสดุที่ ใช้งานได้ <= 3 เดือน";
+      case "Medium":
+        return "รายการพัสดุที่ ใช้งานได้ 3-6 เดือน";
+      case "Low":
+        return "รายการพัสดุที่ ใช้งานได้ > 6 เดือน";
+      default:
+        return "รายการพัสดุ";
+    }
+  };
 
   const {
     data: requireMaterialDetail,
@@ -212,7 +211,7 @@ const { data: categoryData, isLoading: isCategoriesLoading } = useQuery({
 
   console.log("dataTableSimMaterialPlan:", dataTableSimMaterialPlan);
 
-    const csvTableD42Headers = [
+  const csvTableD42Headers = [
     { label: "กฟฟ.", key: "region" },
     { label: "อัตราการใช้งานต่อเดือน (R/M)", key: "usage" },
     { label: "ยอดคงคล้ง", key: "stock" },
@@ -256,7 +255,7 @@ const { data: categoryData, isLoading: isCategoriesLoading } = useQuery({
 
   const csvTableD42Data = formatCSVData(dataTableSimMaterialPlan); // Use your table data as CSV data
 
-const downloadXLSX = (
+  const downloadXLSX = (
     data,
     headers,
     fileName,
@@ -486,25 +485,22 @@ const downloadXLSX = (
 
         {/* Top Controls Section */}
         <div className="btn-container-L1">
-          <div className="dropdown-group dropdown-cat-group">
-            <h1 className="text-subtitle">
-            เลือกกลุ่ม และ รายการพัสดุ
-            </h1>
+          <div className="dropdown-group D4-dropdown-cat-group">
+            <h1 className="text-subtitle">เลือกกลุ่ม และ รายการพัสดุ</h1>
             {isCategoriesLoading ? (
               <p>Loading categories...</p>
             ) : (
-                <select
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                >
-                  <option value="">-- เลือกกลุ่มพัสดุ --</option>
-                  {categoryData
-                    ?.map((category, index) => (
-                      <option key={index} value={category.CATEGORY_GROUP}>
-                        {`${category.CATEGORY_GROUP}: ${category.CATEGORY_GROUP_NAME}`}
-                      </option>
-                    ))}
-                </select>
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+              >
+                <option value="">-- เลือกกลุ่มพัสดุ --</option>
+                {categoryData?.map((category, index) => (
+                  <option key={index} value={category.CATEGORY_GROUP}>
+                    {`${category.CATEGORY_GROUP}: ${category.CATEGORY_GROUP_NAME}`}
+                  </option>
+                ))}
+              </select>
             )}
             {isLoadingMaterialD4Data ? (
               <p>Loading materials...</p>
@@ -538,7 +534,9 @@ const downloadXLSX = (
 
           {/* Lead Time Section */}
           <div className="lead-time">
-            <p className="text-subtitle">เลือกจำนวนเดือนคาดการณ์จัดซื้อโดยส่วนกลาง (ฝวห.)</p>
+            <p className="text-subtitle">
+              เลือกจำนวนเดือนคาดการณ์จัดซื้อโดยส่วนกลาง (ฝวห.)
+            </p>
             <div className="button-group">
               {[
                 "1 เดือน",
@@ -564,7 +562,9 @@ const downloadXLSX = (
 
           {/* Demand Time Section */}
           <div className="demand-time">
-            <p className="text-subtitle">เลือกจำนวนเดือนคาดการณ์ที่ต้องการใช้พัสดุ</p>
+            <p className="text-subtitle">
+              เลือกจำนวนเดือนคาดการณ์ที่ต้องการใช้พัสดุ
+            </p>
             <div className="button-group">
               {[
                 "1 เดือน",
@@ -619,8 +619,10 @@ const downloadXLSX = (
               title="ตารางจำลองแผนจัดซื้อพัสดุเพิ่มเติมระหว่างปี"
               data={dataTableSimMaterialPlan}
             />
-             <p>
-              หมายเหตุ: จัดหาเพิ่ม (หน่วย) ที่แสดงในตาราง อาจคลาดเคลื่อนจาก จัดหาเพิ่ม (เดือน) คูณ อัตราการใช้งานต่อเดือน (R/M)  เนื่องจากการปัดเศษทศนิยมของจำนวนเดือน
+            <p>
+              หมายเหตุ: จัดหาเพิ่ม (หน่วย) ที่แสดงในตาราง อาจคลาดเคลื่อนจาก
+              จัดหาเพิ่ม (เดือน) คูณ อัตราการใช้งานต่อเดือน (R/M)
+              เนื่องจากการปัดเศษทศนิยมของจำนวนเดือน
             </p>
             <D4GroupBarRe
               title="มูลค่าจัดหาพัสดุ (ล้านบาท)"

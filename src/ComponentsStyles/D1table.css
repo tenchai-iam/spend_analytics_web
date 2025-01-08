@@ -1,125 +1,121 @@
 /* General table styling */
 .table-container {
-    width: 100%;
-    margin: 20px auto;
-    padding: 20px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
-    border-radius: 8px;
-    overflow-x: auto;
-  }
-  
-  .table-wrapper {
-    max-height: 700px; /* Set your preferred max height */
-    overflow-y: auto; /* Enable vertical scrolling */
-    border: 1px solid #ddd; /* Optional: Add a border around the table */
-  }
-  
-  .table-wrapper-NS {
-    overflow-y: auto; /* Enable vertical scrolling */
-    border: 1px solid #ddd; /* Optional: Add a border around the table */
-  }
-  
-  /* Table Title */
-  .table-title {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #4a0072;
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table-wrapper {
+  max-height: 700px; /* Set your preferred max height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  border: 1px solid #ddd; /* Optional: Add a border around the table */
+}
+
+.table-wrapper-NS {
+  overflow-y: auto; /* Enable vertical scrolling */
+  border: 1px solid #ddd; /* Optional: Add a border around the table */
+}
+
+/* Table Title */
+.table-title {
+  font-size: 0.9rem;
+  color: #3e3e3e;
+  margin: 5px 0px 20px 0px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 10px 15px;
+  text-align: left;
+  border: none;
+  border-left: 1px solid #fff;
+  border-right: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+}
+
+th {
+  background-color: rgba(118, 118, 128, 0.3); /* Base dark color */
+  text-align: left;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  font-size: 0.8rem;
+}
+
+td {
+  background-color: #f7ecff;
+  font-size: 0.8rem;
+}
+
+/* Responsive layout for smaller screens */
+@media (max-width: 600px) {
+  table,
+  thead,
+  tbody,
   th,
+  td,
+  tr {
+    display: block;
+  }
+
+  thead {
+    display: none;
+  }
+
+  tr {
+    margin-bottom: 10px;
+    border-bottom: 2px solid #2e073f;
+  }
+
   td {
-    padding: 12px 15px;
-    text-align: left;
-    border: 1px solid #2e073f;
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 10px;
+    border: none;
+    border-bottom: 1px solid #ccc;
   }
-  
-  th {
-    background-color: #4c0033;
-    color: #fff;
-    position: sticky;
-    font-size: 0.9rem;
-    top: 0;
-    z-index: 2;
-  }
-  
-  td {
-    background-color: #ebd3f8;
-    font-size: 0.8rem;
-  }
-  
-  /* Responsive layout for smaller screens */
-  @media (max-width: 600px) {
-    table,
-    thead,
-    tbody,
-    th,
-    td,
-    tr {
-      display: block;
-    }
-  
-    thead {
-      display: none;
-    }
-  
-    tr {
-      margin-bottom: 10px;
-      border-bottom: 2px solid #2e073f;
-    }
-  
-    td {
-      display: flex;
-      justify-content: space-between;
-      padding: 8px 10px;
-      border: none;
-      border-bottom: 1px solid #ccc;
-    }
-  
-    td:before {
-      content: attr(data-label); /* Fetch the data-label value */
-      font-weight: bold;
-      background-color: #4c0033; /* Background color for the label */
-      color: white; /* Font color for the label */
-      padding: 4px 8px;
-      border-radius: 5px;
-      margin-right: 10px; /* Space between label and value */
-      display: inline-block; /* Make the label appear as a block */
-      width: 45%; /* Adjust to control the width of the label */
-    }
-  }
-  
-  .priority {
-    padding: 5px;
-    color: #fff; /* Set text color to white for readability */
-    border-radius: 4px;
+
+  td:before {
+    content: attr(data-label); /* Fetch the data-label value */
     font-weight: bold;
+    background-color: #4c0033; /* Background color for the label */
+    color: white; /* Font color for the label */
+    padding: 4px 8px;
+    border-radius: 5px;
+    margin-right: 10px; /* Space between label and value */
+    display: inline-block; /* Make the label appear as a block */
+    width: 45%; /* Adjust to control the width of the label */
   }
-  
-  .priority.high {
-    background-color: red;
-  }
-  
-  .priority.medium {
-    background-color: #c69530;
-    color: #333; /* Darker text color for better readability on yellow */
-  }
-  
-  .priority.low {
-    background-color: green;
-  }
-  
-  .lower {
-    padding: 5px;
-    color: #fff; /* Set text color to white for readability */
-    border-radius: 4px;
-    font-weight: bold;
-    background-color: green;
-  }
+}
+
+.priority {
+  padding: 5px;
+  color: #fff; /* Set text color to white for readability */
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.priority.high {
+  background-color: red;
+}
+
+.priority.medium {
+  background-color: #c69530;
+  color: #333; /* Darker text color for better readability on yellow */
+}
+
+.priority.low {
+  background-color: green;
+}
+
+.lower {
+  padding: 3px;
+  color: #fff; /* Set text color to white for readability */
+  border-radius: 4px;
+  font-weight: bold;
+  background-color: green;
+}

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../ComponentsStyles/Dashboard2.css";
 import Card from "./D2Card.js"; // Import the Card component
-import BackgroundComponent from "../ComponentsPage/BackgroundComponent";
 import YearDropdown from "./YearDropdown";
 import NavbarComponent from "../ComponentsPage/NavbarComponent";
 import BarGraphReH from "./BarGraphReH";

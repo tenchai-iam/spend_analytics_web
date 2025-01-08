@@ -21,7 +21,7 @@
   align-items: center;
 }
 
-.dropdown-cat-group {
+.D3-dropdown-cat-group {
   font-size: 0.9rem;
   display: flex;
   flex-direction: column;
@@ -31,6 +31,10 @@
 .dropdown-group label {
   font-weight: bold;
   margin-bottom: 5px;
+}
+
+.download-button {
+  white-space: nowrap; /* Prevent the text from wrapping */
 }
 
 .D3-CSV-container {

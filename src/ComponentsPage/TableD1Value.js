@@ -56,13 +56,11 @@ const TableD1Value = ({ title, data }) => {
   return (
     <div className="table-container">
       <h2 className="table-title">{title}</h2>
-      <div className="table-wrapper">
+      <div className="table-wrapper-NS">
         <table>
           <thead>
             <tr>
-              <th>
-                หน่วยงานจัดซื้อ
-              </th>
+              <th>หน่วยงานจัดซื้อ</th>
               <th onClick={() => handleSort("lessThanQuantity")}>
                 จำนวน PO มูลค่าไม่เกิน 500,000 บาท{" "}
                 {renderSortArrow("lessThanQuantity")}

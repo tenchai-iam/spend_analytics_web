@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import NavbarComponent from "../ComponentsPage/NavbarComponent";
-import BackgroundComponent from "../ComponentsPage/BackgroundComponent";
 import BubbleChart from "./BubbleChart.js";
 import "../ComponentsStyles/Dashboard1.css"; // Updated to use Dashboard1.css
 import YearDropdown from "./YearDropdown";
@@ -95,8 +94,8 @@ const Dashboard1 = () => {
       priceDistrict: Number(item.PRICE_REGION),
       priceDiff: Number(item.PRICE_DIFF) - 1,
     })) || [];
-  
-    const csvTablePriceHeaders = [
+
+  const csvTablePriceHeaders = [
     { label: "รหัสพัสดุ", key: "matNR" },
     { label: "ชื่อพัสดุ", key: "matName" },
     { label: "ราคาที่ส่วนกลาง", key: "priceHQ" },
@@ -132,9 +131,9 @@ const Dashboard1 = () => {
       district: item.DISTRICT_NAME,
       lessThanQuantity: Number(item.PERCENT_PO_LESS),
       totalQuantity: Number(item.TOTAL_PO),
-      percentQuantity: Number(item.PO_LESS_EQUAL_500K_QUANTITY)/100,
+      percentQuantity: Number(item.PO_LESS_EQUAL_500K_QUANTITY) / 100,
     })) || [];
-  
+
   const csvTableValueHeaders = [
     { label: "หน่วยงานจัดซื้อ", key: "district" },
     { label: "จำนวน PO มูลค่าไม่เกิน 500,000 บาท", key: "lessThanQuantity" },
@@ -369,7 +368,7 @@ const Dashboard1 = () => {
         value: Number(item.TOTAL_SPEND_MAT || 0) / 1_000_000,
       },
     ])?.flat() || [];
-  
+
   const {
     data: PONumSpendCSV,
     isLoading: isLoadingPONumSpendCSV,
@@ -437,7 +436,7 @@ const Dashboard1 = () => {
     enabled: !!selectedYear, // Only run query if both year and category_group are selected
   });
 
-    const getButtonStyle = (isSelected) => ({
+  const getButtonStyle = (isSelected) => ({
     backgroundColor: isSelected ? "#8e44ad" : "#f0f0f0",
     color: isSelected ? "white" : "black",
     textDecoration: "none", // Remove underline
@@ -461,65 +460,69 @@ const Dashboard1 = () => {
       <div className="dashboard1-container">
         <div className="table-container-L1">
           <div className="table-top-price-diff">
-              <div className="D1-CSV-container">
-                <div className="download-button">
-                  <CSVLink
-                    data={csvTablePriceData}
-                    headers={csvTablePriceHeaders}
-                    filename={`HQvsDistrictPriceComparison_${selectedYear}_${selectedCategory}.csv`}
-                    style={getButtonStyle(false)} // Apply the button style
+            <div className="dropdown-download-container">
+              <div className="D1-dropdown-cat-group">
+                {isCategoriesLoading ? (
+                  <p>Loading categories...</p>
+                ) : (
+                  <select
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
                   >
-                    Download CSV
-                  </CSVLink>
-                </div>
+                    <option value="">-- เลือกประเภทพัสดุ --</option>
+                    {categoryData
+                      ?.slice() // Create a shallow copy of the array to avoid modifying the original
+                      .sort((a, b) => {
+                        if (a.CATEGORY_ID === "100") return -1; // Move `100` to the top
+                        if (b.CATEGORY_ID === "100") return 1;
+                        return a.CATEGORY_ID.localeCompare(b.CATEGORY_ID); // Default alphabetical sort by ID
+                      })
+                      .map((category, index) => (
+                        <option key={index} value={category.CATEGORY_ID}>
+                          {`${category.CATEGORY_ID}: ${category.CATEGORY_NAME}`}
+                        </option>
+                      ))}
+                  </select>
+                )}
               </div>
-            <div className="dropdown-cat-group">
-              {isCategoriesLoading ? (
-                <p>Loading categories...</p>
-              ) : (
-                <select
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
+              <div className="download-button">
+                <CSVLink
+                  data={csvTablePriceData}
+                  headers={csvTablePriceHeaders}
+                  filename={`HQvsDistrictPriceComparison_${selectedYear}_${selectedCategory}.csv`}
+                  style={getButtonStyle(false)} // Apply the button style
                 >
-                  <option value="">-- เลือกประเภทพัสดุ --</option>
-                  {categoryData
-                    ?.slice() // Create a shallow copy of the array to avoid modifying the original
-                    .sort((a, b) => {
-                      if (a.CATEGORY_ID === "100") return -1; // Move `100` to the top
-                      if (b.CATEGORY_ID === "100") return 1;
-                      return a.CATEGORY_ID.localeCompare(b.CATEGORY_ID); // Default alphabetical sort by ID
-                    })
-                    .map((category, index) => (
-                      <option key={index} value={category.CATEGORY_ID}>
-                        {`${category.CATEGORY_ID}: ${category.CATEGORY_NAME}`}
-                      </option>
-                    ))}
-                </select>
-              )}
+                  Download CSV
+                </CSVLink>
+              </div>
             </div>
             <TableD1Price
               title={`Top 10 รายการพัสดุที่มีราคาจัดซื้อระหว่างส่วนกลาง และ กฟข. แตกต่างกันมากที่สุด ปี ${selectedYear}`}
               data={dataTablePrice}
             />
-            <p>
-              หมายเหตุ: ราคาที่แสดงเป็นราคาเฉลี่ยในปีปัจจุบัน
-              ยกเว้นหากไม่มีการจัดซื้อในปีที่เลือกแสดง
-              จะใช้ราคาเฉลี่ยของปีก่อนหน้าที่มีการจัดซื้อ{" "};* คือพัสดุที่มีการจ้างรีดที่ส่วนกลางด้วยอลูมิเนียมอินกอต{" "}
-            </p>
+            <div className="remark-container">
+              <p>หมายเหตุ:</p>
+              <p>
+                1. ราคาที่แสดงเป็นราคาเฉลี่ยในปีปัจจุบัน
+                ยกเว้นหากไม่มีการจัดซื้อในปีที่เลือกแสดง
+                จะใช้ราคาเฉลี่ยของปีก่อนหน้าที่มีการจัดซื้อ
+              </p>
+              <p>2. *คือพัสดุที่มีการจ้างรีดที่ส่วนกลางด้วยอลูมิเนียมอินกอท</p>
+            </div>
           </div>
           <div className="table-top-povalue-count">
-              <div className="D1-CSV-container">
-                <div className="download-button">
-                  <CSVLink
-                    data={csvTableValueData}
-                    headers={csvTableValueHeaders}
-                    filename={`DistrictPOValueComparison_${selectedYear}.csv`}
-                    style={getButtonStyle(false)} // Apply the button style
-                  >
-                    Download CSV
-                  </CSVLink>
-                </div>
+            <div className="download-container">
+              <div className="download-button">
+                <CSVLink
+                  data={csvTableValueData}
+                  headers={csvTableValueHeaders}
+                  filename={`DistrictPOValueComparison_${selectedYear}.csv`}
+                  style={getButtonStyle(false)} // Apply the button style
+                >
+                  Download CSV
+                </CSVLink>
               </div>
+            </div>
             <TableD1Value
               title={`การจัดซื้อที่มีมูลค่าไม่เกิน 500,000 บาท ปี ${selectedYear}`}
               data={dataTableValue}
@@ -544,11 +547,8 @@ const Dashboard1 = () => {
               title={`มูลค่าการจัดหาทั้งหมดของ กฟภ. (ล้านบาท) ในปี ${selectedYear}`}
               height={330}
             />
-            <p>
-              หมายเหตุ: พัสดุอุปกรณ์ไฟฟ้าคือพัสดุหลัก พัสดุรองที่มีรหัสพัสดุ
-              (รหัส 100 - 108) อื่นๆ หมายถึงงานจ้างบริการต่างๆ งานจัดซื้ออะไหล่
-              และ งานเช่า เป็นต้น
-            </p>
+            <p className="mat-legend">▬▬ พัสดุอุปกรณ์ไฟฟ้า (รหัส 100 - 108)</p>
+            <p className="nonMat-legend">▬▬ อื่นๆ</p>
           </div>
         </div>
         <div className="top-D1-grid-container">
@@ -569,9 +569,12 @@ const Dashboard1 = () => {
               title={`จำนวนใบสั่งซื้อ (PO) ในปี ${selectedYear}`}
               height={330}
             />
-          <p>
-             หมายเหตุ: พัสดุอุปกรณ์ไฟฟ้าคือพัสดุหลัก พัสดุรองที่มีรหัสพัสดุ (รหัส 100 - 108) อื่นๆ หมายถึงงานจ้างบริการต่างๆ งานจัดซื้ออะไหล่ และ          งานเช่า เป็นต้น; บาง PO มีการจัดซื้อทั้งพัสดุอุปกรณ์ไฟฟ้า และ อื่นๆ จึงทำให้ผลรวมคลาดเคลื่อนกับจำนวน PO จัดหาทั้งหมดของ กฟภ.
-          </p>
+            <p className="mat-legend">▬▬ พัสดุอุปกรณ์ไฟฟ้า (รหัส 100 - 108)</p>
+            <p className="nonMat-legend">▬▬ อื่นๆ</p>
+            <p>
+              หมายเหตุ: บาง PO มีการจัดซื้อทั้งพัสดุอุปกรณ์ไฟฟ้า และ อื่นๆ
+              จึงทำให้ผลรวมคลาดเคลื่อนกับจำนวน PO จัดหาทั้งหมดของ กฟภ.
+            </p>
           </div>
         </div>
         <div className="top-D1-grid-container">
@@ -585,7 +588,8 @@ const Dashboard1 = () => {
             />
             <p>
               หมายเหตุ: นับเฉพาะ Supplier ที่เคยมีสัญญาจัดซื้อกับ กฟภ. อย่างน้อย
-              1 ครั้งในระยะเวลานั้นๆ; Supplier บางเจ้าอาจจะอยู่หลายเขตทำให้จำนวนรวมคลาดเคลื่อน
+              1 ครั้งในระยะเวลานั้นๆ; Supplier
+              บางเจ้าอาจจะอยู่หลายเขตทำให้จำนวนรวมคลาดเคลื่อน
             </p>
           </div>
           <div className="right">
@@ -596,9 +600,8 @@ const Dashboard1 = () => {
               title={`จำนวน Supplier ในปี ${selectedYear}`}
               height={330}
             />
-            <p>
-              หมายเหตุ: พัสดุอุปกรณ์ไฟฟ้าคือพัสดุหลัก พัสดุรองที่มีรหัสพัสดุ (รหัส 100 - 108) อื่นๆ หมายถึงงานจ้างบริการต่างๆ งานจัดซื้ออะไหล่ และ           งานเช่า เป็นต้น
-            </p>
+            <p className="mat-legend">▬▬ พัสดุอุปกรณ์ไฟฟ้า (รหัส 100 - 108)</p>
+            <p className="nonMat-legend">▬▬ อื่นๆ</p>
           </div>
         </div>
         <div className="middle-D1-container">
@@ -620,18 +623,18 @@ const Dashboard1 = () => {
           </div>
         </div>
         <div className="bottom-D1-container">
-            <div className="D1-CSV-container">
-              <div className="download-button">
-                <CSVLink
-                  data={csvMapData}
-                  headers={csvMapHeaders}
-                  filename={`PurchaseUnitbyPONumAndValue_${selectedYear}.csv`}
-                  style={getButtonStyle(false)} // Apply the button style
-                >
-                  Download CSV
-                </CSVLink>
-              </div>
+          <div className="D1-CSV-container">
+            <div className="download-button">
+              <CSVLink
+                data={csvMapData}
+                headers={csvMapHeaders}
+                filename={`PurchaseUnitbyPONumAndValue_${selectedYear}.csv`}
+                style={getButtonStyle(false)} // Apply the button style
+              >
+                Download CSV
+              </CSVLink>
             </div>
+          </div>
           <div className="map-wrapper">
             <div className="map-container">
               <MapChart data={dataPONumSpend} />

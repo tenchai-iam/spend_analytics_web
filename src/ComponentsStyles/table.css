@@ -1,11 +1,6 @@
 /* General table styling */
 .table-container {
   width: 100%;
-  margin: 20px auto;
-  padding: 20px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
-  border-radius: 8px;
   overflow-x: auto;
 }
 
@@ -28,11 +23,9 @@
 
 /* Table Title */
 .table-title {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #4a0072;
-  text-align: center;
-  margin-bottom: 20px;
+  font-size: 0.9rem;
+  color: #3e3e3e;
+  margin: 5px 0px 20px 0px;
 }
 
 table {
@@ -42,22 +35,25 @@ table {
 
 th,
 td {
-  padding: 6px 10px;
+  padding: 10px 15px;
   text-align: left;
-  border: 1px solid #2e073f;
+  border: none;
+  border-left: 1px solid #fff;
+  border-right: 1px solid #fff;
+  border-bottom: 1px solid #fff;
 }
 
 th {
-  background-color: #4c0033;
-  color: #fff;
+  background-color: rgba(118, 118, 128, 0.3); /* Base dark color */
+  text-align: left;
   position: sticky;
   top: 0;
   z-index: 2;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
 }
 
 td {
-  background-color: #ebd3f8;
+  background-color: #f7ecff;
   font-size: 0.8rem;
 }
 

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "../ComponentsStyles/Dashboard3.css"; // Updated to use Dashboard3.css
-import BackgroundComponent from "../ComponentsPage/BackgroundComponent";
 import YearDropdown from "./YearDropdown";
 import NavbarComponent from "../ComponentsPage/NavbarComponent";
 import D3BarGraphReV from "./D3BarGraphReV";
@@ -317,7 +316,7 @@ const Dashboard3 = () => {
         {/* Left Container */}
         <div className="top-container">
           <div className="dropdown-download">
-            <div className="dropdown-cat-group">
+            <div className="D3-dropdown-cat-group">
               {isCategoriesLoading ? (
                 <p>Loading categories...</p>
               ) : (
@@ -361,7 +360,7 @@ const Dashboard3 = () => {
         <div className="bottom-container">
           <h1 className="text-title">{`เปรียบเทียบราคาจัดซื้อพัสดุตามหน่วยงานจัดซื้อ ในปี ${selectedYear}`}
           </h1>
-          <div className="dropdown-cat-group">
+          <div className="D3-dropdown-cat-group">
             {isLoadingMaterialD3Data ? (
               <p>Loading materials...</p>
             ) : isErrorMaterialD3Data ? (
@@ -429,7 +428,7 @@ const Dashboard3 = () => {
             </div>
           ) : (
             <div>
-              <div className="dropdown-cat-group">
+              <div className="D3-dropdown-cat-group">
                 {isLoadingDistrictData ? (
                   <p>Loading districts...</p>
                 ) : (

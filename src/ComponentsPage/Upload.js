@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import NavbarComponent from "../ComponentsPage/NavbarComponent";
-import BackgroundComponent from "../ComponentsPage/BackgroundComponent";
 import axios from "axios";
 import "../ComponentsStyles/upload.css";
 
