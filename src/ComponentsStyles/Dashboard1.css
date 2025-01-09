@@ -114,25 +114,25 @@
 
 .left {
   padding: 20px;
-  flex: 1 1 60%;
-  max-width: 60%;
+  flex: 1 1 70%;
+  max-width: 70%;
 }
 
 .right {
   padding: 20px;
-  flex: 1 1 40%;
-  max-width: 40%;
+  flex: 1 1 30%;
+  max-width: 30%;
+  font-size: 0.8rem;
 }
 
 .mat-legend {
-  padding-left: 20px;
-  font-size: 1rem;
+  padding-right: 5px;
+  font-size: 0.9rem;
   color: #932bde;
 }
 
 .nonMat-legend {
-  padding-left: 20px;
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: #12b76a;
 }
 

@@ -37,7 +37,7 @@ const BarGraphReV = ({ data, xAxisKey, barKey, title, height = 400 }) => {
           <XAxis dataKey={xAxisKey} tick={false} />
           <YAxis tickFormatter={formatCurrency} />
           <Tooltip formatter={(value) => formatCurrency(value)} />
-          <Bar dataKey={barKey}>
+          <Bar dataKey={barKey} barSize={50}>
             {formattedData.map((entry, index) => (
               <Bar key={index} fill={entry.fill}></Bar>
             ))}

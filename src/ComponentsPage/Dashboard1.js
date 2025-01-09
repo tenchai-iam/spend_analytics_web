@@ -536,7 +536,7 @@ const Dashboard1 = () => {
               xAxisKey="month" // X-axis is month
               lineKeys={["mat", "nonMat"]}
               title={`มูลค่าการจัดหาทั้งหมดของ กฟภ. (ล้านบาท) ในปี ${selectedYear}`}
-              height={300} // Adjust height as needed
+              height={230} // Adjust height as needed
             />
           </div>
           <div className="right">
@@ -544,11 +544,17 @@ const Dashboard1 = () => {
               data={dataBarSpend}
               xAxisKey="name"
               barKey="value"
-              title={`มูลค่าการจัดหาทั้งหมดของ กฟภ. (ล้านบาท) ในปี ${selectedYear}`}
+              title={" "}
               height={330}
             />
-            <p className="mat-legend">▬▬ พัสดุอุปกรณ์ไฟฟ้า (รหัส 100 - 108)</p>
-            <p className="nonMat-legend">▬▬ อื่นๆ</p>
+            <p className="mat-legend">
+              ▬▬ พัสดุอุปกรณ์ไฟฟ้า คือ พัสดุหลัก พัสดุรองที่มีรหัสพัสดุ (รหัส
+              100 - 108)
+            </p>
+            <p className="nonMat-legend">
+              ▬▬ การจัดซื้ออื่น ๆ หมายถึงงานจ้างบริการต่าง ๆ งานจัดซื้ออะไหล่
+              และ งานเช่า เป็นต้น
+            </p>
           </div>
         </div>
         <div className="top-D1-grid-container">
@@ -566,11 +572,17 @@ const Dashboard1 = () => {
               data={dataBarPurchaseQ}
               xAxisKey="name"
               barKey="value"
-              title={`จำนวนใบสั่งซื้อ (PO) ในปี ${selectedYear}`}
+              title={``}
               height={330}
             />
-            <p className="mat-legend">▬▬ พัสดุอุปกรณ์ไฟฟ้า (รหัส 100 - 108)</p>
-            <p className="nonMat-legend">▬▬ อื่นๆ</p>
+            <p className="mat-legend">
+              ▬▬ พัสดุอุปกรณ์ไฟฟ้า คือ พัสดุหลัก พัสดุรองที่มีรหัสพัสดุ (รหัส
+              100 - 108)
+            </p>
+            <p className="nonMat-legend">
+              ▬▬ การจัดซื้ออื่น ๆ หมายถึงงานจ้างบริการต่าง ๆ งานจัดซื้ออะไหล่
+              และ งานเช่า เป็นต้น
+            </p>
             <p>
               ⓘ หมายเหตุ: บาง PO มีการจัดซื้อทั้งพัสดุอุปกรณ์ไฟฟ้า และ อื่นๆ
               จึงทำให้ผลรวมคลาดเคลื่อนกับจำนวน PO จัดหาทั้งหมดของ กฟภ.
@@ -583,7 +595,7 @@ const Dashboard1 = () => {
               data={dataLineSupplierQuantity}
               xAxisKey="month"
               lineKeys={["mat", "nonMat"]}
-              title={`จำนวน Supplier ในปี ${selectedYear}`}
+              title={`จำนวน Supplier (ราย) ในปี ${selectedYear}`}
               height={230}
             />
             <p>
@@ -597,11 +609,17 @@ const Dashboard1 = () => {
               data={dataBarSupplierQ}
               xAxisKey="name"
               barKey="value"
-              title={`จำนวน Supplier ในปี ${selectedYear}`}
+              title={``}
               height={330}
             />
-            <p className="mat-legend">▬▬ พัสดุอุปกรณ์ไฟฟ้า (รหัส 100 - 108)</p>
-            <p className="nonMat-legend">▬▬ อื่นๆ</p>
+            <p className="mat-legend">
+              ▬▬ พัสดุอุปกรณ์ไฟฟ้า คือ พัสดุหลัก พัสดุรองที่มีรหัสพัสดุ (รหัส
+              100 - 108)
+            </p>
+            <p className="nonMat-legend">
+              ▬▬ การจัดซื้ออื่น ๆ หมายถึงงานจ้างบริการต่าง ๆ งานจัดซื้ออะไหล่
+              และ งานเช่า เป็นต้น
+            </p>
           </div>
         </div>
         <div className="middle-D1-container">
@@ -623,7 +641,7 @@ const Dashboard1 = () => {
           </div>
         </div>
         <div className="bottom-D1-container">
-          <div className="D1-CSV-container">
+          <div className="download-container">
             <div className="download-button">
               <CSVLink
                 data={csvMapData}
