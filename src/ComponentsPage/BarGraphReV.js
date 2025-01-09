@@ -39,14 +39,13 @@ const BarGraphReV = ({ data, xAxisKey, barKey, title, height = 400 }) => {
           <Tooltip formatter={(value) => formatCurrency(value)} />
           <Bar dataKey={barKey}>
             {formattedData.map((entry, index) => (
-              <Bar key={index} fill={entry.fill}>
-                <LabelList
-                  dataKey={barKey}
-                  position="top"
-                  formatter={formatCurrency}
-                />
-              </Bar>
+              <Bar key={index} fill={entry.fill}></Bar>
             ))}
+            <LabelList
+              dataKey={barKey}
+              position="top"
+              formatter={formatCurrency}
+            />
           </Bar>
         </BarChart>
       </ResponsiveContainer>

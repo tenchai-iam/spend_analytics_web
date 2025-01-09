@@ -154,6 +154,13 @@
   gap: 20px;
   justify-items: center; /* Center align the text items */
   align-items: center;
+  max-height: 700px;
+}
+
+.bubble-title {
+  font-size: 1rem;
+  color: #3e3e3e; /* Custom color for the title */
+  text-align: center; /* Center the title */
 }
 
 .donut-Graph {
@@ -163,8 +170,7 @@
     /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
   border-radius: 12px; /* Rounded corners */
   padding: 20px;
-  justify-items: center; /* Center align the text items */
-  align-items: center;
+  max-height: 700px;
 }
 
 .bottom-D1-container {
@@ -224,13 +230,6 @@
   .map-wrapper {
     width: 100%; /* Full width for graphs on smaller screens */
   }
-}
-
-.bubble-title {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #4a0072; /* Custom color for the title */
-  text-align: center; /* Center the title */
 }
 
 /* iPhone (max-width: 600px) */

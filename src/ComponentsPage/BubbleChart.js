@@ -5,7 +5,7 @@ import "../ComponentsStyles/BubbleChart.css"; // Import CSS
 const BubbleChart = ({ data }) => {
   const svgRef = useRef();
   const containerRef = useRef();
-  const [dimensions, setDimensions] = useState({ width: 800, height: 800 });
+  const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
 
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
@@ -27,37 +27,17 @@ const BubbleChart = ({ data }) => {
   });
 
   const colorPalette = [
-    "#BC6FF1",
-    "#7ED4AD",
-    "#AD49E1",
-    "#8d98a1",
-    "#c69530",
-    "#FB773C",
-    "#B03052",
-    "#FF77B7",
-    "#FDDBBB",
-    "#EE4266",
+    "#FFB3BA",
+    "#FFDFBA",
+    "#FFFFBA",
+    "#BAFFC9",
+    "#BAE1FF",
+    "#D4A5A5",
+    "#B5D3E7",
+    "#D9C5F2",
+    "#F2E2BA",
+    "#B4F2B4",
   ];
-
-  const generateGradient = (defs, color, index) => {
-    const gradient = defs
-      .append("linearGradient")
-      .attr("id", `gradient-${index}`)
-      .attr("x1", "0%")
-      .attr("x2", "100%")
-      .attr("y1", "0%")
-      .attr("y2", "100%");
-
-    gradient
-      .append("stop")
-      .attr("offset", "0%")
-      .attr("stop-color", d3.color(color).brighter(0.8));
-
-    gradient
-      .append("stop")
-      .attr("offset", "100%")
-      .attr("stop-color", d3.color(color).darker(1.2));
-  };
 
   useEffect(() => {
     if (!data || data.length === 0) return;
@@ -78,7 +58,6 @@ const BubbleChart = ({ data }) => {
 
     data.forEach((_, i) => {
       const color = colorPalette[i % colorPalette.length];
-      generateGradient(defs, color, i);
     });
 
     const maxRadius = Math.min(dimensions.width, dimensions.height) / 10;
@@ -111,7 +90,7 @@ const BubbleChart = ({ data }) => {
       .append("circle")
       .attr("class", "bubble")
       .attr("r", (d) => sizeScale(d.value))
-      .attr("fill", (d, i) => `url(#gradient-${i})`)
+      .attr("fill", (d, i) => colorPalette[i % colorPalette.length])
       .attr("stroke", "#d3cce3")
       .on("mouseenter", (event, d) => applyInteractionForce(d))
       .on("mouseleave", resetInteractionForce)
