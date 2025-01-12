@@ -31,23 +31,23 @@ const BarGraphReH = ({
   return (
     <div className="bar-chart-container">
       {/* Title and Legend Row */}
-      <div className="title-legend-row">
+      <div className="title-legend-container">
         <h2 className="bar-chart-title">{title}</h2>
         <ResponsiveContainer width="50%" height={50}>
           <BarChart>
             <Legend
               verticalAlign="middle"
+              className="bar-chart-title"
               align="right"
-              wrapperStyle={{ fontSize: 12 }}
               payload={[
                 { value: hqLabel, type: "square", color: hqColor },
                 { value: districtLabel, type: "square", color: districtColor },
               ]}
-              className="bar-chart-title"
             />
           </BarChart>
         </ResponsiveContainer>
       </div>
+
       <ResponsiveContainer width="100%" height={height}>
         <BarChart
           data={data}

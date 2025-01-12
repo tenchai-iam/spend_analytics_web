@@ -458,12 +458,12 @@ const Dashboard4 = () => {
   return (
     <div>
       <NavbarComponent />
-      <div className="year-dropdown-container">
+      {/* <div className="year-dropdown-container">
         <YearDropdown
           onSelectYear={setSelectedYear}
           selectedYear={selectedYear}
         />
-      </div>
+      </div> */}
       <div className="dashboard4-container">
         {/* Summary Section */}
         <div className="summary-container-L1">

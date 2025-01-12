@@ -2,11 +2,12 @@
 .bar-chart-container {
   width: 100%;
   max-width: 100%; /* Set a maximum width for the container */
+  font-size: 0.8rem;
 }
 
 /* Chart Title */
 .bar-chart-title {
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: #3e3e3e;
   margin: 5px 0px 20px 15px;
 }
@@ -29,7 +30,7 @@
   }
 
   .bar-chart-title {
-    font-size: 1.2rem; /* Reduce title font size on smaller screens */
+    font-size: 0.9rem; /* Reduce title font size on smaller screens */
   }
 }
 

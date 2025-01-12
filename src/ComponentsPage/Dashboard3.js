@@ -25,6 +25,7 @@ const Dashboard3 = () => {
   const [selectedMaterial, setSelectedMaterial] = useState(""); // State to hold the selected material
   const [selectedDistrict, setSelectedDistrict] = useState(""); // State to hold the selected material
   const [showFirstChart, setShowFirstChart] = useState(true); // State to toggle between the charts
+  const [selectedButton, setSelectedButton] = useState("first"); // Track selected button index
 
   const priceFormatter = new Intl.NumberFormat("en-US", {
     style: "decimal",
@@ -78,7 +79,7 @@ const Dashboard3 = () => {
   } = useQuery({
     queryKey: ["materials", selectedYear, selectedCategory], // Unique query key for caching
     queryFn: () => getD3Materials(selectedYear, selectedCategory), // API call to fetch data based on year
-    enabled: Boolean(selectedYear) && Boolean(selectedCategory) !== null, // Only run query if year and category are selected
+    enabled: Boolean(selectedYear) && Boolean(selectedCategory), // Only run query if year and category are selected
   });
 
   // Map material data to options for react-select
@@ -120,7 +121,7 @@ const Dashboard3 = () => {
       quantityRegion: Number(item.QUANTITY_REGION),
     })) || [];
 
-    const csvTablePriceHeaders = [
+  const csvTablePriceHeaders = [
     { label: "รหัสพัสดุ", key: "matNR" },
     { label: "ชื่อพัสดุ", key: "matName" },
     { label: "ราคาที่ส่วนกลาง", key: "priceHQ" },
@@ -177,7 +178,7 @@ const Dashboard3 = () => {
       minQuantity: district?.QUANTITY_MIN_DISTRICT,
     })) || [];
 
-    const csvBarDistrictHeaders = [
+  const csvBarDistrictHeaders = [
     { label: "หน่วยจัดซื้อ", key: "name" },
     { label: "ราคาเฉลี่ย", key: "averagePrice" },
     { label: "ราคาสูงสุด", key: "maxPrice" },
@@ -254,7 +255,7 @@ const Dashboard3 = () => {
       maxQuantity: ekgrp?.QUANTITY_MAX_EKGRP,
       minQuantity: ekgrp?.QUANTITY_MIN_EKGRP,
     })) || [];
-  
+
   const csvBarEKGRPHeaders = [
     { label: "หน่วยจัดซื้อ", key: "name" },
     { label: "ราคาเฉลี่ย", key: "averagePrice" },
@@ -273,8 +274,17 @@ const Dashboard3 = () => {
 
   const csvBarEKGRPData = formatCSVBarEKGRPData(dataMaterialPriceByEKGRP); // Use your table data as CSV data
 
-  const toggleChart = () => {
-    setShowFirstChart(!showFirstChart); // Toggle between true and false
+  const handleButtonClick = (button) => {
+    setSelectedButton(button); // Update the active button state
+    setShowFirstChart(button === "first"); // Toggle the chart based on the button
+  };
+
+  const handleShowFirstChart = () => {
+    setShowFirstChart(true);
+  };
+
+  const handleShowSecondChart = () => {
+    setShowFirstChart(false);
   };
 
   const datadate = 1;
@@ -291,16 +301,16 @@ const Dashboard3 = () => {
     enabled: !!selectedYear, // Only run query if both year and category_group are selected
   });
 
-    const getButtonStyle = (isSelected) => ({
-      backgroundColor: isSelected ? "#8e44ad" : "#f0f0f0",
-      color: isSelected ? "white" : "black",
-      textDecoration: "none", // Remove underline
-      border: "1px solid #ccc",
-      borderRadius: "4px",
-      padding: "10px 15px",
-      cursor: "pointer",
-      textAlign: "center",
-      display: "inline-block", // Ensure button-like appearance
+  const getButtonStyle = (isSelected) => ({
+    backgroundColor: isSelected ? "#8e44ad" : "#f0f0f0",
+    color: isSelected ? "white" : "black",
+    textDecoration: "none", // Remove underline
+    border: "1px solid #ccc",
+    borderRadius: "4px",
+    padding: "10px 15px",
+    cursor: "pointer",
+    textAlign: "center",
+    display: "inline-block", // Ensure button-like appearance
   });
 
   return (
@@ -315,7 +325,7 @@ const Dashboard3 = () => {
       <div className="dashboard3-container">
         {/* Left Container */}
         <div className="top-container">
-          <div className="dropdown-download">
+          <div className="dropdown-download-container">
             <div className="D3-dropdown-cat-group">
               {isCategoriesLoading ? (
                 <p>Loading categories...</p>
@@ -325,13 +335,13 @@ const Dashboard3 = () => {
                   onChange={(e) => setSelectedCategory(e.target.value)}
                 >
                   <option value="">-- เลือกกลุ่มพัสดุ --</option>
-                    {categoryData
+                  {categoryData
                     ?.filter((category) => category.CATEGORY_ID !== "999") // Exclude CATEGORY_ID 999
                     .map((category, index) => (
                       <option key={index} value={category.CATEGORY_ID}>
                         {`${category.CATEGORY_ID}: ${category.CATEGORY_NAME}`}
                       </option>
-                  ))}
+                    ))}
                 </select>
               )}
             </div>
@@ -352,83 +362,72 @@ const Dashboard3 = () => {
             title={`เปรียบเทียบราคาจัดซื้อส่วนกลาง vs. กฟข. ในปี ${selectedYear}`}
             data={dataTablePrice}
           />
-          <p>
-            หมายเหตุ: หากไม่มีการจัดซื้อเกิดขึ้น ณ
-            หน่วยงานจัดซื้อนั้นๆในปีที่เลือกแสดง จะไม่มีการแสดงผลราคาเฉลี่ย{" "}; *         คือพัสดุที่มีการจ้างรีดที่ส่วนกลางด้วยอลูมิเนียมอินกอต{" "}
-          </p>
+          <div className="remark-container">
+            <p>ⓘ หมายเหตุ:</p>
+            <p>
+              1. หากไม่มีการจัดซื้อเกิดขึ้น ณ
+              หน่วยงานจัดซื้อนั้นๆในปีที่เลือกแสดง จะไม่มีการแสดงผลราคาเฉลี่ย
+            </p>
+            <p>2. * คือพัสดุที่มีการจ้างรีดที่ส่วนกลางด้วยอลูมิเนียมอินกอต</p>
+          </div>
         </div>
         <div className="bottom-container">
-          <h1 className="text-title">{`เปรียบเทียบราคาจัดซื้อพัสดุตามหน่วยงานจัดซื้อ ในปี ${selectedYear}`}
+          <h1 className="text-title">
+            {`เปรียบเทียบราคาจัดซื้อพัสดุตามหน่วยงานจัดซื้อ ในปี ${selectedYear}`}
           </h1>
-          <div className="D3-dropdown-cat-group">
-            {isLoadingMaterialD3Data ? (
-              <p>Loading materials...</p>
-            ) : isErrorMaterialD3Data ? (
-              <p>Error fetching materials: {errorMaterialD3Data.message}</p>
-            ) : (
-              <Select
-                options={materialD3Options}
-                value={materialD3Options?.find(
-                  (option) => option.value === selectedMaterial
-                )}
-                onChange={(selectedOption) => {
-                  console.log("Selected MATNR:", selectedOption?.value);
-                  setSelectedMaterial(selectedOption?.value);
-                }}
-                placeholder="เลือกรายการพัสดุ..."
-                isClearable
-                isSearchable
-                styles={{
-                  control: (base) => ({
-                    ...base,
-                    padding: "5px",
-                  }),
-                }}
-              />
-            )}
+          <div className="dropdown-container">
+            <div className="D3-dropdown-cat-group">
+              {isLoadingMaterialD3Data ? (
+                <p>Loading materials...</p>
+              ) : isErrorMaterialD3Data ? (
+                <p>Error fetching materials: {errorMaterialD3Data.message}</p>
+              ) : (
+                <Select
+                  options={materialD3Options}
+                  value={materialD3Options?.find(
+                    (option) => option.value === selectedMaterial
+                  )}
+                  onChange={(selectedOption) => {
+                    console.log("Selected MATNR:", selectedOption?.value);
+                    setSelectedMaterial(selectedOption?.value);
+                  }}
+                  placeholder="เลือกรายการพัสดุ..."
+                  isClearable
+                  isSearchable
+                />
+              )}
+            </div>
           </div>
 
           {/* Toggle Button */}
-          <button className="chart-button" onClick={toggleChart}>
-            {showFirstChart ? "แยกตาม กฟข. หน้างาน" : "แยกตาม กฟข. 12 เขค"}
-          </button>
+          <div className="chart-button-group">
+            <button
+              className={`chart-button ${
+                selectedButton === "first" ? "active" : ""
+              }`}
+              disabled={!selectedMaterial}
+              onClick={() => handleButtonClick("first")}
+            >
+              แยกตาม กฟข. หน้างาน
+            </button>
+            <button
+              className={`chart-button ${
+                selectedButton === "second" ? "active" : ""
+              }`}
+              disabled={!selectedMaterial}
+              onClick={() => handleButtonClick("second")}
+            >
+              แยกตามการไฟฟ้าเขต{" "}
+            </button>
+          </div>
 
           {/* Chart Container */}
 
           {showFirstChart ? (
-            <div>
-              {/*<div className="price-summary">
-                <div>
-                  <p className="text-subtitle">
-                    ราคาต่ำสุด:{" "}
-                    {priceFormatter.format(materialPriceGroupDistrict?.PRICE_LOWEST)}{" "}
-                    บาท
-                  </p>
-                </div>
-                <div>
-                  <p className="text-subtitle">
-                    ราคาเฉลี่ย:{" "}
-                    {priceFormatter.format(materialPriceGroupDistrict?.PRICE_AVERAGE)}{" "}
-                    บาท
-                  </p>
-                </div>
-                <div>
-                  <p className="text-subtitle">
-                    ราคาสูงสุด:{" "}
-                    {priceFormatter.format(materialPriceGroupDistrict?.PRICE_HIGHEST)}{" "}
-                    บาท
-                  </p>
-                </div>
-              </div>*/}
-              <div>
-                <p className="text-subtitle">
-                  หน่วย: บาท ต่อ {materialPriceGroupDistrict?.UOM}
-                </p>
-              </div>
-            </div>
+            <div className="dropdown-container"> </div>
           ) : (
             <div>
-              <div className="D3-dropdown-cat-group">
+              <div className="dropdown-container">
                 {isLoadingDistrictData ? (
                   <p>Loading districts...</p>
                 ) : (
@@ -449,40 +448,17 @@ const Dashboard3 = () => {
                   </select>
                 )}
               </div>
-              {/*<div className="price-summary">
-                <div>
-                  <p className="text-subtitle">
-                    ราคาต่ำสุด:{" "}
-                    {priceFormatter.format(materialPriceGroupEKGRP?.PRICE_LOWEST)}{" "}
-                    บาท
-                  </p>
-                </div>
-                <div>
-                  <p className="text-subtitle">
-                    ราคาเฉลี่ย:{" "}
-                    {priceFormatter.format(materialPriceGroupEKGRP?.PRICE_AVERAGE)}{" "}
-                    บาท
-                  </p>
-                </div>
-                <div>
-                  <p className="text-subtitle">
-                    ราคาสูงสุด:{" "}
-                    {priceFormatter.format(materialPriceGroupEKGRP?.PRICE_HIGHEST)}{" "}
-                    บาท
-                  </p>
-                </div>
-              </div>*/}
-              <div>
-                <p className="text-subtitle">
-                  หน่วย: บาท ต่อ {materialPriceGroupEKGRP?.UOM}
-                </p>
-              </div>
             </div>
           )}
           <div className="D3BarChart-container">
             {showFirstChart ? (
               <>
-                <div className="D3-CSV-container">
+                <div className="dropdown-download-container">
+                  <div>
+                    <p className="text-subtitle">
+                      หน่วย: บาท ต่อ {materialPriceGroupDistrict?.UOM}
+                    </p>
+                  </div>
                   <div className="download-button">
                     <CSVLink
                       data={csvBarDistrictData}
@@ -503,7 +479,12 @@ const Dashboard3 = () => {
               </>
             ) : (
               <>
-                <div className="D3-CSV-container">
+                <div className="dropdown-download-container">
+                  <div>
+                    <p className="text-subtitle">
+                      หน่วย: บาท ต่อ {materialPriceGroupEKGRP?.UOM}
+                    </p>
+                  </div>
                   <div className="download-button">
                     <CSVLink
                       data={csvBarEKGRPData}
@@ -524,8 +505,8 @@ const Dashboard3 = () => {
               </>
             )}
             <h1 className="text-subtitle">
-              หมายเหตุ: หากไม่มีการจัดซื้อเกิดขึ้น ณ หน่วยงานจัดซื้อนั้นๆในปีที่เลือกแสดง
-              จะไม่มีการแสดงผลราคาเฉลี่ย
+              หมายเหตุ: หากไม่มีการจัดซื้อเกิดขึ้น ณ
+              หน่วยงานจัดซื้อนั้นๆในปีที่เลือกแสดง จะไม่มีการแสดงผลราคาเฉลี่ย
             </h1>
           </div>
         </div>

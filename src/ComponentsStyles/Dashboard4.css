@@ -34,27 +34,38 @@
   flex-direction: row;
   gap: 20px;
   box-sizing: border-box; /* Ensure padding is included in width */
-  margin: 0 auto;
   width: 100%;
 }
 
 .donut-Chart {
   flex: 1 1 40%;
   max-width: 1 1 40%;
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
-  border-radius: 8px;
   padding: 20px;
+  background-color: rgba(118, 118, 128, 0.04); /* Base dark color */
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.04),
+    /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
   box-sizing: border-box; /* Ensure padding is included in width */
-  color: black;
+  color: #3e3e3e;
+  font-size: 0.8rem;
+}
+
+.recharts-wrapper g:focus,
+.recharts-wrapper path:focus {
+  outline: none; /* Remove the focus rectangle */
 }
 
 .table-summary {
   flex: 1 1 60%;
   max-width: 1 1 60%;
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
-  border-radius: 8px;
+  background-color: rgba(118, 118, 128, 0.04); /* Base dark color */
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.04),
+    /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
+  padding: 20px;
   box-sizing: border-box; /* Ensure padding is included in width */
-  color: black;
+  color: #3e3e3e;
+  font-size: 0.8rem;
+  gap: 20px;
+  align-items: center;
 }
 
 .download-button {
@@ -73,7 +84,9 @@
 .dropdown-group {
   flex: 1 1 65%;
   max-width: 1 1 65%;
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  background-color: rgba(118, 118, 128, 0.04); /* Base dark color */
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.04),
+    /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
   border-radius: 8px;
   padding: 20px;
   display: flex;
@@ -100,7 +113,9 @@
 .lead-time {
   flex: 1 1 17.5%;
   max-width: 1 1 17.5%;
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  background-color: rgba(118, 118, 128, 0.04); /* Base dark color */
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.04),
+    /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
   border-radius: 8px;
   padding: 20px;
   display: flex;
@@ -114,7 +129,9 @@
 .demand-time {
   flex: 1 1 17.5%;
   max-width: 1 1 17.5%;
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  background-color: rgba(118, 118, 128, 0.04); /* Base dark color */
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.04),
+    /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
   border-radius: 8px;
   padding: 20px;
   display: flex;
@@ -126,41 +143,18 @@
 }
 
 .button-group button {
-  cursor: pointer;
-  background-color: #4a0072;
-  color: white;
-  border: none;
-  border-radius: 5px;
+  background-color: white;
+  color: #4a0072;
+  font-size: 0.8rem;
   flex: 1;
   transition: background-color 0.3s ease; /* Smooth hover transition */
-  min-width: 100px;
-  max-width: 300px;
+  min-width: 30px;
+  max-width: 200px;
 }
 
-.summary-container-L1 {
-  padding: 20px;
-  display: flex;
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
-  border-radius: 8px;
-  flex-wrap: wrap;
-  gap: 20px;
-  box-sizing: border-box; /* Ensure padding is included in width */
-  margin: 0 auto;
-  width: 100%;
-}
-
-.donutChart {
-  flex: 1 1 calc(40% - 30px);
-  max-width: calc(40%-30px);
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
-  border-radius: 8px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  box-sizing: border-box; /* Ensure padding is included in width */
-  color: black;
-  align-items: center;
+.button-group button:hover {
+  background-color: #4a0072;
+  color: white;
 }
 
 .text-summary {
@@ -182,20 +176,6 @@
   text-align: center;
 }
 
-.table-summary {
-  flex: 1 1 calc(60% - 30px);
-  max-width: calc(60%-30px);
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
-  border-radius: 8px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  box-sizing: border-box; /* Ensure padding is included in width */
-  color: black;
-  align-items: center;
-}
-
 .table-container-L1 {
   display: flex;
   flex-wrap: nowrap;
@@ -207,7 +187,9 @@
 
 .table-compare {
   max-width: 100%;
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  background-color: rgba(118, 118, 128, 0.04); /* Base dark color */
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.04),
+    /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
   border-radius: 8px;
   padding: 20px;
   display: flex;
@@ -221,7 +203,7 @@
 .text-title {
   font-size: 1rem;
   margin-bottom: 10px;
-  color: black;
+  color: #3e3e3e;
 }
 
 .text-subtitle {

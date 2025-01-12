@@ -21,7 +21,7 @@ import {
 
 const Dashboard2 = () => {
   const [selectedYear, setSelectedYear] = useState(""); // State to hold the selected year
-  const [selectedCategoryGroup, setSelectedCategoryGroup] = useState(1); // State to hold the selected category id
+  const [selectedCategoryGroup, setSelectedCategoryGroup] = useState(0); // State to hold the selected category id
   const [selectedButton, setSelectedButton] = useState(0); // Track selected button index
   const [isCardView, setIsCardView] = useState(true); // State to toggle between card and graph view
   const [currentBarView, setCurrentBarView] = useState(1); // State to toggle between card and graph view
@@ -42,6 +42,7 @@ const Dashboard2 = () => {
 
   // Category labels
   const categories = [
+    "ทุกพัสดุ",
     "ผลิตภัณฑ์คอนกรีต",
     "หม้อแปลง",
     "มิเตอร์",
@@ -333,30 +334,22 @@ const Dashboard2 = () => {
         />
       </div>
       <div className="dashboard2-container">
-        <div className="top-container">
+        <div className="btn-container">
           <h1 className="text-subtitle">
             Top 20 suppliers ตามมูลค่าจัดซื้อทั้งหมด จำนวนใบสั่งซื้อ และ
             มูลค่าจัดซื้อต่อ PO
           </h1>
           <div className="btn-menu">
             {/* Button Controls */}
-            <div className="button-group">
+            <div className="D2-button-group">
               {categories.map((label, index) => {
                 // Calculate the category ID based on the button index
-                const categoryGroup = index < 12 ? 1 + index : 99; // 1-12 for first 9 buttons, 99 for the last button
+                const categoryGroup = index < 12 ? 0 + index : 99; // 0-12 for first 10 buttons, 99 for the last button
                 return (
                   <button
                     key={index}
                     onClick={() => handleCategorySelect(index, categoryGroup)} // Send calculated category ID on click
-                    style={{
-                      backgroundColor:
-                        selectedButton === index ? "#8e44ad" : "#f0f0f0",
-                      color: selectedButton === index ? "white" : "black",
-                      margin: "5px",
-                      padding: "10px 20px",
-                      border: "1px solid #ddd",
-                      cursor: "pointer",
-                    }}
+                    className={selectedButton === index ? "active" : ""}
                   >
                     {label}
                   </button>
@@ -366,45 +359,46 @@ const Dashboard2 = () => {
           </div>
         </div>
         <div className="bottom-container">
-          <h1 className="text-subtitle">
-            Top 20 suppliers ตามมูลค่าจัดซื้อทั้งหมด จำนวนใบสั่งซื้อ และ
-            มูลค่าจัดซื้อต่อ PO
-          </h1>
-          <p>หมายเหตุ: หน่วยมูลค่าจัดซื้อเป็นหน่วยบาท</p>
-          {/* Toggle Button */}
-          <button className="chart-button" onClick={toggleView}>
-            {isCardView ? "มุมมอง Card" : "มุมมอง Graph"}
-          </button>
-
-          {/* Buttons for View Selection */}
-          {isCardView && (
-            <div className="chart-button-group">
-              <button
-                className={`chart-button ${
-                  currentBarView === 1 ? "active" : ""
-                }`}
-                onClick={() => handleViewChange(1)}
-              >
-                เรียงลำดับตามมูลค่าจัดซื้อ
-              </button>
-              <button
-                className={`chart-button ${
-                  currentBarView === 2 ? "active" : ""
-                }`}
-                onClick={() => handleViewChange(2)}
-              >
-                เรียงลำดับตามจำนวนใบสั่งซื้อ(PO)
-              </button>
-              <button
-                className={`chart-button ${
-                  currentBarView === 3 ? "active" : ""
-                }`}
-                onClick={() => handleViewChange(3)}
-              >
-                เรียงลำดับตามมูลค่าจัดซื้อต่อ PO
-              </button>
-            </div>
-          )}
+          <p>หมายเหตุ: หน่วยมูลค่าจัดซื้อเป็นหน่วยล้านบาท</p>
+          <div className="select-switch-container">
+            {/* Buttons for View Selection */}
+            {isCardView ? (
+              <div className="chart-button-group">
+                <button
+                  className={`chart-button ${
+                    currentBarView === 1 ? "active" : ""
+                  }`}
+                  onClick={() => handleViewChange(1)}
+                >
+                  เรียงลำดับตามมูลค่าจัดซื้อ
+                </button>
+                <button
+                  className={`chart-button ${
+                    currentBarView === 2 ? "active" : ""
+                  }`}
+                  onClick={() => handleViewChange(2)}
+                >
+                  เรียงลำดับตามจำนวนใบสั่งซื้อ(PO)
+                </button>
+                <button
+                  className={`chart-button ${
+                    currentBarView === 3 ? "active" : ""
+                  }`}
+                  onClick={() => handleViewChange(3)}
+                >
+                  เรียงลำดับตามมูลค่าจัดซื้อต่อ PO
+                </button>
+              </div>
+            ) : (
+              <>
+                <div className="select-switch-container"></div>
+              </>
+            )}
+            {/* Toggle Button */}
+            <button className="switch-button" onClick={toggleView}>
+              {isCardView ? "มุมมอง Card" : "มุมมอง Graph"}
+            </button>
+          </div>
 
           {/* Chart Container */}
           {isCardView ? (

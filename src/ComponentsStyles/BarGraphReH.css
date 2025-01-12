@@ -4,22 +4,23 @@
   max-width: 100%; /* Set a maximum width for the container */
 }
 
+.title-legend-container {
+  display: flex; /* Use Flexbox for layout */
+  justify-content: space-between; /* Place items on opposite ends */
+  align-items: center; /* Align items vertically */
+  font-size: 0.8rem;
+  width: 100%;
+}
+
 /* Chart Title */
 .bar-chart-title {
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: #3e3e3e;
   margin: 5px 0px 20px 15px;
 }
 
 .data-size {
   font-size: 0.8rem;
-}
-
-.title-legend-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px; /* Add space below for the chart */
 }
 
 /* Responsive Styles */
@@ -30,7 +31,7 @@
   }
 
   .bar-chart-title {
-    font-size: 1rem; /* Reduce title font size on smaller screens */
+    font-size: 0.9rem; /* Reduce title font size on smaller screens */
   }
 }
 

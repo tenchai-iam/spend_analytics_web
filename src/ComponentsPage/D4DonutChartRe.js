@@ -63,12 +63,14 @@ const D4DonutChartRe = ({ data, title, height = 400, onPrioritySelect }) => {
               return `${formattedValue} (${(percent * 100).toFixed(2)}%)`;
             }}
             labelLine={false}
-            onClick={handleClick} // Add click handler
+            onClick={handleClick} // Add click
+            tabIndex={-1} // Prevent focus on the entire pie
           >
             {data.map((entry, index) => (
               <Cell
                 key={`cell-${index}`}
                 fill={COLORS[index % COLORS.length]}
+                tabIndex={-1} // Prevent focus on individual slices
               />
             ))}
           </Pie>

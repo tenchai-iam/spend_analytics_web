@@ -14,18 +14,17 @@
   flex-wrap: wrap; /* Allow wrapping for responsiveness */
 }
 
-.dropdown-download {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between; /* Moves items to opposite ends */
-  align-items: center;
+.dropdown-download-container {
+  display: flex; /* Use Flexbox for layout */
+  justify-content: space-between; /* Place items on opposite ends */
+  align-items: center; /* Align items vertically */
+  font-size: 0.8rem;
+  width: 100%;
 }
 
 .D3-dropdown-cat-group {
-  font-size: 0.9rem;
-  display: flex;
-  flex-direction: column;
-  width: 50%;
+  flex: 1; /* Allow the dropdown to take up available space */
+  max-width: 50%; /* Optional: Limit the maximum width */
 }
 
 .dropdown-group label {
@@ -37,17 +36,37 @@
   white-space: nowrap; /* Prevent the text from wrapping */
 }
 
-.D3-CSV-container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  margin-left: auto;
+.remark-container {
+  font-size: 0.8rem;
+  padding: 10px;
+  gap: 0px;
+  justify-self: left;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.04),
+    /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
+  width: 100%;
+}
+
+.dropdown-container {
+  display: flex; /* Use Flexbox for layout */
+  align-items: center; /* Align items vertically */
+  font-size: 0.8rem;
+  width: 100%;
+}
+
+.download-container {
+  display: flex; /* Use Flexbox for layout */
+  justify-content: right;
+  align-items: center; /* Align items vertically */
+  font-size: 0.8rem;
+  width: 100%;
 }
 
 .text-title {
   font-size: 1rem;
   margin-bottom: 10px;
-  color: black;
+  color: #3e3e3e;
 }
 
 .text-subtitle {
@@ -57,10 +76,12 @@
 }
 
 .top-container {
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  background-color: rgba(118, 118, 128, 0.04); /* Base dark color */
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.04),
+    /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
   border-radius: 8px;
   padding: 20px;
-  max-width: 100%; /* Maximum width set to 25% */
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -81,7 +102,9 @@
 }
 
 .bottom-container {
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  background-color: rgba(118, 118, 128, 0.04); /* Base dark color */
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.04),
+    /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
   border-radius: 8px;
   padding: 20px;
   max-width: 100%; /* Maximum width set to 75% */
@@ -118,16 +141,25 @@
   max-width: 100%;
 }
 
+.chart-button-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+}
+
 .chart-button {
-  background-color: #4a0072;
-  color: white;
-  padding: 10px 15px;
+  background-color: #f7ecff;
+  color: #4a0072;
   border: none;
   border-radius: 5px;
-  cursor: pointer;
-  width: 50%; /* Make the button full width on small screens */
-  display: block;
-  margin: 0 auto;
+  font-size: 0.8rem;
+  flex: 1;
+  transition: background-color 0.3s ease; /* Smooth hover transition */
+}
+
+.chart-button.active {
+  background-color: #4a0072;
+  color: white;
 }
 
 .chart-title {
