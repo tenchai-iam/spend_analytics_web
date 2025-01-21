@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../ComponentsStyles/table.css";
+import "../ComponentsStyles/TablePrice.css";
 
 const TableD1Price = ({ title, data }) => {
   const [sortConfig, setSortConfig] = useState({
@@ -98,24 +99,36 @@ const TableD1Price = ({ title, data }) => {
             {sortedData.map((row, index) => (
               <tr key={index}>
                 <td data-label="รหัสพัสดุ">
-                  {specialMatNRs.includes(row.matNR) ? `${row.matNR}*` : row.matNR}
+                  {specialMatNRs.includes(row.matNR)
+                    ? `${row.matNR}*`
+                    : row.matNR}
                 </td>
-                <td data-label="ชื่อพัสดุ">{row.matName}</td>
-                <td data-label="ราคาที่ส่วนกลาง (บาท)">
+                <td className="matnr">{row.matName}</td>
+                <td className="number">
                   <span
-                    className={row.priceHQ < row.priceDistrict && row.priceHQ > 0 ? "lower" : ""}
+                    className={
+                      row.priceHQ < row.priceDistrict && row.priceHQ > 0
+                        ? "lower"
+                        : ""
+                    }
                   >
                     {row.priceHQ === 0 ? "-" : formatPrice(row.priceHQ)}{" "}
                   </span>
                 </td>
-                <td data-label="ราคาเฉลี่ยที่กฟข. (บาท)">
+                <td className="number">
                   <span
-                    className={row.priceDistrict < row.priceHQ && row.priceDistrict > 0 ? "lower" : ""}
+                    className={
+                      row.priceDistrict < row.priceHQ && row.priceDistrict > 0
+                        ? "lower"
+                        : ""
+                    }
                   >
-                    {row.priceDistrict === 0 ? "-" : formatPrice(row.priceDistrict)}{" "}
+                    {row.priceDistrict === 0
+                      ? "-"
+                      : formatPrice(row.priceDistrict)}{" "}
                   </span>
                 </td>
-                <td data-label="% ราคาที่แตกต่าง">
+                <td className="number">
                   {row.priceDiff < 0 ? "-" : formatPercentage(row.priceDiff)}
                 </td>
               </tr>

@@ -327,11 +327,14 @@ const Dashboard2 = () => {
   return (
     <div>
       <NavbarComponent />
-      <div className="year-dropdown-container">
-        <YearDropdown
-          onSelectYear={setSelectedYear}
-          selectedYear={selectedYear}
-        />
+      <div className="text-dropdown-container">
+        <h1 className="header-title">ภาพรวม Supplier</h1>
+        <div className="year-dropdown-container">
+          <YearDropdown
+            onSelectYear={setSelectedYear}
+            selectedYear={selectedYear}
+          />
+        </div>
       </div>
       <div className="dashboard2-container">
         <div className="btn-container">

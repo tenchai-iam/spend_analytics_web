@@ -4,7 +4,7 @@ import "../ComponentsStyles/Dashboard4.css"; // Updated to use Dashboard3.css
 import YearDropdown from "./YearDropdown";
 import Table4 from "./Table4.js";
 import D4DonutChartRe from "./D4DonutChartRe.js";
-import TableD42 from "./TableD42.js";
+import TableD4Priority from "./TableD4Priority.js";
 import D4GroupBarRe from "./D4GroupBarRe";
 import Select from "react-select"; // Import react-select
 import { useQuery } from "@tanstack/react-query";
@@ -16,7 +16,6 @@ import {
   getD4RequireMaterialDetail,
   getD4SimMaterialPlan,
 } from "../services/api_D4.js";
-import { CSVLink } from "react-csv"; // Import CSVLink from react-csv
 import XLSX from "xlsx-js-style";
 import { saveAs } from "file-saver";
 
@@ -211,7 +210,7 @@ const Dashboard4 = () => {
 
   console.log("dataTableSimMaterialPlan:", dataTableSimMaterialPlan);
 
-  const csvTableD42Headers = [
+  const csvTableD4PriorityHeaders = [
     { label: "กฟฟ.", key: "region" },
     { label: "อัตราการใช้งานต่อเดือน (R/M)", key: "usage" },
     { label: "ยอดคงคล้ง", key: "stock" },
@@ -253,7 +252,7 @@ const Dashboard4 = () => {
       budget: formatTotal(item.budget),
     }));
 
-  const csvTableD42Data = formatCSVData(dataTableSimMaterialPlan); // Use your table data as CSV data
+  const csvTableD4PriorityData = formatCSVData(dataTableSimMaterialPlan); // Use your table data as CSV data
 
   const downloadXLSX = (
     data,
@@ -337,7 +336,9 @@ const Dashboard4 = () => {
     worksheet[`A${infoRowIndex + 1}`] = {
       v: `ข้อมูล ณ วันที่ ${dateInfoData?.day || "-"} / ${
         dateInfoData?.month || "-"
-      } / ${dateInfoData?.year || "-"}`,
+      } / ${dateInfoData?.year || "-"} เวลา 0${dateInfoData?.hour}:${
+        dateInfoData?.minute
+      }0 น.`,
     };
     worksheet[`A${infoRowIndex + 1}`].s = {
       font: { sz: 12 },
@@ -361,7 +362,7 @@ const Dashboard4 = () => {
           vertical: "center",
           wrapText: true,
         },
-        fill: { fgColor: { rgb: "FFFF00" } }, // Yellow background
+        fill: { fgColor: { rgb: "D9D9D9" } },
         border: {
           top: { style: "thin", color: { rgb: "000000" } },
           bottom: { style: "thin", color: { rgb: "000000" } },
@@ -381,10 +382,10 @@ const Dashboard4 = () => {
         const cellAddress = XLSX.utils.encode_cell({ r: R, c: C });
         if (!worksheet[cellAddress]) continue;
 
-        const alignRight = C > 1; // Right-align for columns after the first two
+        const alignRight = C > 0; // Right-align for columns after the first
         worksheet[cellAddress].s = {
           alignment: {
-            horizontal: alignRight ? "right" : "left",
+            horizontal: alignRight ? "right" : "center",
             vertical: "center",
             wrapText: true,
           },
@@ -458,12 +459,38 @@ const Dashboard4 = () => {
   return (
     <div>
       <NavbarComponent />
-      {/* <div className="year-dropdown-container">
+      <div className="text-dropdown-container">
+        <h1 className="header-title">ปรับแผนเพิ่มเติมระหว่างปี</h1>
+        {/* <div className="year-dropdown-container">
         <YearDropdown
           onSelectYear={setSelectedYear}
           selectedYear={selectedYear}
         />
       </div> */}
+      </div>
+      <div className="rm-container">
+        <div>
+          <p className="top-text">R/M รายเขตของแต่ละพัสดุเฉลี่ย 24 เดือน</p>
+        </div>
+        <div className="download-button">
+          <button
+            onClick={() =>
+              download(
+                csvTableD4PriorityData, // Data
+                csvTableD4PriorityHeaders, // Headers
+                `SimMaterialPlan_${selectedYear}`, // File Name
+                selectedMaterial, // Selected Material
+                selectedHQLeadTime, // Selected HQ Lead Time
+                selectedDemandMonth, // Selected Demand Month
+                dateInfoData // Date Info
+              )
+            }
+            style={getButtonStyle(false)} // Apply button style
+          >
+            Download XLSX
+          </button>
+        </div>
+      </div>
       <div className="dashboard4-container">
         {/* Summary Section */}
         <div className="summary-container-L1">
@@ -476,7 +503,7 @@ const Dashboard4 = () => {
             />
           </div>
           <div className="table-summary">
-            <TableD42
+            <TableD4Priority
               title={getTableTitle(selectedMaterialGroup)} // Dynamic title
               data={dataTableRequireMaterialDetail}
             />
@@ -486,7 +513,7 @@ const Dashboard4 = () => {
         {/* Top Controls Section */}
         <div className="btn-container-L1">
           <div className="dropdown-group D4-dropdown-cat-group">
-            <h1 className="text-subtitle">เลือกกลุ่ม และ รายการพัสดุ</h1>
+            <h1 className="text-subtitle">เลือกกลุ่มและรายการพัสดุ</h1>
             {isCategoriesLoading ? (
               <p>Loading categories...</p>
             ) : (
@@ -502,34 +529,36 @@ const Dashboard4 = () => {
                 ))}
               </select>
             )}
-            {isLoadingMaterialD4Data ? (
-              <p>Loading materials...</p>
-            ) : isErrorMaterialD4Data ? (
-              <p>Error fetching materials: {errorMaterialD4Data.message}</p>
-            ) : (
-              <Select
-                options={materialD4Options}
-                value={
-                  materialD4Options?.find(
-                    (option) => option.value === selectedMaterial
-                  ) || null
-                }
-                onChange={(selectedOption) => {
-                  const value = selectedOption ? selectedOption.value : ""; // Ensure only value is stored
-                  console.log("Selected Material Value:", value); // Log the value
-                  setSelectedMaterial(value); // Store only the value in state
-                }}
-                placeholder="เลือกรายการพัสดุ..."
-                isClearable
-                isSearchable
-                styles={{
-                  control: (base) => ({
-                    ...base,
-                    padding: "5px",
-                  }),
-                }}
-              />
-            )}
+            <div className="D4-dropdown-container">
+              {isLoadingMaterialD4Data ? (
+                <p>Loading materials...</p>
+              ) : isErrorMaterialD4Data ? (
+                <p>Error fetching materials: {errorMaterialD4Data.message}</p>
+              ) : (
+                <Select
+                  options={materialD4Options}
+                  value={
+                    materialD4Options?.find(
+                      (option) => option.value === selectedMaterial
+                    ) || null
+                  }
+                  onChange={(selectedOption) => {
+                    const value = selectedOption ? selectedOption.value : ""; // Ensure only value is stored
+                    console.log("Selected Material Value:", value); // Log the value
+                    setSelectedMaterial(value); // Store only the value in state
+                  }}
+                  placeholder="เลือกรายการพัสดุ..."
+                  isClearable
+                  isSearchable
+                  styles={{
+                    control: (base) => ({
+                      ...base,
+                      padding: "5px",
+                    }),
+                  }}
+                />
+              )}
+            </div>
           </div>
 
           {/* Lead Time Section */}
@@ -537,7 +566,7 @@ const Dashboard4 = () => {
             <p className="text-subtitle">
               เลือกจำนวนเดือนคาดการณ์จัดซื้อโดยส่วนกลาง (ฝวห.)
             </p>
-            <div className="button-group">
+            <div className="button-group-lead">
               {[
                 "1 เดือน",
                 "2 เดือน",
@@ -565,7 +594,7 @@ const Dashboard4 = () => {
             <p className="text-subtitle">
               เลือกจำนวนเดือนคาดการณ์ที่ต้องการใช้พัสดุ
             </p>
-            <div className="button-group">
+            <div className="button-group-demand">
               {[
                 "1 เดือน",
                 "2 เดือน",
@@ -595,13 +624,13 @@ const Dashboard4 = () => {
         {/* Table and Chart Section */}
         <div className="table-container-L1">
           <div className="table-compare">
-            <div className="D4-CSV-container">
+            <div className="download-container">
               <div className="download-button">
                 <button
                   onClick={() =>
                     downloadXLSX(
-                      csvTableD42Data, // Data
-                      csvTableD42Headers, // Headers
+                      csvTableD4PriorityData, // Data
+                      csvTableD4PriorityHeaders, // Headers
                       `SimMaterialPlan_${selectedYear}`, // File Name
                       selectedMaterial, // Selected Material
                       selectedHQLeadTime, // Selected HQ Lead Time
@@ -619,19 +648,33 @@ const Dashboard4 = () => {
               title="ตารางจำลองแผนจัดซื้อพัสดุเพิ่มเติมระหว่างปี"
               data={dataTableSimMaterialPlan}
             />
-            <p>
-              หมายเหตุ: จัดหาเพิ่ม (หน่วย) ที่แสดงในตาราง อาจคลาดเคลื่อนจาก
-              จัดหาเพิ่ม (เดือน) คูณ อัตราการใช้งานต่อเดือน (R/M)
-              เนื่องจากการปัดเศษทศนิยมของจำนวนเดือน
-            </p>
+            <div className="remark-container">
+              <p>
+                ⓘ หมายเหตุ: จัดหาเพิ่ม (หน่วย) ที่แสดงในตาราง อาจคลาดเคลื่อนจาก
+                จัดหาเพิ่ม (เดือน) คูณ อัตราการใช้งานต่อเดือน (R/M)
+                เนื่องจากการปัดเศษทศนิยมของจำนวนเดือน
+              </p>
+            </div>
             <D4GroupBarRe
               title="มูลค่าจัดหาพัสดุ (ล้านบาท)"
               data={dataTableSimMaterialPlan}
             />
-            <p>
-              หมายเหตุ: Savings เกิดจากผลลัพธ์ของ Base case จากการจัดซื้อที่
-              กฟข. ทั้งหมด เทียบกับ Target case จากการจัดซื้อตามการจำลอง
-            </p>
+            <div className="remark-container">
+              <p>ⓘ หมายเหตุ:</p>
+              <p>
+                1. Savings เกิดจากผลลัพธ์ของ Base Case จากการจัดซื้อที่ กฟข.
+                ทั้งหมด เทียบกับ Target Case จากการจัดซื้อตามการจำลอง
+              </p>
+              <p>
+                2. Base Case
+                คือการจัดซื้อแบบเดิมโดยไม่ผ่านการวิเคราะห์ข้อมูลจากระบบ Spend
+                Insight
+              </p>
+              <p>
+                3. Target Case คือการจัดซื้อโดยผ่านการวิเคราะห์ข้อมูลจากระบบ
+                Spend Insight”
+              </p>
+            </div>
           </div>
         </div>
         <div>

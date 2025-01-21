@@ -39,10 +39,7 @@ function NavbarComponent() {
             </Nav.Link>
 
             {/* Dropdown for Admin */}
-            <NavDropdown
-              title="สำหรับพนักงานทั่วไป"
-              id="admin-dropdown"
-            >
+            <NavDropdown title="สำหรับพนักงานทั่วไป" id="admin-dropdown">
               <NavDropdown.Item
                 as={Link}
                 to="/dashboard1"
@@ -82,7 +79,7 @@ function NavbarComponent() {
 
             {/* Link for Data Management */}
             <Nav.Link as={Link} to="/upload">
-              การจัดการข้อมูล
+              จัดการข้อมูล
             </Nav.Link>
           </Nav>
 

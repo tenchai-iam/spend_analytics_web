@@ -26,14 +26,14 @@ const Dashboard = ({ selectedYear }) => {
     <div className="text-container">
       <div className="text-subcontainer">
         <label className="text">มูลค่าจัดซื้อทั้งหมด</label>
-        <label className="number">
+        <label className="home-number">
           {data.TOTAL_SPEND.toLocaleString("th-TH")}
           {" บาท"}
         </label>
       </div>
       <div className="text-subcontainer">
         <label className="text">จำนวนใบสั่งซื้อ (PO)</label>
-        <label className="number">
+        <label className="home-number">
           {data.TOTAL_PO.toLocaleString("th-TH")}
         </label>
       </div>
@@ -76,11 +76,14 @@ const Home = () => {
   return (
     <div>
       <NavbarComponent />
-      <div className="year-dropdown-container">
-        <YearDropdown
-          onSelectYear={setSelectedYear}
-          selectedYear={selectedYear}
-        />
+      <div className="text-dropdown-container">
+        <h1 className="header-title">หน้าหลัก</h1>
+        <div className="year-dropdown-container">
+          <YearDropdown
+            onSelectYear={setSelectedYear}
+            selectedYear={selectedYear}
+          />
+        </div>
       </div>
       <Dashboard selectedYear={selectedYear} />
       <div>

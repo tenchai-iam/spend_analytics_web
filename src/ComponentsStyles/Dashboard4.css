@@ -3,12 +3,41 @@
   color: #3e3e3e;
 }
 
+.text-dropdown-container {
+  padding: 20px;
+  display: flex; /* Use Flexbox for layout */
+  justify-content: space-between; /* Place items on opposite ends */
+  align-items: center; /* Align items vertically */
+  font-size: 0.8rem;
+  width: 100%;
+}
+
+.header-title {
+  font-size: 1rem;
+}
+
 .year-dropdown-container {
   display: flex;
   justify-content: flex-end; /* This moves the dropdown to the right */
+  color: white;
+}
+
+.rm-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* This moves the dropdown to the right */
+  gap: 20px;
   padding-right: 20px; /* Optional: adjust padding as per your needs */
   margin-top: 20px;
-  color: white;
+  color: #3e3e3e;
+  font-size: 0.8rem;
+  vertical-align: middle;
+}
+
+.top-text {
+  line-height: 0.9;
+  font-size: 0.8rem;
+  margin: 0px;
 }
 
 .dashboard4-container {
@@ -22,18 +51,10 @@
   padding: 20px;
 }
 
-.D4-CSV-container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  margin-left: auto;
-}
-
 .summary-container-L1 {
   display: flex;
   flex-direction: row;
   gap: 20px;
-  box-sizing: border-box; /* Ensure padding is included in width */
   width: 100%;
 }
 
@@ -73,17 +94,16 @@
 }
 
 .btn-container-L1 {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* Default: 3 columns */
+  display: flex;
+  flex-direction: row;
   gap: 20px;
   box-sizing: border-box; /* Ensure padding is included in width */
-  margin: 0 auto;
   width: 100%;
 }
 
 .dropdown-group {
-  flex: 1 1 65%;
-  max-width: 1 1 65%;
+  flex: 1 1 40%;
+  max-width: 1 1 40%;
   background-color: rgba(118, 118, 128, 0.04); /* Base dark color */
   box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.04),
     /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
@@ -94,7 +114,7 @@
   gap: 20px;
   box-sizing: border-box; /* Ensure padding is included in width */
   margin: 0 auto;
-  color: black;
+  color: #3e3e3e;
 }
 
 .D4-dropdown-cat-group {
@@ -105,14 +125,14 @@
   z-index: 5;
 }
 
-.dropdown-group label {
-  font-weight: bold;
-  margin-bottom: 5px;
+.D4-dropdown-container {
+  font-size: 0.8rem;
+  width: 100%;
 }
 
 .lead-time {
-  flex: 1 1 17.5%;
-  max-width: 1 1 17.5%;
+  flex: 1 1 30%;
+  max-width: 1 1 30%;
   background-color: rgba(118, 118, 128, 0.04); /* Base dark color */
   box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.04),
     /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
@@ -127,8 +147,8 @@
 }
 
 .demand-time {
-  flex: 1 1 17.5%;
-  max-width: 1 1 17.5%;
+  flex: 1 1 30%;
+  max-width: 1 1 30%;
   background-color: rgba(118, 118, 128, 0.04); /* Base dark color */
   box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.04),
     /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
@@ -142,7 +162,27 @@
   color: black;
 }
 
-.button-group button {
+.button-group-lead {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.button-group-demand {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.button-group-lead button {
+  background-color: white;
+  color: #4a0072;
+  font-size: 0.8rem;
+  flex: 1;
+  transition: background-color 0.3s ease; /* Smooth hover transition */
+  min-width: 30px;
+  max-width: 200px;
+}
+
+.button-group-demand button {
   background-color: white;
   color: #4a0072;
   font-size: 0.8rem;
@@ -200,6 +240,14 @@
   align-items: center;
 }
 
+.download-container {
+  display: flex; /* Use Flexbox for layout */
+  justify-content: right;
+  align-items: center; /* Align items vertically */
+  font-size: 0.8rem;
+  width: 100%;
+}
+
 .text-title {
   font-size: 1rem;
   margin-bottom: 10px;
@@ -209,7 +257,19 @@
 .text-subtitle {
   font-size: 0.9rem;
   margin-bottom: 10px;
-  color: black;
+  color: #3e3e3e;
+}
+
+.remark-container {
+  font-size: 0.8rem;
+  padding: 10px;
+  gap: 0px;
+  justify-self: left;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.04),
+    /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
+  width: 100%;
 }
 
 @media (max-width: 768px) {

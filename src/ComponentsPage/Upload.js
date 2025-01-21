@@ -3,7 +3,7 @@ import NavbarComponent from "../ComponentsPage/NavbarComponent";
 import axios from "axios";
 import "../ComponentsStyles/upload.css";
 
-const API_URL = "https://dev-spendi-tcc.pea.co.th/api";
+const API_URL = process.env.REACT_APP_API_URL;
 
 const UploadPage = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -78,6 +78,9 @@ const UploadPage = () => {
   return (
     <div>
       <NavbarComponent />
+      <div className="text-dropdown-container">
+        <h1 className="header-title">จัดการข้อมูล</h1>
+      </div>
       <div className="upload-container">
         <div className="upload-container-L1">
           {uploadSections.map((section, index) => (

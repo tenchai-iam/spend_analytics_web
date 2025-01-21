@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import "../ComponentsStyles/D4tableTop.css";
+import "../ComponentsStyles/table.css";
+import "../ComponentsStyles/TablePriority.css";
 
-const TableD42 = ({ title, data }) => {
+const TableD4Priority = ({ title, data }) => {
   const [sortConfig, setSortConfig] = useState({
     key: null,
     direction: "ascending",
@@ -70,8 +71,8 @@ const TableD42 = ({ title, data }) => {
             {sortedData.map((row, index) => (
               <tr key={index}>
                 <td>{row.matNum}</td>
-                <td>{row.matName}</td>
-                <td>{formatQuantity(row.usableMonth)}</td>
+                <td className="matnr">{row.matName}</td>
+                <td className="number">{formatQuantity(row.usableMonth)}</td>
                 <td>
                   <span className={`priority ${row.matGrade.toLowerCase()}`}>
                     {row.matGrade}
@@ -86,4 +87,4 @@ const TableD42 = ({ title, data }) => {
   );
 };
 
-export default TableD42;
+export default TableD4Priority;
