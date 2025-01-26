@@ -22,6 +22,10 @@
   color: #333;
 }
 
+.difference-label {
+  color: #fff;
+}
+
 /* Responsive Styles */
 @media only screen and (max-width: 768px) {
   .bar-chart-container {

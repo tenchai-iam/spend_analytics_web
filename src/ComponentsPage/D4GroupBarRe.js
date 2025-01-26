@@ -122,7 +122,7 @@ const D4GroupBarRe = ({
           <Bar dataKey="Placeholder" fill="transparent" stackId="offset" />
           <Bar
             dataKey="Difference"
-            fill={aggregatedData[0]?.Difference >= 0 ? "green" : "red"}
+            fill={aggregatedData[0]?.Difference >= 0 ? "#FD8A8A" : "#ACE1AF"}
             stackId="offset"
             name="Savings"
           >

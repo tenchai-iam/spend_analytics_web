@@ -12,43 +12,36 @@ import "../ComponentsStyles/BarGraphReV.css";
 
 const numberFormatter = new Intl.NumberFormat("en-US", {
   style: "decimal",
-  maximumFractionDigits: 3,
+  maximumFractionDigits: 2,
+  minimumFractionDigits: 2,
 });
 
-const D6BarGraphReV = ({ data, xAxisKey, barKey, title, height = 400 }) => {
-  // Ensure data contains a fill property for coloring bars
-  const formattedData = data.map((item, index) => ({
-    ...item,
-    fill: index === 1 ? "#12B76A" : "#932BDE", // Different color for the second bar
-  }));
-
+const D6BarGraphReV = ({ data, xAxisKey, title, height = 400 }) => {
   return (
     <div className="bar-chart-container">
       <h2 className="bar-chart-title">{title}</h2>
       <ResponsiveContainer width="100%" height={height}>
         <BarChart
-          data={formattedData}
+          data={data}
           margin={{
-            top: 20,
+            top: 30,
             right: 30,
             left: 20,
             bottom: 5,
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey={xAxisKey} tick={false} />
+          <XAxis
+            dataKey={xAxisKey}
+            label={{
+              position: "insideBottom", // Position it at the bottom
+              offset: -5, // Adjust offset
+            }}
+          />
           <YAxis tickFormatter={(value) => numberFormatter.format(value)} />
           <Tooltip formatter={(value) => numberFormatter.format(value)} />
-          <Bar dataKey={barKey} barSize={50}>
-            {formattedData.map((entry, index) => (
-              <Bar key={index} fill={entry.fill}></Bar>
-            ))}
-            <LabelList
-              dataKey={barKey}
-              position="top"
-              formatter={(value) => numberFormatter.format(value)}
-            />
-          </Bar>
+          <Bar dataKey="amtused_MT" fill="#932BDE"></Bar>
+          <Bar dataKey="amtused_MA" fill="#12B76A"></Bar>
         </BarChart>
       </ResponsiveContainer>
     </div>

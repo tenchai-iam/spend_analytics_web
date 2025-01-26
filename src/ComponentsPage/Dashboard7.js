@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import "../ComponentsStyles/Dashboard.css";
+import "../ComponentsStyles/Dashboard7.css";
 import NavbarComponent from "../ComponentsPage/NavbarComponent";
 import YearDropdown from "./YearDropdown";
 

@@ -8,7 +8,9 @@ import D6BarGraphReV from "./D6BarGraphReV.js";
 import { getYears, getDateInfo } from "../services/api.js"; // Import your API service function
 import {
   getPreviousInventoryMonth,
-  getInventoryMonth,
+  getCurrentInventoryMonth,
+  getTargetInventoryDay,
+  getCurrentInventoryDay,
 } from "../services/api_D6.js";
 
 const Dashboard6 = () => {
@@ -16,6 +18,7 @@ const Dashboard6 = () => {
   const [selectedMonth, setSelectedMonth] = useState("1"); // State to hold the selected year
   const [selectedCategory, setSelectedCategory] = useState("100"); // State to hold the selected category id
   const [selectedButton, setSelectedButton] = useState(0); // Track selected button index
+  const [currentBarView, setCurrentBarView] = useState(1); // State to toggle between card and graph view
   const [isMonthView, setIsMonthView] = useState(true); // State to toggle between card and graph view
 
   // Fetch available years using React Query
@@ -33,32 +36,32 @@ const Dashboard6 = () => {
   }, [yearsData]);
 
   // Category labels
-  const categories = [
-    "ทุกพัสดุ",
-    "ผลิตภัณฑ์คอนกรีต",
-    "หม้อแปลง",
-    "มิเตอร์",
-    "ลูกถ้วย และ เคเบิลสเปเซอร์",
-    "สายไฟ",
-    "อลูมิเนียมอินกอท",
-    "ดรอพเอาท์ ฟิวส์คัทเอาท์",
-    "ล่อฟ้า",
-    "คาปาซิเตอร์",
-    "รีโคลสเซอร์",
-    "สวิตซ์",
-    "พัสดุรอง/อุปกรณ์ประกอบ",
-    "อื่นๆ",
-  ];
+  // const categories = [
+  //   "ทุกพัสดุ",
+  //   "ผลิตภัณฑ์คอนกรีต",
+  //   "หม้อแปลง",
+  //   "มิเตอร์",
+  //   "ลูกถ้วย และ เคเบิลสเปเซอร์",
+  //   "สายไฟ",
+  //   "อลูมิเนียมอินกอท",
+  //   "ดรอพเอาท์ ฟิวส์คัทเอาท์",
+  //   "ล่อฟ้า",
+  //   "คาปาซิเตอร์",
+  //   "รีโคลสเซอร์",
+  //   "สวิตซ์",
+  //   "พัสดุรอง/อุปกรณ์ประกอบ",
+  //   "อื่นๆ",
+  // ];
 
   // Fetch target inventory data for selected year, month and category using React Query
   const {
-    data: PreviousMonthInventory,
+    data: previousMonthInventory,
     isLoading: isLoadingPreviousMonthInventory,
     isError: isErrorPreviousMonthInventory,
     error: errorPreviousMonthInventory,
   } = useQuery({
     queryKey: [
-      "PreviousMonthInventory",
+      "previousMonthInventory",
       selectedYear,
       selectedMonth,
       selectedCategory,
@@ -72,10 +75,109 @@ const Dashboard6 = () => {
   });
 
   const dataPreviousMonthInventory =
-    PreviousMonthInventory?.inventory_data.map((item) => ({
+    previousMonthInventory?.inventory_data.map((item) => ({
       EKGRP: item.EKGRP, // Map EKGRP directly
-      amtused: item.amtused / 1000000, // Convert amtused to millions
+      amtused_MT: item.amtused / 1000000, // Convert amtused to millions
+      amtused_MA: 0,
     })) || [];
+
+  const {
+    data: currentMonthInventory,
+    isLoading: isLoadingCurrentMonthInventory,
+    isError: isErrorCurrentMonthInventory,
+    error: errorCurrentMonthInventory,
+  } = useQuery({
+    queryKey: [
+      "currentMonthInventory",
+      selectedYear,
+      selectedMonth,
+      selectedCategory,
+    ], // Unique query key for caching
+    queryFn: () =>
+      getCurrentInventoryMonth(selectedYear, selectedMonth, selectedCategory), // API call to fetch data based on year and category are selected
+    enabled:
+      Boolean(selectedYear) &&
+      Boolean(selectedMonth) &&
+      Boolean(selectedCategory), // Only run query if year, month and category are selected
+  });
+
+  const dataCurrentMonthInventory =
+    currentMonthInventory?.inventory_data.map((item) => ({
+      EKGRP: item.EKGRP, // Map EKGRP directly
+      amtused_MT: 50,
+      amtused_MA: item.amtused / 1000000, // Convert amtused to millions
+    })) || [];
+
+  // Merge the two datasets by EKGRP
+  const dataMonthInventory = [
+    ...dataPreviousMonthInventory,
+    ...dataCurrentMonthInventory,
+  ].reduce((acc, curr) => {
+    const existingItem = acc.find((item) => item.EKGRP === curr.EKGRP);
+    if (existingItem) {
+      existingItem.amtused_MT += curr.amtused_MT;
+      existingItem.amtused_MA += curr.amtused_MA;
+    } else {
+      acc.push(curr);
+    }
+    return acc;
+  }, []);
+
+  // get data for inventory day graph
+  const {
+    data: targetDayInventory,
+    isLoading: isLoadingTargetDayInventory,
+    isError: isErrorTargetDayInventory,
+    error: errorTargetDayInventory,
+  } = useQuery({
+    queryKey: ["targetDayInventory", selectedYear, selectedCategory], // Unique query key for caching
+    queryFn: () => getTargetInventoryDay(selectedYear, selectedCategory), // API call to fetch data based on year and category are selected
+    enabled: Boolean(selectedYear) && Boolean(selectedCategory), // Only run query if year, month and category are selected
+  });
+
+  const dataTargetDayInventory =
+    targetDayInventory?.inventory_data.map((item) => ({
+      EKGRP: item.EKGRP, // Map EKGRP directly
+      amtused_MT: item.amtused / 1000000, // Convert amtused to millions
+      amtused_MA: 0,
+    })) || [];
+
+  const {
+    data: currentDayInventory,
+    isLoading: isLoadingCurrentDayInventory,
+    isError: isErrorCurrentDayInventory,
+    error: errorCurrentDayInventory,
+  } = useQuery({
+    queryKey: ["currentDayInventory", selectedYear, selectedCategory], // Unique query key for caching
+    queryFn: () => getCurrentInventoryDay(selectedYear, selectedCategory), // API call to fetch data based on year and category are selected
+    enabled: Boolean(selectedYear) && Boolean(selectedCategory), // Only run query if year, month and category are selected
+  });
+
+  const dataCurrentDayInventory =
+    currentDayInventory?.inventory_data.map((item) => ({
+      EKGRP: item.EKGRP, // Map EKGRP directly
+      amtused_MT: 0,
+      amtused_MA: item.total_AMTUSED / 1000000, // Convert amtused to millions,
+    })) || [];
+
+  // Merge the two datasets by EKGRP
+  const dataDayInventory = [
+    ...dataTargetDayInventory,
+    ...dataCurrentDayInventory,
+  ].reduce((acc, curr) => {
+    const existingItem = acc.find((item) => item.EKGRP === curr.EKGRP);
+    if (existingItem) {
+      existingItem.amtused_MT += curr.amtused_MT;
+      existingItem.amtused_MA += curr.amtused_MA;
+    } else {
+      acc.push(curr);
+    }
+    return acc;
+  }, []);
+
+  const handleViewChange = (view) => {
+    setCurrentBarView(view); // Change to the selected view
+  };
 
   return (
     <div>
@@ -91,15 +193,53 @@ const Dashboard6 = () => {
       </div>
       <div className="dashboard-container">
         {/* <div className="btn-container"></div> */}
+        <div className="chart-button-group">
+          <button
+            className={`chart-button ${currentBarView === 1 ? "active" : ""}`}
+            onClick={() => handleViewChange(1)}
+          >
+            มูลค่าพัสดุคงคลังต่อวัน
+          </button>
+          <button
+            className={`chart-button ${currentBarView === 2 ? "active" : ""}`}
+            onClick={() => handleViewChange(2)}
+          >
+            มูลค่าพัสดุคงคลังต่อเดือน
+          </button>
+          {/* <button
+            className={`chart-button ${currentBarView === 3 ? "active" : ""}`}
+            onClick={() => handleViewChange(3)}
+          >
+            เรียงลำดับตามมูลค่าจัดซื้อต่อ PO
+          </button> */}
+        </div>
         <div className="D6-bar-chart-container">
-          <p>หมายเหตุ: หน่วยมูลค่าจัดซื้อเป็นหน่วยล้านบาท</p>
-          <D6BarGraphReV
-            data={dataPreviousMonthInventory}
-            xAxisKey="EKGRP"
-            barKey="amtused"
-            title={" "}
-            height={330}
-          />
+          {currentBarView === 1 && (
+            <>
+              <D6BarGraphReV
+                data={dataDayInventory}
+                xAxisKey="EKGRP"
+                barKeys={["amtused_MT", "amtused_MA"]}
+                title={"รายงานมูลค่าพัสดุคงคลังต่อวัน"}
+                height={330}
+              />
+              <p className="mat-legend">▬▬ เป้าหมายมูลค่าพัสดุคงคลัง</p>
+              <p className="nonMat-legend">▬▬ มูลค่าพัสดุคงคลังปัจจุบัน</p>
+            </>
+          )}
+          {currentBarView === 2 && (
+            <>
+              <D6BarGraphReV
+                data={dataMonthInventory}
+                xAxisKey="EKGRP"
+                barKeys={["amtused_MT", "amtused_MA"]}
+                title={"รายงานมูลค่าพัสดุคงคลังต่อเดือน"}
+                height={330}
+              />
+              <p className="mat-legend">▬▬ เป้าหมายมูลค่าพัสดุคงคลัง</p>
+              <p className="nonMat-legend">▬▬ มูลค่าพัสดุคงคลังปัจจุบัน</p>
+            </>
+          )}
         </div>
         <div className="D6-inventory-table"></div>
         <div className="D6-inflowoutflow-table"></div>

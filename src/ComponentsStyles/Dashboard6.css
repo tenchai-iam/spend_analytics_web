@@ -7,7 +7,7 @@
 
 .D6-bar-chart-container {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   background-color: rgba(118, 118, 128, 0.04); /* Base dark color */
   box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.04),
     /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
@@ -17,15 +17,26 @@
   padding: 20px;
 }
 
-.D6-table-container {
+.chart-button-group {
   display: flex;
-  flex-direction: row;
-  background-color: rgba(118, 118, 128, 0.04); /* Base dark color */
-  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.04),
-    /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
-  gap: 20px;
-  box-sizing: border-box; /* Ensure padding is included in width */
-  width: 100%;
+  justify-content: space-between;
+  gap: 5px;
+  width: 50%;
+}
+
+.chart-button {
+  background-color: #f7ecff;
+  color: #4a0072;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  flex: 1;
+  transition: background-color 0.3s ease; /* Smooth hover transition */
+}
+
+.chart-button.active {
+  background-color: #4a0072;
+  color: white;
 }
 
 .D6-inflowoutflow-container {
