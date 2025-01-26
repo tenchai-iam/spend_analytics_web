@@ -111,7 +111,14 @@
   color: #3e3e3e;
 }
 
-.menu-grid {
+.menu-grid-general {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two columns */
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.menu-grid-procurement {
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* Two columns */
   gap: 20px;

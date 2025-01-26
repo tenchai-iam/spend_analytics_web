@@ -1,0 +1,40 @@
+.btn-container {
+  width: 100%;
+  margin-top: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.D6-bar-chart-container {
+  display: flex;
+  flex-direction: row;
+  background-color: rgba(118, 118, 128, 0.04); /* Base dark color */
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.04),
+    /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
+  gap: 20px;
+  box-sizing: border-box; /* Ensure padding is included in width */
+  width: 100%;
+  padding: 20px;
+}
+
+.D6-table-container {
+  display: flex;
+  flex-direction: row;
+  background-color: rgba(118, 118, 128, 0.04); /* Base dark color */
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.04),
+    /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
+  gap: 20px;
+  box-sizing: border-box; /* Ensure padding is included in width */
+  width: 100%;
+}
+
+.D6-inflowoutflow-container {
+  display: flex;
+  flex-direction: row;
+  background-color: rgba(118, 118, 128, 0.04); /* Base dark color */
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.04),
+    /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
+  gap: 20px;
+  box-sizing: border-box; /* Ensure padding is included in width */
+  width: 100%;
+}

@@ -54,6 +54,20 @@ function NavbarComponent() {
               >
                 ภาพรวม Supplier
               </NavDropdown.Item>
+              <NavDropdown.Item
+                as={Link}
+                to="/dashboard5"
+                className="dropdown-item-custom "
+              >
+                ติดตามมูลค่า Stage 5
+              </NavDropdown.Item>
+              <NavDropdown.Item
+                as={Link}
+                to="/dashboard6"
+                className="dropdown-item-custom "
+              >
+                ภาพรวมมูลค่าพัสดุคงคลัง
+              </NavDropdown.Item>
             </NavDropdown>
 
             {/* Dropdown for Planning */}
@@ -74,6 +88,13 @@ function NavbarComponent() {
                 className="dropdown-item-custom"
               >
                 ปรับแผนเพิ่มเติมระหว่างปี
+              </NavDropdown.Item>
+              <NavDropdown.Item
+                as={Link}
+                to="/dashboard7"
+                className="dropdown-item-custom"
+              >
+                ปรับแผนเพิ่มเติมระหว่างปี (งบ C)
               </NavDropdown.Item>
             </NavDropdown>
 

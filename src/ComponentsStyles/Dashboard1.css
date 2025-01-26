@@ -1,9 +1,3 @@
-/* General Layout */
-.data-date {
-  font-size: 0.8rem;
-  color: #3e3e3e;
-}
-
 .text-dropdown-container {
   padding: 20px;
   display: flex; /* Use Flexbox for layout */
@@ -15,12 +9,6 @@
 
 .header-title {
   font-size: 1rem;
-}
-
-.year-dropdown-container {
-  display: flex;
-  justify-content: flex-end; /* This moves the dropdown to the right */
-  color: white;
 }
 
 .dashboard1-container {
