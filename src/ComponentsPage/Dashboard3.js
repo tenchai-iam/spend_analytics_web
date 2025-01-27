@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "../ComponentsStyles/Dashboard.css"; // Updated to use Dashboard3.css
 import "../ComponentsStyles/Dashboard3.css"; // Updated to use Dashboard3.css
 import YearDropdown from "./YearDropdown";
 import NavbarComponent from "../ComponentsPage/NavbarComponent";
@@ -807,12 +808,12 @@ const Dashboard3 = () => {
       <NavbarComponent />
       <div className="text-dropdown-container">
         <h1 className="header-title">เปรียบเทียบราคาจัดซื้อ</h1>
-      <div className="year-dropdown-container">
-        <YearDropdown
-          onSelectYear={setSelectedYear}
-          selectedYear={selectedYear}
-        />
-      </div>
+        <div className="year-dropdown-container">
+          <YearDropdown
+            onSelectYear={setSelectedYear}
+            selectedYear={selectedYear}
+          />
+        </div>
       </div>
       <div className="dashboard3-container">
         {/* Left Container */}

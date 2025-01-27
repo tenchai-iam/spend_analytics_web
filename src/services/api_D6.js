@@ -56,3 +56,14 @@ export const getCurrentInventoryDay = async (year, category_group) => {
   );
   return response.data;
 };
+
+export const getD6Month = async (year) => {
+  const response = await axios.post(
+    `${API_URL}/get_month_select`,
+    {
+      year: year, // Pass the year value in the request body
+    },
+    { timeout: 5000 }
+  );
+  return response.data;
+};

@@ -29,7 +29,8 @@ const D5GroupBarRe = ({
     baseValue: "Baseline",
     normalizedDifference: "Normalization",
     normalizedValue: "Normalized Baseline",
-    actualDifference: "Savings",
+    actualDifferenceP: "Value Gain",
+    actualDifferenceN: "Value Loss",
     actualValue: "Actual",
   };
 
@@ -152,7 +153,11 @@ const D5GroupBarRe = ({
               formatter={formatValue}
             />
             <LabelList
-              valueAccessor={() => barLabels["actualDifference"]}
+              valueAccessor={(entry) =>
+                entry.actualDifference >= 0
+                  ? barLabels["actualDifferenceN"]
+                  : barLabels["actualDifferenceP"]
+              }
               position="center"
             />
           </Bar>

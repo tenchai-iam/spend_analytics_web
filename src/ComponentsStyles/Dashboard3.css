@@ -67,13 +67,6 @@
   width: 100%;
 }
 
-.dropdown-container {
-  display: flex; /* Use Flexbox for layout */
-  align-items: center; /* Align items vertically */
-  font-size: 0.8rem;
-  width: 100%;
-}
-
 .download-container {
   display: flex; /* Use Flexbox for layout */
   justify-content: right;

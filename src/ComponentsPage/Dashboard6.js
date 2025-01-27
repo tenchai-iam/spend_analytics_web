@@ -11,6 +11,7 @@ import {
   getCurrentInventoryMonth,
   getTargetInventoryDay,
   getCurrentInventoryDay,
+  getD6Month,
 } from "../services/api_D6.js";
 
 const Dashboard6 = () => {
@@ -19,13 +20,21 @@ const Dashboard6 = () => {
   const [selectedCategory, setSelectedCategory] = useState("100"); // State to hold the selected category id
   const [selectedButton, setSelectedButton] = useState(0); // Track selected button index
   const [currentBarView, setCurrentBarView] = useState(1); // State to toggle between card and graph view
-  const [isMonthView, setIsMonthView] = useState(true); // State to toggle between card and graph view
 
   // Fetch available years using React Query
   const { data: yearsData, isLoading } = useQuery({
     queryKey: ["years"],
     queryFn: getYears,
   });
+
+  const { data: monthData, isLoading: isLoadingMonth } = useQuery({
+    queryKey: ["month", selectedYear],
+    queryFn: () => getD6Month(selectedYear), // API call to fetch data
+    enabled: Boolean(selectedYear), // Only run query if selectedYear is valid
+  });
+
+  // Extract month array from the API response
+  const months = monthData?.MONTH || [];
 
   // Set the default year to the most recent one
   useEffect(() => {
@@ -229,6 +238,27 @@ const Dashboard6 = () => {
           )}
           {currentBarView === 2 && (
             <>
+              <div className="dropdown-download-container">
+                <div className="dropdown-container">
+                  {isLoadingMonth ? (
+                    <p>Loading Month...</p>
+                  ) : (
+                    <select
+                      value={selectedMonth}
+                      onChange={(e) => setSelectedMonth(e.target.value)}
+                    >
+                      <option value="" disabled>
+                        เลือกเดือนที่ต้องการ
+                      </option>
+                      {months.map((month, index) => (
+                        <option key={index} value={month}>
+                          {month}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                </div>
+              </div>
               <D6BarGraphReV
                 data={dataMonthInventory}
                 xAxisKey="EKGRP"
