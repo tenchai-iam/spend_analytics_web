@@ -3,9 +3,10 @@ import { Navbar, Nav, NavDropdown, Container, Button } from "react-bootstrap";
 import { Link } from "react-router-dom"; // Import Link from react-router-dom
 import "bootstrap/dist/css/bootstrap.min.css";
 import spendinsight from "../pic/spend_insight_m.png";
+import workd from "../pic/w-logo.svg";
 import "../ComponentsStyles/NavbarStyles.css"; // Import the custom Navbar CSS file
 
-const logout_url = process.env.REACT_APP_LOGOUT_URL;
+const workd_url = process.env.REACT_APP_WORKD_URL;
 
 function NavbarComponent() {
   return (
@@ -108,10 +109,16 @@ function NavbarComponent() {
           <Button
             className="logout-button ms-auto"
             onClick={() => {
-              window.location.href = logout_url;
+              window.location.href = workd_url;
             }}
           >
-            Logout
+            &larr; ไปที่ระบบ
+            <img
+              src={workd} // Replace with the path to your logo
+              height="15"
+              className="d-inline-block align-center"
+              alt="Spend Insight"
+            />
           </Button>
         </Navbar.Collapse>
       </Container>
