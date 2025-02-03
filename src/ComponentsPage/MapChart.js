@@ -1,14 +1,7 @@
 import React, { useState } from "react";
 import { Map } from "react-map-gl/maplibre";
 import DeckGL from "@deck.gl/react";
-import {
-  AmbientLight,
-  PointLight,
-  project32,
-  LightingEffect,
-  picking,
-  gouraudLighting,
-} from "@deck.gl/core";
+import { AmbientLight, PointLight, LightingEffect } from "@deck.gl/core";
 import { ColumnLayer } from "@deck.gl/layers";
 import "../ComponentsStyles/MapChart.css"; // Ensure CSS is imported
 import { GeoJsonLayer } from "@deck.gl/layers";
@@ -146,7 +139,6 @@ const MapChart = ({ data, mapStyle }) => {
         : ELEVATION_SCALE_PO),
     pickable: true,
     extruded: true,
-    shaderModules: [project32, picking, gouraudLighting], // Add missing shader modules
   });
 
   return (
