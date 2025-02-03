@@ -8,8 +8,8 @@
 .D6-bar-chart-container {
   display: flex;
   flex-direction: column;
-  background-color: rgba(118, 118, 128, 0.04); /* Base dark color */
-  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.04),
+  background-color: rgba(118, 118, 128, 0.08); /* Base dark color */
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.08),
     /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
   gap: 20px;
   box-sizing: border-box; /* Ensure padding is included in width */
@@ -42,8 +42,8 @@
 .D6-inflowoutflow-container {
   display: flex;
   flex-direction: row;
-  background-color: rgba(118, 118, 128, 0.04); /* Base dark color */
-  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.04),
+  background-color: rgba(118, 118, 128, 0.08); /* Base dark color */
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.08),
     /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
   gap: 20px;
   box-sizing: border-box; /* Ensure padding is included in width */

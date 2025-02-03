@@ -59,12 +59,12 @@
 .text-subcontainer {
   display: grid;
   grid-template-rows: repeat(2, 1fr); /* Two columns for the two text items */
-  background-color: rgba(118, 118, 128, 0.04); /* Base dark color */
+  background-color: rgba(118, 118, 128, 0.08); /* Base dark color */
   gap: 20px; /* Space between text items */
   justify-items: left;
   padding: 20px;
   width: 100%;
-  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.04),
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.08),
     /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -87,11 +87,11 @@
 }
 
 .nav-section {
-  background-color: rgba(118, 118, 128, 0.04); /* Base dark color */
+  background-color: rgba(118, 118, 128, 0.08); /* Base dark color */
   padding: 30px;
   margin-bottom: 20px;
   border-radius: 8px;
-  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.04),
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.08),
     /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
   color: #fff; /* Text color for contrast */
   flex: 1;

@@ -62,8 +62,8 @@
   flex: 1 1 40%;
   max-width: 1 1 40%;
   padding: 20px;
-  background-color: rgba(118, 118, 128, 0.04); /* Base dark color */
-  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.04),
+  background-color: rgba(118, 118, 128, 0.08); /* Base dark color */
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.08),
     /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
   box-sizing: border-box; /* Ensure padding is included in width */
   color: #3e3e3e;
@@ -78,8 +78,8 @@
 .table-summary {
   flex: 1 1 60%;
   max-width: 1 1 60%;
-  background-color: rgba(118, 118, 128, 0.04); /* Base dark color */
-  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.04),
+  background-color: rgba(118, 118, 128, 0.08); /* Base dark color */
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.08),
     /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
   padding: 20px;
   box-sizing: border-box; /* Ensure padding is included in width */
@@ -104,8 +104,8 @@
 .dropdown-group {
   flex: 1 1 40%;
   max-width: 1 1 40%;
-  background-color: rgba(118, 118, 128, 0.04); /* Base dark color */
-  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.04),
+  background-color: rgba(118, 118, 128, 0.08); /* Base dark color */
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.08),
     /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
   border-radius: 8px;
   padding: 20px;
@@ -133,8 +133,8 @@
 .lead-time {
   flex: 1 1 30%;
   max-width: 1 1 30%;
-  background-color: rgba(118, 118, 128, 0.04); /* Base dark color */
-  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.04),
+  background-color: rgba(118, 118, 128, 0.08); /* Base dark color */
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.08),
     /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
   border-radius: 8px;
   padding: 20px;
@@ -149,8 +149,8 @@
 .demand-time {
   flex: 1 1 30%;
   max-width: 1 1 30%;
-  background-color: rgba(118, 118, 128, 0.04); /* Base dark color */
-  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.04),
+  background-color: rgba(118, 118, 128, 0.08); /* Base dark color */
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.08),
     /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
   border-radius: 8px;
   padding: 20px;
@@ -227,8 +227,8 @@
 
 .table-compare {
   max-width: 100%;
-  background-color: rgba(118, 118, 128, 0.04); /* Base dark color */
-  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.04),
+  background-color: rgba(118, 118, 128, 0.08); /* Base dark color */
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.08),
     /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
   border-radius: 8px;
   padding: 20px;
@@ -267,7 +267,7 @@
   justify-self: left;
   background-color: #fff;
   border-radius: 8px;
-  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.04),
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.08),
     /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
   width: 100%;
 }
