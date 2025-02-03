@@ -46,11 +46,6 @@ const LOCATION_NAMES = {
   Z: "ส่วนกลาง",
 };
 
-const CATEGORY_NAMES = {
-  TOTAL_SPEND_MAT: "มูลค่าพัสดุสะสม",
-  TOTAL_PO_MAT: "จำนวน PO สั่งซื้อพัสดุสะสม",
-};
-
 const ambientLight = new AmbientLight({
   color: [255, 255, 255],
   intensity: 1.0,
@@ -77,19 +72,9 @@ const priceFormatter = new Intl.NumberFormat("en-US", {
 
 function getTooltip({ object }) {
   if (!object) return null;
-
+  const formattedValue = priceFormatter.format(object.value);
   const locationName = LOCATION_NAMES[object.location] || object.location;
-  const categoryName = CATEGORY_NAMES[object.type];
-
-  // Apply different formatting based on the category name
-  let formattedValue;
-  if (categoryName === "จำนวน PO สั่งซื้อพัสดุสะสม") {
-    formattedValue = quantityFormatter.format(object.value); // Use quantity format
-  } else {
-    formattedValue = priceFormatter.format(object.value); // Use price format
-  }
-
-  return `Location: ${locationName}\n${categoryName}: ${formattedValue}`;
+  return `Location: ${locationName}\nType: ${object.type}\nValue: ${formattedValue}`;
 }
 
 // Legend Component
@@ -129,9 +114,7 @@ const MapChart = ({ data, mapStyle }) => {
     radius: 15000,
     getPosition: (d) => getOffsetPosition(d.position, d.type),
     getFillColor: (d) =>
-      d.type === "TOTAL_PO_MAT"
-        ? [253, 176, 3] // Light Pink for PO
-        : [147, 43, 222], // Light Blue for Spend
+      d.type === "TOTAL_PO_MAT" ? [122, 28, 72] : [173, 72, 225], // Different colors for PO and Spend
     getElevation: (d) =>
       d.value *
       (d.type === "TOTAL_SPEND_MAT"
@@ -154,7 +137,7 @@ const MapChart = ({ data, mapStyle }) => {
         <div className="map-section">
           <DeckGL
             layers={[thailandLayer, columnLayer]}
-            effects={[lightingEffect]} // ✅ Keep lighting effect
+            effects={[lightingEffect]}
             initialViewState={INITIAL_VIEW_STATE}
             controller={{ dragRotate: false }}
             getTooltip={getTooltip}
@@ -266,3 +249,4 @@ const DataTable = ({ data }) => {
 };
 
 export default MapChart;
+
