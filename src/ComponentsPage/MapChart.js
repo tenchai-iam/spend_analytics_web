@@ -21,8 +21,8 @@ const thailandLayer = new GeoJsonLayer({
 const INITIAL_VIEW_STATE = {
   longitude: 100.9925,
   latitude: 9.1,
-  zoom: 5.5,
-  minZoom: 5.5,
+  zoom: 5.0,
+  minZoom: 5.0,
   maxZoom: 7.0,
   pitch: 75,
   bearing: -5,
@@ -154,7 +154,6 @@ const MapChart = ({ data, mapStyle }) => {
         <div className="map-section">
           <DeckGL
             layers={[thailandLayer, columnLayer]}
-            effects={[lightingEffect]} // ✅ Keep lighting effect
             initialViewState={INITIAL_VIEW_STATE}
             controller={{ dragRotate: false }}
             getTooltip={getTooltip}
