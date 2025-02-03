@@ -2,6 +2,12 @@ import axios from "axios";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
+// Fetch years from the API
+export const getD4RM = async () => {
+  const response = await axios.get(`${API_URL}/get_rm_data`);
+  return response.data; // Return the data received from the API
+};
+
 // Fetch cateogories from the API
 export const getD4Categories = async (priority) => {
   const response = await axios.post(

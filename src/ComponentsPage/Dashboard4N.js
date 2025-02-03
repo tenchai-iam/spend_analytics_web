@@ -10,6 +10,7 @@ import Select from "react-select"; // Import react-select
 import { useQuery } from "@tanstack/react-query";
 import { getYears, getDateInfo } from "../services/api.js"; // Import your API service function
 import {
+  getD4RM,
   getD4Categories,
   getD4Materials,
   getD4UsableMaterialGroup,
@@ -64,6 +65,180 @@ const Dashboard4 = () => {
       setSelectedYear(mostRecentYear.toString()); // Set as default selected year
     }
   }, [yearsData]);
+
+  // Fetch available years using React Query
+  const { data: rmData, isLoadingRMData } = useQuery({
+    queryKey: ["rm"],
+    queryFn: getD4RM,
+  });
+
+  // Function to format data for CSV export
+  const formatRMCSVData = (data) => {
+    if (!Array.isArray(data)) {
+      console.error("Expected an array but received:", data);
+      return []; // Avoid errors by returning an empty array
+    }
+
+    return data
+      .filter((item) => item.MATNR && item.RM) // Ensure valid entries
+      .map((item) => ({
+        MATNR: item.MATNR, // Material Number
+        RM: item.RM === "-" ? "0" : item.RM, // Convert "-" values to "0"
+      }));
+  };
+
+  // Format CSV Data
+  const csvTableRMData = formatRMCSVData(rmData);
+
+  const csvTableRMHeaders = [
+    { label: "MATNR", key: "MATNR" },
+    { label: "อัตราการใช้งานต่อเดือน (R/M)", key: "RM" },
+  ];
+
+  const downloadXLSX_RM = (data, headers, fileName, dateInfoData) => {
+    // Format data with headers
+    const formattedData = data.map((item) =>
+      headers.reduce((acc, header) => {
+        acc[header.label] = item[header.key];
+        return acc;
+      }, {})
+    );
+
+    // Define the number of extra rows
+    const extraRowsAbove = Array(3).fill({}); // 7 rows above the table
+    const extraRowsBelow = Array(2).fill({}); // 2 rows below the table
+
+    // Combine all rows: extra rows above, header, data, and extra rows below
+    const headerRow = headers.reduce((acc, header) => {
+      acc[header.label] = header.label; // Add headers as keys
+      return acc;
+    }, {});
+    const fullData = [
+      ...extraRowsAbove,
+      headerRow,
+      ...formattedData,
+      ...extraRowsBelow,
+    ];
+
+    // Create worksheet
+    const worksheet = XLSX.utils.json_to_sheet(fullData, { skipHeader: true });
+    const workbook = XLSX.utils.book_new();
+
+    // Add merges for title row and rows below
+    const numColumns = headers.length; // Number of columns in the dataset
+    worksheet["!merges"] = [
+      { s: { r: 1, c: 0 }, e: { r: 1, c: numColumns - 1 } }, // Merge title row
+      {
+        s: { r: fullData.length - 1, c: 0 },
+        e: { r: fullData.length - 1, c: numColumns - 1 },
+      }, // Merge info row
+    ];
+
+    // Add text to extra rows above
+    worksheet["A2"] = { v: `ตาราง RM ปี ${selectedYear}` };
+    worksheet["A4"] = { v: `รหัสพัสดุ : ${selectedMaterial || "-"}` };
+
+    // Style extra rows above
+    const styleRowsAbove = [1, 3, 4, 5];
+    styleRowsAbove.forEach((rowIndex) => {
+      const cellAddress = XLSX.utils.encode_cell({ r: rowIndex, c: 0 });
+      worksheet[cellAddress].s = {
+        font: { bold: rowIndex === 1, sz: rowIndex === 1 ? 16 : 12 },
+        alignment: {
+          horizontal: rowIndex === 1 ? "center" : "left",
+          vertical: "center",
+        },
+      };
+    });
+
+    // Add and style rows below
+    const infoRowIndex = fullData.length - 1; // Index of the last row
+    worksheet[`A${infoRowIndex + 1}`] = {
+      v: `ข้อมูล ณ วันที่ ${dateInfoData?.day || "-"} / ${
+        dateInfoData?.month || "-"
+      } / ${dateInfoData?.year || "-"} เวลา 0${dateInfoData?.hour}:${
+        dateInfoData?.minute
+      }0 น.`,
+    };
+    worksheet[`A${infoRowIndex + 1}`].s = {
+      font: { sz: 12 },
+      alignment: {
+        horizontal: "left",
+        vertical: "center",
+      },
+    };
+
+    // Style headers
+    const headerRowIndex = extraRowsAbove.length;
+    for (let C = 0; C < headers.length; C++) {
+      const cellAddress = XLSX.utils.encode_cell({ r: headerRowIndex, c: C });
+      if (!worksheet[cellAddress]) {
+        worksheet[cellAddress] = { v: headers[C]?.label || "" };
+      }
+      worksheet[cellAddress].s = {
+        font: { bold: true },
+        alignment: {
+          horizontal: "center",
+          vertical: "center",
+          wrapText: true,
+        },
+        fill: { fgColor: { rgb: "D9D9D9" } },
+        border: {
+          top: { style: "thin", color: { rgb: "000000" } },
+          bottom: { style: "thin", color: { rgb: "000000" } },
+          left: { style: "thin", color: { rgb: "000000" } },
+          right: { style: "thin", color: { rgb: "000000" } },
+        },
+      };
+    }
+
+    // Style data cells
+    for (
+      let R = headerRowIndex + 1;
+      R < fullData.length - extraRowsBelow.length;
+      ++R
+    ) {
+      for (let C = 0; C < headers.length; ++C) {
+        const cellAddress = XLSX.utils.encode_cell({ r: R, c: C });
+        if (!worksheet[cellAddress]) continue;
+
+        const alignRight = C > 0; // Right-align for columns after the first
+        worksheet[cellAddress].s = {
+          alignment: {
+            horizontal: alignRight ? "right" : "center",
+            vertical: "center",
+            wrapText: true,
+          },
+          border: {
+            top: { style: "thin", color: { rgb: "000000" } },
+            bottom: { style: "thin", color: { rgb: "000000" } },
+            left: { style: "thin", color: { rgb: "000000" } },
+            right: { style: "thin", color: { rgb: "000000" } },
+          },
+        };
+      }
+    }
+
+    // Dynamically calculate column widths
+    const colWidths = headers.map((header) => {
+      const columnData = [
+        header.label,
+        ...formattedData.map((row) => row[header.label]?.toString() || ""),
+      ];
+      const maxLength = columnData.reduce(
+        (max, value) => Math.max(max, value.length),
+        0
+      );
+      return { wch: maxLength + 1 }; // Add a small buffer
+    });
+    worksheet["!cols"] = colWidths;
+
+    // Append worksheet to workbook and trigger download
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+    const xlsxData = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+    const blob = new Blob([xlsxData], { type: "application/octet-stream" });
+    saveAs(blob, `${fileName}.xlsx`);
+  };
 
   const { data: categoryData, isLoading: isCategoriesLoading } = useQuery({
     queryKey: ["categories", selectedMaterialGroup],
@@ -470,18 +645,15 @@ const Dashboard4 = () => {
       </div>
       <div className="rm-container">
         <div>
-          <p className="top-text">R/M รายเขตของแต่ละพัสดุเฉลี่ย 24 เดือน</p>
+          <p className="top-text">R/M ของแต่ละพัสดุเฉลี่ย 24 เดือน</p>
         </div>
         <div className="download-button">
           <button
             onClick={() =>
-              download(
-                csvTableD4PriorityData, // Data
-                csvTableD4PriorityHeaders, // Headers
-                `SimMaterialPlan_${selectedYear}`, // File Name
-                selectedMaterial, // Selected Material
-                selectedHQLeadTime, // Selected HQ Lead Time
-                selectedDemandMonth, // Selected Demand Month
+              downloadXLSX_RM(
+                csvTableRMData, // Data
+                csvTableRMHeaders, // Headers
+                `RMinput_${selectedYear}`, // File Name
                 dateInfoData // Date Info
               )
             }
