@@ -139,6 +139,12 @@ const MapChart = ({ data, mapStyle }) => {
         : ELEVATION_SCALE_PO),
     pickable: true,
     extruded: true,
+    material: {
+      ambient: 0.64,
+      diffuse: 0.6,
+      shininess: 32,
+      specularColor: [51, 51, 51],
+    },
   });
 
   return (
@@ -148,6 +154,7 @@ const MapChart = ({ data, mapStyle }) => {
         <div className="map-section">
           <DeckGL
             layers={[thailandLayer, columnLayer]}
+            effects={[lightingEffect]} // ✅ Keep lighting effect
             initialViewState={INITIAL_VIEW_STATE}
             controller={{ dragRotate: false }}
             getTooltip={getTooltip}
