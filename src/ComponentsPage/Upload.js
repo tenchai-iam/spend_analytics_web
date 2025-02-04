@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import NavbarComponent from "../ComponentsPage/NavbarComponent";
 import axios from "axios";
+import File from "../pic/File.svg";
+import UploadButton from "../pic/Upload.svg";
 import "../ComponentsStyles/upload.css";
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -9,6 +11,8 @@ const UploadPage = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploadStatus, setUploadStatus] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const fileInputRef = useRef(null);
+  const formRefs = useRef({});
 
   // Configuration for each upload section
   const uploadSections = [
@@ -35,6 +39,10 @@ const UploadPage = () => {
     {
       title: "ข้อมูลพัสดุสายไฟที่มีการจ้างรีดที่ส่วนกลางด้วยอลูมิเนียมอินกอท",
       endpoint: `${API_URL}/upload_and_update_ingot`,
+    },
+    {
+      title: "ข้อมูล WBS unplanned",
+      endpoint: `${API_URL}/upload_wbs_file`,
     },
   ];
 
@@ -75,6 +83,10 @@ const UploadPage = () => {
     }
   };
 
+  const handleImageClick = () => {
+    fileInputRef.current.click();
+  };
+
   return (
     <div>
       <NavbarComponent />
@@ -86,11 +98,36 @@ const UploadPage = () => {
           {uploadSections.map((section, index) => (
             <div key={index} className="upload-module">
               <h1 className="text-title ">{section.title}</h1>
-              <form onSubmit={(event) => handleUpload(event, section.endpoint)}>
-                <input type="file" onChange={handleFileChange} />
-                <button type="submit" disabled={isLoading}>
-                  {isLoading ? "Uploading..." : "Upload"}
-                </button>
+              <form
+                ref={(el) => (formRefs.current[index] = el)}
+                onSubmit={(event) => handleUpload(event, section.endpoint)}
+                className="form-container"
+              >
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  style={{ display: "none" }}
+                />
+
+                {/* Image for file selection */}
+                <img
+                  src={File}
+                  alt="Select File"
+                  className="file-image"
+                  onClick={handleImageClick}
+                />
+
+                {selectedFile && <p>Selected: {selectedFile.name}</p>}
+
+                {/* Image acting as the upload button */}
+                <img
+                  src={UploadButton}
+                  alt="Upload"
+                  className="upload-button-image"
+                  onClick={() => formRefs.current[index].requestSubmit()}
+                  disabled={isLoading}
+                />
               </form>
             </div>
           ))}
