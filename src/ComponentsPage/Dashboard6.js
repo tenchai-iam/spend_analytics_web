@@ -15,9 +15,9 @@ import {
 } from "../services/api_D6.js";
 
 const Dashboard6 = () => {
-  const [selectedYear, setSelectedYear] = useState("2025"); // State to hold the selected year
-  const [selectedMonth, setSelectedMonth] = useState("1"); // State to hold the selected year
-  const [selectedCategory, setSelectedCategory] = useState("100"); // State to hold the selected category id
+  const [selectedYear, setSelectedYear] = useState(""); // State to hold the selected year
+  const [selectedMonth, setSelectedMonth] = useState(""); // State to hold the selected year
+  const [selectedCategory, setSelectedCategory] = useState("999"); // State to hold the selected category id
   const [selectedButton, setSelectedButton] = useState(0); // Track selected button index
   const [currentBarView, setCurrentBarView] = useState(1); // State to toggle between card and graph view
 
@@ -86,7 +86,7 @@ const Dashboard6 = () => {
   const dataPreviousMonthInventory =
     previousMonthInventory?.inventory_data.map((item) => ({
       EKGRP: item.EKGRP, // Map EKGRP directly
-      amtused_MT: item.amtused / 1000000, // Convert amtused to millions
+      amtused_MT: item.total_AMTUSED / 1000000, // Convert amtused to millions
       amtused_MA: 0,
     })) || [];
 
@@ -113,8 +113,8 @@ const Dashboard6 = () => {
   const dataCurrentMonthInventory =
     currentMonthInventory?.inventory_data.map((item) => ({
       EKGRP: item.EKGRP, // Map EKGRP directly
-      amtused_MT: 50,
-      amtused_MA: item.amtused / 1000000, // Convert amtused to millions
+      amtused_MT: 0,
+      amtused_MA: item.total_inventory / 1000000, // Convert amtused to millions
     })) || [];
 
   // Merge the two datasets by EKGRP
@@ -147,7 +147,7 @@ const Dashboard6 = () => {
   const dataTargetDayInventory =
     targetDayInventory?.inventory_data.map((item) => ({
       EKGRP: item.EKGRP, // Map EKGRP directly
-      amtused_MT: item.amtused / 1000000, // Convert amtused to millions
+      amtused_MT: item.total_AMTUSED / 1000000, // Convert amtused to millions
       amtused_MA: 0,
     })) || [];
 
