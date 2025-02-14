@@ -15,8 +15,8 @@ import {
 } from "../services/api_D6.js";
 
 const Dashboard6 = () => {
-  const [selectedYear, setSelectedYear] = useState(""); // State to hold the selected year
-  const [selectedMonth, setSelectedMonth] = useState(""); // State to hold the selected year
+  const [selectedYear, setSelectedYear] = useState("2025"); // State to hold the selected year
+  const [selectedMonth, setSelectedMonth] = useState("2"); // State to hold the selected year
   const [selectedCategory, setSelectedCategory] = useState("999"); // State to hold the selected category id
   const [selectedButton, setSelectedButton] = useState(0); // Track selected button index
   const [currentBarView, setCurrentBarView] = useState(1); // State to toggle between card and graph view
