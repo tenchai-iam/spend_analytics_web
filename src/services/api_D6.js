@@ -5,7 +5,7 @@ const API_URL = process.env.REACT_APP_API_URL;
 // Fetch target monthly inventory target from the API
 export const getTargetInventoryMonth = async (year, month, category_group) => {
   const response = await axios.post(
-    `${API_URL}/InventoryYearTarget`,
+    `${API_URL}/inventoryYearTarget`,
     {
       year: year, // Pass the year value in the request body
       month: month,
@@ -18,7 +18,7 @@ export const getTargetInventoryMonth = async (year, month, category_group) => {
 
 export const getCurrentInventoryMonth = async (year, month, category_group) => {
   const response = await axios.post(
-    `${API_URL}/get_inventory_by_month`,
+    `${API_URL}/inventoryMonth`,
     {
       year: year, // Pass the year value in the request body
       month: month,
@@ -42,7 +42,7 @@ export const getTargetInventoryDay = async (year, category_group) => {
 
 export const getCurrentInventoryDay = async (year, category_group) => {
   const response = await axios.post(
-    `${API_URL}/get_inventory_use_plant`,
+    `${API_URL}/inventoryDay`,
     {
       year: year, // Pass the year value in the request body
       category_group: String(category_group), // Pass the category group value in the request body
