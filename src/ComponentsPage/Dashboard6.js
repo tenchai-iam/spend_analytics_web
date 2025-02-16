@@ -15,8 +15,8 @@ import {
 } from "../services/api_D6.js";
 
 const Dashboard6 = () => {
-  const [selectedYear, setSelectedYear] = useState("2025"); // State to hold the selected year
-  const [selectedMonth, setSelectedMonth] = useState("2"); // State to hold the selected year
+  const [selectedYear, setSelectedYear] = useState(""); // State to hold the selected year
+  const [selectedMonth, setSelectedMonth] = useState(""); // State to hold the selected year
   const [selectedCategory, setSelectedCategory] = useState("999"); // State to hold the selected category id
   const [selectedButton, setSelectedButton] = useState(0); // Track selected button index
   const [currentBarView, setCurrentBarView] = useState(1); // State to toggle between card and graph view
@@ -70,7 +70,7 @@ const Dashboard6 = () => {
     error: errorPreviousMonthInventory,
   } = useQuery({
     queryKey: ["targetInventoryMonth", selectedYear], // Unique query key for caching
-    queryFn: () => getTargetInventoryDay(selectedYear), // API call to fetch data based on year and category are selected
+    queryFn: () => getTargetInventoryMonth(selectedYear), // API call to fetch data based on year and category are selected
     enabled: Boolean(selectedYear), // Only run query if year, month and category are selected
   });
 
@@ -80,6 +80,20 @@ const Dashboard6 = () => {
       amtused_MT: item.amtused / 1000000, // Convert amtused to millions
       amtused_MA: 0,
     })) || [];
+
+  const datadate = 1;
+
+  // Fetch summary data for selected year and category using React Query
+  const {
+    data: dateInfoData,
+    isLoading: isLoadingDateInfoData,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["dateInfoData", datadate], // Unique query key for caching
+    queryFn: () => getDateInfo(datadate), // API call to fetch data based on datadate
+    enabled: !!selectedYear, // Only run query if both year and category_group are selected
+  });
 
   const {
     data: currentMonthInventory,
@@ -110,7 +124,7 @@ const Dashboard6 = () => {
 
   // Merge the two datasets by EKGRP
   const dataMonthInventory = [
-    ...dataPreviousMonthInventory,
+    ...dataTargetInventoryMonth,
     ...dataCurrentMonthInventory,
   ].reduce((acc, curr) => {
     const existingItem = acc.find((item) => item.EKGRP === curr.EKGRP);
@@ -220,11 +234,17 @@ const Dashboard6 = () => {
                 data={dataDayInventory}
                 xAxisKey="EKGRP"
                 barKeys={["amtused_MT", "amtused_MA"]}
-                title={"รายงานมูลค่าพัสดุคงคลังต่อวัน"}
+                title={"รายงานมูลค่าพัสดุคงคลังต่อวัน (ล้านบาท)"}
                 height={330}
               />
-              <p className="mat-legend">▬▬ เป้าหมายมูลค่าพัสดุคงคลัง</p>
-              <p className="nonMat-legend">▬▬ มูลค่าพัสดุคงคลังปัจจุบัน</p>
+              <p className="mat-legend">
+                ▬▬ เป้าหมายมูลค่าพัสดุคงคลังโดยใช้ 86% ของมูลค่าพัสดุของเดือน{" "}
+                {dateInfoData?.month} ปี {selectedYear - 1}
+              </p>
+              <p className="nonMat-legend">
+                ▬▬ มูลค่าพัสดุคงคลัง ณ วันที่ {dateInfoData?.day}/
+                {dateInfoData?.month}/{dateInfoData?.year}
+              </p>
             </>
           )}
           {currentBarView === 2 && (
@@ -254,11 +274,16 @@ const Dashboard6 = () => {
                 data={dataMonthInventory}
                 xAxisKey="EKGRP"
                 barKeys={["amtused_MT", "amtused_MA"]}
-                title={"รายงานมูลค่าพัสดุคงคลังต่อเดือน"}
+                title={"รายงานมูลค่าพัสดุคงคลังต่อเดือน (ล้านบาท)"}
                 height={330}
               />
-              <p className="mat-legend">▬▬ เป้าหมายมูลค่าพัสดุคงคลัง</p>
-              <p className="nonMat-legend">▬▬ มูลค่าพัสดุคงคลังปัจจุบัน</p>
+              <p className="mat-legend">
+                ▬▬ เป้าหมายมูลค่าพัสดุคงคลัง ณ ต้นปี {selectedYear}
+              </p>
+              <p className="nonMat-legend">
+                ▬▬ มูลค่าพัสดุคงคลังปัจจุบัน ณ สิ้นเดือน {selectedMonth} ปี{" "}
+                {selectedYear}
+              </p>
             </>
           )}
         </div>
