@@ -7,7 +7,7 @@ import YearDropdown from "./YearDropdown";
 import D6BarGraphReV from "./D6BarGraphReV.js";
 import { getYears, getDateInfo } from "../services/api.js"; // Import your API service function
 import {
-  getPreviousInventoryMonth,
+  getTargetInventoryMonth,
   getCurrentInventoryMonth,
   getTargetInventoryDay,
   getCurrentInventoryDay,
@@ -64,29 +64,20 @@ const Dashboard6 = () => {
 
   // Fetch target inventory data for selected year, month and category using React Query
   const {
-    data: previousMonthInventory,
+    data: targetInventoryMonth,
     isLoading: isLoadingPreviousMonthInventory,
     isError: isErrorPreviousMonthInventory,
     error: errorPreviousMonthInventory,
   } = useQuery({
-    queryKey: [
-      "previousMonthInventory",
-      selectedYear,
-      selectedMonth,
-      selectedCategory,
-    ], // Unique query key for caching
-    queryFn: () =>
-      getPreviousInventoryMonth(selectedYear, selectedMonth, selectedCategory), // API call to fetch data based on year and category are selected
-    enabled:
-      Boolean(selectedYear) &&
-      Boolean(selectedMonth) &&
-      Boolean(selectedCategory), // Only run query if year, month and category are selected
+    queryKey: ["targetInventoryMonth", selectedYear], // Unique query key for caching
+    queryFn: () => getTargetInventoryDay(selectedYear), // API call to fetch data based on year and category are selected
+    enabled: Boolean(selectedYear), // Only run query if year, month and category are selected
   });
 
-  const dataPreviousMonthInventory =
-    previousMonthInventory?.inventory_data.map((item) => ({
+  const dataTargetInventoryMonth =
+    targetInventoryMonth?.inventory_data.map((item) => ({
       EKGRP: item.EKGRP, // Map EKGRP directly
-      amtused_MT: item.total_AMTUSED / 1000000, // Convert amtused to millions
+      amtused_MT: item.amtused / 1000000, // Convert amtused to millions
       amtused_MA: 0,
     })) || [];
 
@@ -139,15 +130,15 @@ const Dashboard6 = () => {
     isError: isErrorTargetDayInventory,
     error: errorTargetDayInventory,
   } = useQuery({
-    queryKey: ["targetDayInventory", selectedYear, selectedCategory], // Unique query key for caching
-    queryFn: () => getTargetInventoryDay(selectedYear, selectedCategory), // API call to fetch data based on year and category are selected
-    enabled: Boolean(selectedYear) && Boolean(selectedCategory), // Only run query if year, month and category are selected
+    queryKey: ["targetDayInventory", selectedYear], // Unique query key for caching
+    queryFn: () => getTargetInventoryDay(selectedYear), // API call to fetch data based on year and category are selected
+    enabled: Boolean(selectedYear), // Only run query if year, month and category are selected
   });
 
   const dataTargetDayInventory =
     targetDayInventory?.inventory_data.map((item) => ({
       EKGRP: item.EKGRP, // Map EKGRP directly
-      amtused_MT: item.total_AMTUSED / 1000000, // Convert amtused to millions
+      amtused_MT: item.amtused / 1000000, // Convert amtused to millions
       amtused_MA: 0,
     })) || [];
 
