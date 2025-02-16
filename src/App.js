@@ -28,7 +28,8 @@ export default function App() {
       <Router>
         <div className="App">
           <Routes>
-            <Route path="/" element={<ProtectedRoute element={Home} />} />
+          <Route path="/" element={Home} />
+            {/* <Route path="/" element={<ProtectedRoute element={Home} />} /> */}
             <Route
               path="/dashboard1"
               element={<ProtectedRoute element={Dashboard1} />}
@@ -49,6 +50,10 @@ export default function App() {
               path="/dashboard5"
               element={<ProtectedRoute element={Dashboard5} />}
             />
+            {/* <Route
+              path="/dashboard6"
+              element={Dashboard6}
+            /> */}
             <Route
               path="/dashboard6"
               element={<ProtectedRoute element={Dashboard6} />}
