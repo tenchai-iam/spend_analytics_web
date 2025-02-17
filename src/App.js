@@ -13,6 +13,9 @@ import Dashboard1 from "./ComponentsPage/Dashboard1";
 import Dashboard2 from "./ComponentsPage/Dashboard2X";
 import Dashboard3 from "./ComponentsPage/Dashboard3";
 import Dashboard4 from "./ComponentsPage/Dashboard4N";
+import Dashboard5 from "./ComponentsPage/Dashboard5";
+import Dashboard6 from "./ComponentsPage/Dashboard6";
+import Dashboard7 from "./ComponentsPage/Dashboard7";
 import Upload from "./ComponentsPage/Upload";
 import ProtectedRoute from "./services/ProtectedRoute.js";
 import Callback from "./services/Callback.js";
@@ -25,12 +28,42 @@ export default function App() {
       <Router>
         <div className="App">
           <Routes>
+            {/* <Route path="/" element={<Home />} /> */}
             <Route path="/" element={<ProtectedRoute element={Home} />} />
-            <Route path="/dashboard1" element={<ProtectedRoute element={Dashboard1} />} />
-            <Route path="/dashboard2" element={<ProtectedRoute element={Dashboard2} />} />
-            <Route path="/dashboard3" element={<ProtectedRoute element={Dashboard3} />} />
-            <Route path="/dashboard4" element={<ProtectedRoute element={Dashboard4} />} />
-            <Route path="/upload" element={<ProtectedRoute element={Upload} />} />
+            <Route
+              path="/dashboard1"
+              element={<ProtectedRoute element={Dashboard1} />}
+            />
+            <Route
+              path="/dashboard2"
+              element={<ProtectedRoute element={Dashboard2} />}
+            />
+            <Route path="/dashboard3" element={<Dashboard3 />} />
+            {/* <Route
+              path="/dashboard3"
+              element={<ProtectedRoute element={Dashboard3} />}
+            /> */}
+            <Route
+              path="/dashboard4"
+              element={<ProtectedRoute element={Dashboard4} />}
+            />
+            <Route
+              path="/dashboard5"
+              element={<ProtectedRoute element={Dashboard5} />}
+            />
+            <Route path="/dashboard6" element={<Dashboard6 />} />
+            {/* <Route
+              path="/dashboard6"
+              element={<ProtectedRoute element={Dashboard6} />}
+            /> */}
+            <Route
+              path="/dashboard7"
+              element={<ProtectedRoute element={Dashboard7} />}
+            />
+            <Route
+              path="/upload"
+              element={<ProtectedRoute element={Upload} />}
+            />
             <Route path="/callback" element={<Callback />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>

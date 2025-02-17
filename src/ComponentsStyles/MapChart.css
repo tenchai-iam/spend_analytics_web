@@ -1,8 +1,3 @@
-@font-face {
-  font-family: "Sarabun";
-  src: url("./fonts/Sarabun-Regular.ttf");
-}
-
 .map-container {
   display: flex;
   height: 100%;
@@ -50,16 +45,9 @@
 }
 
 .po-color {
-  background-color: #531530;
+  background-color: #fdb022;
 }
 
 .spend-color {
-  background-color: #6f2e90;
-}
-
-body,
-.data-table,
-.legend,
-.map-container {
-  font-family: "Sarabun" !important;
+  background-color: #932bde;
 }

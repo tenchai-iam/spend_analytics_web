@@ -1,9 +1,14 @@
 .donut-title {
-  font-size: 1rem;
-  color: #4a0072; /* Custom color for the title */
+  font-size: 0.9rem;
+  color: #3e3e3e; /* Custom color for the title */
   text-align: center; /* Center the title */
 }
 
 .donut-text {
   font-size: 0.9rem;
+}
+
+.recharts-wrapper g:focus,
+.recharts-wrapper path:focus {
+  outline: none; /* Remove the focus rectangle */
 }

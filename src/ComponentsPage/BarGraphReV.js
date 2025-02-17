@@ -1,4 +1,3 @@
-import React from "react";
 import {
   BarChart,
   Bar,
@@ -15,10 +14,10 @@ import "../ComponentsStyles/BarGraphReV.css";
 const formatCurrency = (value) => `${value.toLocaleString()}`;
 
 const BarGraphReV = ({ data, xAxisKey, barKey, title, height = 400 }) => {
-  // Ensure data contains a `fill` property for coloring bars
+  // Ensure data contains a fill property for coloring bars
   const formattedData = data.map((item, index) => ({
     ...item,
-    fill: index === 1 ? "#00724a" : "#4a0072", // Different color for the second bar
+    fill: index === 1 ? "#12B76A" : "#932BDE", // Different color for the second bar
   }));
 
   return (
@@ -35,15 +34,18 @@ const BarGraphReV = ({ data, xAxisKey, barKey, title, height = 400 }) => {
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey={xAxisKey} />
+          <XAxis dataKey={xAxisKey} tick={false} />
           <YAxis tickFormatter={formatCurrency} />
           <Tooltip formatter={(value) => formatCurrency(value)} />
-          <Bar dataKey={barKey}>
+          <Bar dataKey={barKey} barSize={50}>
             {formattedData.map((entry, index) => (
-              <Bar key={index} fill={entry.fill}>
-                <LabelList dataKey={barKey} position="top" formatter={formatCurrency} />
-              </Bar>
+              <Bar key={index} fill={entry.fill}></Bar>
             ))}
+            <LabelList
+              dataKey={barKey}
+              position="top"
+              formatter={formatCurrency}
+            />
           </Bar>
         </BarChart>
       </ResponsiveContainer>

@@ -23,7 +23,7 @@ const D4GroupBarRe = ({
   title,
   height = 400,
   hqColor = "#4a0072",
-  districtColor = "#AD49E1",
+  districtColor = "#3e3e3e",
 }) => {
   const [aggregatedData, setAggregatedData] = useState([]);
   const [regionDifferences, setRegionDifferences] = useState([]);
@@ -100,7 +100,7 @@ const D4GroupBarRe = ({
               </div>
             )}
           />
-          <Legend/>
+          <Legend />
 
           {/* Render bars for HQ Cost and District Cost */}
           <Bar dataKey="baseCost" fill={hqColor} name="Base Case">
@@ -122,7 +122,7 @@ const D4GroupBarRe = ({
           <Bar dataKey="Placeholder" fill="transparent" stackId="offset" />
           <Bar
             dataKey="Difference"
-            fill={aggregatedData[0]?.Difference >= 0 ? "green" : "red"}
+            fill={aggregatedData[0]?.Difference >= 0 ? "#FD8A8A" : "#ACE1AF"}
             stackId="offset"
             name="Savings"
           >

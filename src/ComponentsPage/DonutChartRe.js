@@ -1,16 +1,10 @@
 import React from "react";
-import {
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import "../ComponentsStyles/DonutChartRe.css";
 
 const COLORS = ["#BC6FF1", "#B03052", "#C69530"]; // Example colors
 
-const DonutChartRe = ({ data, title, height = 400 }) => {
+const DonutChartRe = ({ data, title, height = 300 }) => {
   const numberFormatter = new Intl.NumberFormat("en-US", {
     minimumFractionDigits: 3,
     maximumFractionDigits: 3,
@@ -38,7 +32,15 @@ const DonutChartRe = ({ data, title, height = 400 }) => {
     return null;
   };
 
-  const renderCustomLabel = ({ cx, cy, midAngle, outerRadius, name, value, percent }) => {
+  const renderCustomLabel = ({
+    cx,
+    cy,
+    midAngle,
+    outerRadius,
+    name,
+    value,
+    percent,
+  }) => {
     const RADIAN = Math.PI / 180;
     const radius = outerRadius + 70; // Increase label radius to move labels away from the chart
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
@@ -47,7 +49,9 @@ const DonutChartRe = ({ data, title, height = 400 }) => {
 
     return (
       <text x={x} y={y} textAnchor="middle" dominantBaseline="central">
-        <tspan x={x} dy="-0.5em">{name}</tspan>
+        <tspan x={x} dy="-0.5em">
+          {name}
+        </tspan>
         <tspan x={x} dy="1.2em">
           {formattedValue} ({(percent * 100).toFixed(2)}%)
         </tspan>

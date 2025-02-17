@@ -39,26 +39,26 @@ const Table4 = ({ title, data }) => {
     setSortConfig({ key, direction });
   };
 
-const sortedData = [
-  ...[...data]
-    .filter((row) => row.region !== "รวม")
-    .sort((a, b) => {
-      const aValue = a[sortConfig.key];
-      const bValue = b[sortConfig.key];
+  const sortedData = [
+    ...[...data]
+      .filter((row) => row.region !== "รวม")
+      .sort((a, b) => {
+        const aValue = a[sortConfig.key];
+        const bValue = b[sortConfig.key];
 
-      if (typeof aValue === "string") {
-        return sortConfig.direction === "ascending"
-          ? aValue.localeCompare(bValue)
-          : bValue.localeCompare(aValue);
-      } else if (typeof aValue === "number" && typeof bValue === "number") {
-        return sortConfig.direction === "ascending"
-          ? aValue - bValue
-          : bValue - aValue;
-      }
-      return 0;
-    }),
-  ...data.filter((row) => row.region === "รวม")
-];
+        if (typeof aValue === "string") {
+          return sortConfig.direction === "ascending"
+            ? aValue.localeCompare(bValue)
+            : bValue.localeCompare(aValue);
+        } else if (typeof aValue === "number" && typeof bValue === "number") {
+          return sortConfig.direction === "ascending"
+            ? aValue - bValue
+            : bValue - aValue;
+        }
+        return 0;
+      }),
+    ...data.filter((row) => row.region === "รวม"),
+  ];
 
   const renderSortArrow = (columnKey) => {
     if (sortConfig.key === columnKey) {
@@ -74,9 +74,7 @@ const sortedData = [
         <table>
           <thead>
             <tr>
-              <th>
-                กฟฟ.
-              </th>
+              <th>กฟฟ.</th>
               <th onClick={() => handleSort("usage")}>
                 อัตราการใช้งานต่อเดือน (R/M) {renderSortArrow("usage")}
               </th>
@@ -131,22 +129,24 @@ const sortedData = [
             {sortedData.map((row, index) => (
               <tr key={index}>
                 <td>{row.region}</td>
-                <td>{formatQuantity(row.usage)}</td>
-                <td>{formatQuantity(row.stock)}</td>
-                <td>{formatQuantity(row.quantityPR)}</td>
-                <td>{formatQuantity(row.contract)}</td>
-                <td>{formatQuantity(row.availStock)}</td>
-                <td>{formatMonth(row.availMonth)}</td>
-                <td>{formatQuantity(row.quantityAllocate)}</td>
-                <td>{formatMonth(row.availMonthAfter)}</td>
-                <td>{formatMonth(row.newMonth)}</td>
-                <td>{formatQuantity(row.newQuantity)}</td>
-                <td>{formatQuantity(row.unitHQ)}</td>
-                <td>{formatPrice(row.priceHQ)}</td>
-                <td>{formatQuantity(row.unitDistrict)}</td>
-                <td>{formatPrice(row.priceDistrict)}</td>
-                <td>{formatPrice(row.mediumPrice)}</td>
-                <td>{formatTotal(row.budget)}</td>
+                <td className="number">{formatQuantity(row.usage)}</td>
+                <td className="number">{formatQuantity(row.stock)}</td>
+                <td className="number">{formatQuantity(row.quantityPR)}</td>
+                <td className="number">{formatQuantity(row.contract)}</td>
+                <td className="number">{formatQuantity(row.availStock)}</td>
+                <td className="number">{formatMonth(row.availMonth)}</td>
+                <td className="number">
+                  {formatQuantity(row.quantityAllocate)}
+                </td>
+                <td className="number">{formatMonth(row.availMonthAfter)}</td>
+                <td className="number">{formatMonth(row.newMonth)}</td>
+                <td className="number">{formatQuantity(row.newQuantity)}</td>
+                <td className="number">{formatQuantity(row.unitHQ)}</td>
+                <td className="number">{formatPrice(row.priceHQ)}</td>
+                <td className="number">{formatQuantity(row.unitDistrict)}</td>
+                <td className="number">{formatPrice(row.priceDistrict)}</td>
+                <td className="number">{formatPrice(row.mediumPrice)}</td>
+                <td className="number">{formatTotal(row.budget)}</td>
               </tr>
             ))}
           </tbody>

@@ -1,15 +1,14 @@
-/* General Layout */
-.data-date {
-  font-size: 1rem;
-  color: #fff;
+.text-dropdown-container {
+  padding: 20px;
+  display: flex; /* Use Flexbox for layout */
+  justify-content: space-between; /* Place items on opposite ends */
+  align-items: center; /* Align items vertically */
+  font-size: 0.8rem;
+  width: 100%;
 }
 
-.year-dropdown-container {
-  display: flex;
-  justify-content: flex-end; /* This moves the dropdown to the right */
-  padding-right: 20px; /* Optional: adjust padding as per your needs */
-  margin-top: 20px;
-  color: white;
+.header-title {
+  font-size: 1rem;
 }
 
 .dashboard1-container {
@@ -23,16 +22,33 @@
   padding: 20px;
 }
 
-.D1-CSV-container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  margin-left: auto;
+.dropdown-download-container {
+  display: flex; /* Use Flexbox for layout */
+  justify-content: space-between; /* Place items on opposite ends */
+  align-items: center; /* Align items vertically */
+  font-size: 0.8rem;
+  width: 100%;
+}
+
+.download-container {
+  display: flex; /* Use Flexbox for layout */
+  justify-content: right;
+  align-items: center; /* Align items vertically */
+  font-size: 0.8rem;
+  width: 100%;
+}
+
+.D1-dropdown-cat-group {
+  flex: 1; /* Allow the dropdown to take up available space */
+  max-width: 50%; /* Optional: Limit the maximum width */
+}
+
+.D1-dropdown-cat-group select {
+  background-color: transparent; /* Match the dropdown background to the container */
 }
 
 .download-button {
-  padding: 20px;
-  align-items: center;
+  white-space: nowrap; /* Prevent the text from wrapping */
 }
 
 .table-container-L1 {
@@ -47,7 +63,7 @@
 .table-top-price-diff {
   flex: 1 1 60%;
   max-width: 60%;
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  background-color: rgba(118, 118, 128, 0.08); /* Base dark color */
   border-radius: 8px;
   padding: 20px;
   display: flex;
@@ -61,7 +77,7 @@
 .table-top-povalue-count {
   flex: 1 1 40%;
   max-width: 40%;
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  background-color: rgba(118, 118, 128, 0.08); /* Base dark color */
   border-radius: 8px;
   padding: 20px;
   display: flex;
@@ -72,28 +88,51 @@
   align-items: center;
 }
 
+.remark-container {
+  font-size: 0.8rem;
+  padding: 10px;
+  gap: 0px;
+  justify-self: left;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.08),
+    /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
+  width: 100%;
+}
+
 .top-D1-grid-container {
   display: flex;
   flex-direction: row;
+  background-color: rgba(118, 118, 128, 0.08); /* Base dark color */
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.08),
+    /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
   gap: 20px;
   box-sizing: border-box; /* Ensure padding is included in width */
   width: 100%;
 }
 
 .left {
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
-  border-radius: 8px;
   padding: 20px;
-  flex: 1 1 60%;
-  max-width: 60%;
+  flex: 1 1 70%;
+  max-width: 70%;
 }
 
 .right {
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
-  border-radius: 8px;
   padding: 20px;
-  flex: 1 1 40%;
-  max-width: 40%;
+  flex: 1 1 30%;
+  max-width: 30%;
+  font-size: 0.8rem;
+}
+
+.mat-legend {
+  padding-right: 5px;
+  font-size: 0.9rem;
+  color: #932bde;
+}
+
+.nonMat-legend {
+  font-size: 0.9rem;
+  color: #12b76a;
 }
 
 .middle-D1-container {
@@ -103,7 +142,9 @@
 }
 
 .bubble-graph {
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  background-color: rgba(118, 118, 128, 0.08); /* Base dark color */
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.08),
+    /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
   border-radius: 8px; /* Rounded corners */
   padding: 20px; /* Padding inside the container */
   width: 50%;
@@ -112,19 +153,29 @@
   gap: 20px;
   justify-items: center; /* Center align the text items */
   align-items: center;
+  max-height: 700px;
+}
+
+.bubble-title {
+  font-size: 1rem;
+  color: #3e3e3e; /* Custom color for the title */
+  text-align: center; /* Center the title */
 }
 
 .donut-Graph {
   width: 50%;
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  background-color: rgba(118, 118, 128, 0.08); /* Base dark color */
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.08),
+    /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
   border-radius: 12px; /* Rounded corners */
   padding: 20px;
-  justify-items: center; /* Center align the text items */
-  align-items: center;
+  max-height: 700px;
 }
 
 .bottom-D1-container {
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  background-color: rgba(118, 118, 128, 0.08); /* Base dark color */
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.08),
+    /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
   border-radius: 8px; /* Rounded corners */
   display: flex;
   flex-direction: column;
@@ -135,7 +186,6 @@
 }
 
 .map-wrapper {
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
   border-radius: 12px; /* Rounded corners */
   width: 100%; /* Ensure full width */
   height: 100%; /* Set a defined height */
@@ -179,13 +229,6 @@
   .map-wrapper {
     width: 100%; /* Full width for graphs on smaller screens */
   }
-}
-
-.bubble-title {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #4a0072; /* Custom color for the title */
-  text-align: center; /* Center the title */
 }
 
 /* iPhone (max-width: 600px) */

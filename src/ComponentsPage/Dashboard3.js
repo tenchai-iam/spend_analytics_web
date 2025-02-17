@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
+import "../ComponentsStyles/Dashboard.css"; // Updated to use Dashboard3.css
 import "../ComponentsStyles/Dashboard3.css"; // Updated to use Dashboard3.css
-import BackgroundComponent from "../ComponentsPage/BackgroundComponent";
 import YearDropdown from "./YearDropdown";
 import NavbarComponent from "../ComponentsPage/NavbarComponent";
 import D3BarGraphReV from "./D3BarGraphReV";
@@ -18,7 +18,8 @@ import {
   getD3MaterialPriceGroupEKGRP,
   getD3MaterialPriceByEKGRP,
 } from "../services/api_D3.js";
-import { CSVLink } from "react-csv"; // Import CSVLink from react-csv
+import XLSX from "xlsx-js-style";
+import { saveAs } from "file-saver";
 
 const Dashboard3 = () => {
   const [selectedYear, setSelectedYear] = useState(""); // State to hold the selected year
@@ -26,6 +27,7 @@ const Dashboard3 = () => {
   const [selectedMaterial, setSelectedMaterial] = useState(""); // State to hold the selected material
   const [selectedDistrict, setSelectedDistrict] = useState(""); // State to hold the selected material
   const [showFirstChart, setShowFirstChart] = useState(true); // State to toggle between the charts
+  const [selectedButton, setSelectedButton] = useState("first"); // Track selected button index
 
   const priceFormatter = new Intl.NumberFormat("en-US", {
     style: "decimal",
@@ -79,7 +81,7 @@ const Dashboard3 = () => {
   } = useQuery({
     queryKey: ["materials", selectedYear, selectedCategory], // Unique query key for caching
     queryFn: () => getD3Materials(selectedYear, selectedCategory), // API call to fetch data based on year
-    enabled: Boolean(selectedYear) && Boolean(selectedCategory) !== null, // Only run query if year and category are selected
+    enabled: Boolean(selectedYear) && Boolean(selectedCategory), // Only run query if year and category are selected
   });
 
   // Map material data to options for react-select
@@ -121,7 +123,7 @@ const Dashboard3 = () => {
       quantityRegion: Number(item.QUANTITY_REGION),
     })) || [];
 
-    const csvTablePriceHeaders = [
+  const csvTablePriceHeaders = [
     { label: "รหัสพัสดุ", key: "matNR" },
     { label: "ชื่อพัสดุ", key: "matName" },
     { label: "ราคาที่ส่วนกลาง", key: "priceHQ" },
@@ -144,6 +146,170 @@ const Dashboard3 = () => {
     }));
 
   const csvTablePriceData = formatCSVTablePriceData(dataTablePrice); // Use your table data as CSV data
+
+  const downloadXLSX_catPrice = (
+    data,
+    headers,
+    fileName,
+    selectedYear,
+    selectedCategory,
+    dateInfoData
+  ) => {
+    // Format data with headers
+    const formattedData = data.map((item) =>
+      headers.reduce((acc, header) => {
+        acc[header.label] = item[header.key];
+        return acc;
+      }, {})
+    );
+
+    // Define the number of extra rows
+    const extraRowsAbove = Array(5).fill({}); // 3 rows above the table
+    const extraRowsBelow = Array(2).fill({}); // 2 rows below the table
+
+    // Combine all rows: extra rows above, header, data, and extra rows below
+    const headerRow = headers.reduce((acc, header) => {
+      acc[header.label] = header.label; // Add headers as keys
+      return acc;
+    }, {});
+    const fullData = [
+      ...extraRowsAbove,
+      headerRow,
+      ...formattedData,
+      ...extraRowsBelow,
+    ];
+
+    // Create worksheet
+    const worksheet = XLSX.utils.json_to_sheet(fullData, { skipHeader: true });
+    const workbook = XLSX.utils.book_new();
+
+    // Add merges for title row and rows below
+    const numColumns = headers.length; // Number of columns in the dataset
+    worksheet["!merges"] = [
+      { s: { r: 1, c: 0 }, e: { r: 1, c: numColumns - 1 } }, // Merge title row
+      { s: { r: 3, c: 0 }, e: { r: 3, c: numColumns - 1 } }, // Merge row 4
+      {
+        s: { r: fullData.length - 1, c: 0 },
+        e: { r: fullData.length - 1, c: numColumns - 1 },
+      }, // Merge info row
+    ];
+
+    // Add text to extra rows above
+    worksheet["A2"] = {
+      v: `ตารางเปรียบเทียบราคาและจำนวนจัดซื้อส่วนกลาง vs. กฟข. ในปี ${selectedYear}`,
+    };
+    worksheet["A4"] = { v: `กลุ่มพัสดุ : ${selectedCategory || "-"}` };
+
+    // Style extra rows above
+    const styleRowsAbove = [1];
+    styleRowsAbove.forEach((rowIndex) => {
+      const cellAddress = XLSX.utils.encode_cell({ r: rowIndex, c: 0 });
+      worksheet[cellAddress].s = {
+        font: { bold: rowIndex === 1, sz: rowIndex === 1 ? 16 : 12 },
+        alignment: {
+          horizontal: rowIndex === 1 ? "center" : "left",
+          vertical: "center",
+        },
+      };
+    });
+
+    // Add and style rows below
+    const infoRowIndex = fullData.length - 1; // Index of the last row
+    worksheet[`A${infoRowIndex + 1}`] = {
+      v: `ข้อมูล ณ วันที่ ${dateInfoData?.day || "-"} / ${
+        dateInfoData?.month || "-"
+      } / ${dateInfoData?.year || "-"} เวลา 0${dateInfoData?.hour}:${
+        dateInfoData?.minute
+      }0 น.`,
+    };
+    worksheet[`A${infoRowIndex + 1}`].s = {
+      font: { sz: 12 },
+      alignment: {
+        horizontal: "left",
+        vertical: "center",
+      },
+    };
+
+    // Style headers
+    const headerRowIndex = extraRowsAbove.length;
+    for (let C = 0; C < headers.length; C++) {
+      const cellAddress = XLSX.utils.encode_cell({ r: headerRowIndex, c: C });
+      if (!worksheet[cellAddress]) {
+        worksheet[cellAddress] = { v: headers[C]?.label || "" };
+      }
+      worksheet[cellAddress].s = {
+        font: { bold: true },
+        alignment: {
+          horizontal: "center",
+          vertical: "center",
+          wrapText: true,
+        },
+        fill: { fgColor: { rgb: "D9D9D9" } },
+        border: {
+          top: { style: "thin", color: { rgb: "000000" } },
+          bottom: { style: "thin", color: { rgb: "000000" } },
+          left: { style: "thin", color: { rgb: "000000" } },
+          right: { style: "thin", color: { rgb: "000000" } },
+        },
+      };
+    }
+
+    // Style data cells
+    for (
+      let R = headerRowIndex + 1;
+      R < fullData.length - extraRowsBelow.length;
+      ++R
+    ) {
+      for (let C = 0; C < headers.length; ++C) {
+        const cellAddress = XLSX.utils.encode_cell({ r: R, c: C });
+        if (!worksheet[cellAddress]) continue;
+
+        // Determine horizontal alignment based on column index
+        const alignRight = C > 0; // Right-align for columns after the first
+        const alignLeft = C === 1; // Left-align for the second column
+        const horizontalAlignment = alignLeft
+          ? "left"
+          : alignRight
+          ? "right"
+          : "center";
+
+        // Apply cell styles
+        worksheet[cellAddress].s = {
+          alignment: {
+            horizontal: horizontalAlignment,
+            vertical: "center",
+            wrapText: true,
+          },
+          border: {
+            top: { style: "thin", color: { rgb: "000000" } },
+            bottom: { style: "thin", color: { rgb: "000000" } },
+            left: { style: "thin", color: { rgb: "000000" } },
+            right: { style: "thin", color: { rgb: "000000" } },
+          },
+        };
+      }
+    }
+
+    // Dynamically calculate column widths
+    const colWidths = headers.map((header) => {
+      const columnData = [
+        header.label,
+        ...formattedData.map((row) => row[header.label]?.toString() || ""),
+      ];
+      const maxLength = columnData.reduce(
+        (max, value) => Math.max(max, value.length),
+        0
+      );
+      return { wch: maxLength + 1 }; // Add a small buffer
+    });
+    worksheet["!cols"] = colWidths;
+
+    // Append worksheet to workbook and trigger download
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+    const xlsxData = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+    const blob = new Blob([xlsxData], { type: "application/octet-stream" });
+    saveAs(blob, `${fileName}.xlsx`);
+  };
 
   const {
     data: materialPriceGroupDistrict,
@@ -178,7 +344,7 @@ const Dashboard3 = () => {
       minQuantity: district?.QUANTITY_MIN_DISTRICT,
     })) || [];
 
-    const csvBarDistrictHeaders = [
+  const csvBarDistrictHeaders = [
     { label: "หน่วยจัดซื้อ", key: "name" },
     { label: "ราคาเฉลี่ย", key: "averagePrice" },
     { label: "ราคาสูงสุด", key: "maxPrice" },
@@ -197,6 +363,167 @@ const Dashboard3 = () => {
   const csvBarDistrictData = formatCSVBarDistrictData(
     dataMaterialPriceByDistrict
   ); // Use your table data as CSV data
+
+  const downloadXLSX_barDistrict = (
+    data,
+    headers,
+    fileName,
+    selectedYear,
+    selectedCategory,
+    selectedMaterial,
+    dateInfoData
+  ) => {
+    // Format data with headers
+    const formattedData = data.map((item) =>
+      headers.reduce((acc, header) => {
+        acc[header.label] = item[header.key];
+        return acc;
+      }, {})
+    );
+
+    // Define the number of extra rows
+    const extraRowsAbove = Array(6).fill({}); // 3 rows above the table
+    const extraRowsBelow = Array(2).fill({}); // 2 rows below the table
+
+    // Combine all rows: extra rows above, header, data, and extra rows below
+    const headerRow = headers.reduce((acc, header) => {
+      acc[header.label] = header.label; // Add headers as keys
+      return acc;
+    }, {});
+    const fullData = [
+      ...extraRowsAbove,
+      headerRow,
+      ...formattedData,
+      ...extraRowsBelow,
+    ];
+
+    // Create worksheet
+    const worksheet = XLSX.utils.json_to_sheet(fullData, { skipHeader: true });
+    const workbook = XLSX.utils.book_new();
+
+    // Add merges for title row and rows below
+    const numColumns = headers.length; // Number of columns in the dataset
+    worksheet["!merges"] = [
+      { s: { r: 3, c: 0 }, e: { r: 3, c: numColumns - 1 } }, // Merge row 4
+      { s: { r: 4, c: 0 }, e: { r: 4, c: numColumns - 1 } }, // Merge row 5
+      {
+        s: { r: fullData.length - 1, c: 0 },
+        e: { r: fullData.length - 1, c: numColumns - 1 },
+      }, // Merge info row
+    ];
+
+    // Add text to extra rows above
+    worksheet["A2"] = {
+      v: `ตารางเปรียบเทียบราคาจัดซื้อพัสดุตามกฟข. ในปี ${selectedYear}`,
+    };
+    worksheet["A4"] = { v: `กลุ่มพัสดุ : ${selectedCategory || "-"}` };
+    worksheet["A5"] = { v: `รหัสพัสดุ : ${selectedMaterial || "-"}` };
+
+    // Style extra rows above
+    const styleRowsAbove = [1];
+    styleRowsAbove.forEach((rowIndex) => {
+      const cellAddress = XLSX.utils.encode_cell({ r: rowIndex, c: 0 });
+      worksheet[cellAddress].s = {
+        font: { bold: rowIndex === 1, sz: rowIndex === 1 ? 16 : 12 },
+        alignment: {
+          horizontal: rowIndex === 1 ? "left" : "left",
+          vertical: "center",
+        },
+      };
+    });
+
+    // Add and style rows below
+    const infoRowIndex = fullData.length - 1; // Index of the last row
+    worksheet[`A${infoRowIndex + 1}`] = {
+      v: `ข้อมูล ณ วันที่ ${dateInfoData?.day || "-"} / ${
+        dateInfoData?.month || "-"
+      } / ${dateInfoData?.year || "-"} เวลา 0${dateInfoData?.hour}:${
+        dateInfoData?.minute
+      }0 น.`,
+    };
+    worksheet[`A${infoRowIndex + 1}`].s = {
+      font: { sz: 12 },
+      alignment: {
+        horizontal: "left",
+        vertical: "center",
+      },
+    };
+
+    // Style headers
+    const headerRowIndex = extraRowsAbove.length;
+    for (let C = 0; C < headers.length; C++) {
+      const cellAddress = XLSX.utils.encode_cell({ r: headerRowIndex, c: C });
+      if (!worksheet[cellAddress]) {
+        worksheet[cellAddress] = { v: headers[C]?.label || "" };
+      }
+      worksheet[cellAddress].s = {
+        font: { bold: true },
+        alignment: {
+          horizontal: "center",
+          vertical: "center",
+          wrapText: true,
+        },
+        fill: { fgColor: { rgb: "D9D9D9" } },
+        border: {
+          top: { style: "thin", color: { rgb: "000000" } },
+          bottom: { style: "thin", color: { rgb: "000000" } },
+          left: { style: "thin", color: { rgb: "000000" } },
+          right: { style: "thin", color: { rgb: "000000" } },
+        },
+      };
+    }
+
+    // Style data cells
+    for (
+      let R = headerRowIndex + 1;
+      R < fullData.length - extraRowsBelow.length;
+      ++R
+    ) {
+      for (let C = 0; C < headers.length; ++C) {
+        const cellAddress = XLSX.utils.encode_cell({ r: R, c: C });
+        if (!worksheet[cellAddress]) continue;
+
+        // Determine horizontal alignment based on column index
+        const alignRight = C > 0; // Right-align for columns after the second
+        const horizontalAlignment = alignRight ? "right" : "center";
+
+        // Apply cell styles
+        worksheet[cellAddress].s = {
+          alignment: {
+            horizontal: horizontalAlignment,
+            vertical: "center",
+            wrapText: true,
+          },
+          border: {
+            top: { style: "thin", color: { rgb: "000000" } },
+            bottom: { style: "thin", color: { rgb: "000000" } },
+            left: { style: "thin", color: { rgb: "000000" } },
+            right: { style: "thin", color: { rgb: "000000" } },
+          },
+        };
+      }
+    }
+
+    // Dynamically calculate column widths
+    const colWidths = headers.map((header) => {
+      const columnData = [
+        header.label,
+        ...formattedData.map((row) => row[header.label]?.toString() || ""),
+      ];
+      const maxLength = columnData.reduce(
+        (max, value) => Math.max(max, value.length),
+        0
+      );
+      return { wch: maxLength + 1 }; // Add a small buffer
+    });
+    worksheet["!cols"] = colWidths;
+
+    // Append worksheet to workbook and trigger download
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+    const xlsxData = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+    const blob = new Blob([xlsxData], { type: "application/octet-stream" });
+    saveAs(blob, `${fileName}.xlsx`);
+  };
 
   const {
     data: materialPriceGroupEKGRP,
@@ -255,7 +582,7 @@ const Dashboard3 = () => {
       maxQuantity: ekgrp?.QUANTITY_MAX_EKGRP,
       minQuantity: ekgrp?.QUANTITY_MIN_EKGRP,
     })) || [];
-  
+
   const csvBarEKGRPHeaders = [
     { label: "หน่วยจัดซื้อ", key: "name" },
     { label: "ราคาเฉลี่ย", key: "averagePrice" },
@@ -274,8 +601,180 @@ const Dashboard3 = () => {
 
   const csvBarEKGRPData = formatCSVBarEKGRPData(dataMaterialPriceByEKGRP); // Use your table data as CSV data
 
-  const toggleChart = () => {
-    setShowFirstChart(!showFirstChart); // Toggle between true and false
+  const downloadXLSX_barEKGRP = (
+    data,
+    headers,
+    fileName,
+    selectedYear,
+    selectedCategory,
+    selectedMaterial,
+    selectedDistrict,
+    dateInfoData
+  ) => {
+    // Format data with headers
+    const formattedData = data.map((item) =>
+      headers.reduce((acc, header) => {
+        acc[header.label] = item[header.key];
+        return acc;
+      }, {})
+    );
+
+    // Define the number of extra rows
+    const extraRowsAbove = Array(7).fill({}); // 3 rows above the table
+    const extraRowsBelow = Array(2).fill({}); // 2 rows below the table
+
+    // Combine all rows: extra rows above, header, data, and extra rows below
+    const headerRow = headers.reduce((acc, header) => {
+      acc[header.label] = header.label; // Add headers as keys
+      return acc;
+    }, {});
+    const fullData = [
+      ...extraRowsAbove,
+      headerRow,
+      ...formattedData,
+      ...extraRowsBelow,
+    ];
+
+    // Create worksheet
+    const worksheet = XLSX.utils.json_to_sheet(fullData, { skipHeader: true });
+    const workbook = XLSX.utils.book_new();
+
+    // Add merges for title row and rows below
+    const numColumns = headers.length; // Number of columns in the dataset
+    worksheet["!merges"] = [
+      { s: { r: 3, c: 0 }, e: { r: 3, c: numColumns - 1 } }, // Merge row 4
+      { s: { r: 4, c: 0 }, e: { r: 4, c: numColumns - 1 } }, // Merge row 5
+      {
+        s: { r: fullData.length - 1, c: 0 },
+        e: { r: fullData.length - 1, c: numColumns - 1 },
+      }, // Merge info row
+    ];
+
+    // Add text to extra rows above
+    worksheet["A2"] = {
+      v: `ตารางเปรียบเทียบราคาจัดซื้อพัสดุตามกฟฟ. ในปี ${selectedYear}`,
+    };
+    worksheet["A4"] = { v: `กลุ่มพัสดุ : ${selectedCategory || "-"}` };
+    worksheet["A5"] = { v: `รหัสพัสดุ : ${selectedMaterial || "-"}` };
+    worksheet["A6"] = { v: `การไฟฟ้าเขต : ${selectedDistrict || "-"}` };
+
+    // Style extra rows above
+    const styleRowsAbove = [1];
+    styleRowsAbove.forEach((rowIndex) => {
+      const cellAddress = XLSX.utils.encode_cell({ r: rowIndex, c: 0 });
+      worksheet[cellAddress].s = {
+        font: { bold: rowIndex === 1, sz: rowIndex === 1 ? 16 : 12 },
+        alignment: {
+          horizontal: rowIndex === 1 ? "left" : "left",
+          vertical: "center",
+        },
+      };
+    });
+
+    // Add and style rows below
+    const infoRowIndex = fullData.length - 1; // Index of the last row
+    worksheet[`A${infoRowIndex + 1}`] = {
+      v: `ข้อมูล ณ วันที่ ${dateInfoData?.day || "-"} / ${
+        dateInfoData?.month || "-"
+      } / ${dateInfoData?.year || "-"} เวลา 0${dateInfoData?.hour}:${
+        dateInfoData?.minute
+      }0 น.`,
+    };
+    worksheet[`A${infoRowIndex + 1}`].s = {
+      font: { sz: 12 },
+      alignment: {
+        horizontal: "left",
+        vertical: "center",
+      },
+    };
+
+    // Style headers
+    const headerRowIndex = extraRowsAbove.length;
+    for (let C = 0; C < headers.length; C++) {
+      const cellAddress = XLSX.utils.encode_cell({ r: headerRowIndex, c: C });
+      if (!worksheet[cellAddress]) {
+        worksheet[cellAddress] = { v: headers[C]?.label || "" };
+      }
+      worksheet[cellAddress].s = {
+        font: { bold: true },
+        alignment: {
+          horizontal: "center",
+          vertical: "center",
+          wrapText: true,
+        },
+        fill: { fgColor: { rgb: "D9D9D9" } },
+        border: {
+          top: { style: "thin", color: { rgb: "000000" } },
+          bottom: { style: "thin", color: { rgb: "000000" } },
+          left: { style: "thin", color: { rgb: "000000" } },
+          right: { style: "thin", color: { rgb: "000000" } },
+        },
+      };
+    }
+
+    // Style data cells
+    for (
+      let R = headerRowIndex + 1;
+      R < fullData.length - extraRowsBelow.length;
+      ++R
+    ) {
+      for (let C = 0; C < headers.length; ++C) {
+        const cellAddress = XLSX.utils.encode_cell({ r: R, c: C });
+        if (!worksheet[cellAddress]) continue;
+
+        // Determine horizontal alignment based on column index
+        const alignRight = C > 0; // Right-align for columns after the second
+        const horizontalAlignment = alignRight ? "right" : "center";
+
+        // Apply cell styles
+        worksheet[cellAddress].s = {
+          alignment: {
+            horizontal: horizontalAlignment,
+            vertical: "center",
+            wrapText: true,
+          },
+          border: {
+            top: { style: "thin", color: { rgb: "000000" } },
+            bottom: { style: "thin", color: { rgb: "000000" } },
+            left: { style: "thin", color: { rgb: "000000" } },
+            right: { style: "thin", color: { rgb: "000000" } },
+          },
+        };
+      }
+    }
+
+    // Dynamically calculate column widths
+    const colWidths = headers.map((header) => {
+      const columnData = [
+        header.label,
+        ...formattedData.map((row) => row[header.label]?.toString() || ""),
+      ];
+      const maxLength = columnData.reduce(
+        (max, value) => Math.max(max, value.length),
+        0
+      );
+      return { wch: maxLength + 1 }; // Add a small buffer
+    });
+    worksheet["!cols"] = colWidths;
+
+    // Append worksheet to workbook and trigger download
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+    const xlsxData = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+    const blob = new Blob([xlsxData], { type: "application/octet-stream" });
+    saveAs(blob, `${fileName}.xlsx`);
+  };
+
+  const handleButtonClick = (button) => {
+    setSelectedButton(button); // Update the active button state
+    setShowFirstChart(button === "first"); // Toggle the chart based on the button
+  };
+
+  const handleShowFirstChart = () => {
+    setShowFirstChart(true);
+  };
+
+  const handleShowSecondChart = () => {
+    setShowFirstChart(false);
   };
 
   const datadate = 1;
@@ -292,33 +791,35 @@ const Dashboard3 = () => {
     enabled: !!selectedYear, // Only run query if both year and category_group are selected
   });
 
-    const getButtonStyle = (isSelected) => ({
-      backgroundColor: isSelected ? "#8e44ad" : "#f0f0f0",
-      color: isSelected ? "white" : "black",
-      textDecoration: "none", // Remove underline
-      border: "1px solid #ccc",
-      borderRadius: "4px",
-      padding: "10px 15px",
-      cursor: "pointer",
-      textAlign: "center",
-      display: "inline-block", // Ensure button-like appearance
+  const getButtonStyle = (isSelected) => ({
+    backgroundColor: isSelected ? "#8e44ad" : "#f0f0f0",
+    color: isSelected ? "white" : "black",
+    textDecoration: "none", // Remove underline
+    border: "1px solid #ccc",
+    borderRadius: "4px",
+    padding: "10px 15px",
+    cursor: "pointer",
+    textAlign: "center",
+    display: "inline-block", // Ensure button-like appearance
   });
 
   return (
     <div>
       <NavbarComponent />
-      <BackgroundComponent />
-      <div className="year-dropdown-container">
-        <YearDropdown
-          onSelectYear={setSelectedYear}
-          selectedYear={selectedYear}
-        />
+      <div className="text-dropdown-container">
+        <h1 className="header-title">เปรียบเทียบราคาจัดซื้อ</h1>
+        <div className="year-dropdown-container">
+          <YearDropdown
+            onSelectYear={setSelectedYear}
+            selectedYear={selectedYear}
+          />
+        </div>
       </div>
       <div className="dashboard3-container">
         {/* Left Container */}
         <div className="top-container">
-          <div className="dropdown-download">
-            <div className="dropdown-cat-group">
+          <div className="dropdown-download-container">
+            <div className="D3-dropdown-cat-group">
               {isCategoriesLoading ? (
                 <p>Loading categories...</p>
               ) : (
@@ -327,110 +828,104 @@ const Dashboard3 = () => {
                   onChange={(e) => setSelectedCategory(e.target.value)}
                 >
                   <option value="">-- เลือกกลุ่มพัสดุ --</option>
-                    {categoryData
+                  {categoryData
                     ?.filter((category) => category.CATEGORY_ID !== "999") // Exclude CATEGORY_ID 999
                     .map((category, index) => (
                       <option key={index} value={category.CATEGORY_ID}>
                         {`${category.CATEGORY_ID}: ${category.CATEGORY_NAME}`}
                       </option>
-                  ))}
+                    ))}
                 </select>
               )}
             </div>
-            <div className="D3-CSV-container">
-              <div className="download-button">
-                <CSVLink
-                  data={csvTablePriceData}
-                  headers={csvTablePriceHeaders}
-                  filename={`HQvsDistrictPriceAndQuantityComparison_${selectedYear}_${selectedCategory}.csv`}
-                  style={getButtonStyle(false)} // Apply the button style
-                >
-                  Download CSV
-                </CSVLink>
-              </div>
+            <div className="download-button">
+              <button
+                onClick={() =>
+                  downloadXLSX_catPrice(
+                    csvTablePriceData, // Data
+                    csvTablePriceHeaders, // Headers
+                    `HQvsDistrictPriceAndQuantityComparison_${selectedYear}_${selectedCategory}`,
+                    selectedYear, // File Name
+                    selectedCategory,
+                    dateInfoData // Date Info
+                  )
+                }
+                style={getButtonStyle(false)} // Apply button style
+              >
+                Download XLSX
+              </button>
             </div>
           </div>
           <TableD3Price
-            title={`เปรียบเทียบราคาจัดซื้อส่วนกลาง vs. กฟข. ในปี ${selectedYear}`}
+            title={`เปรียบเทียบราคาและจำนวนจัดซื้อส่วนกลาง vs. กฟข. ในปี ${selectedYear}`}
             data={dataTablePrice}
           />
-          <p>
-            หมายเหตุ: หากไม่มีการจัดซื้อเกิดขึ้น ณ
-            หน่วยงานจัดซื้อนั้นๆในปีที่เลือกแสดง จะไม่มีการแสดงผลราคาเฉลี่ย{" "}; *         คือพัสดุที่มีการจ้างรีดที่ส่วนกลางด้วยอลูมิเนียมอินกอต{" "}
-          </p>
+          <div className="remark-container">
+            <p>ⓘ หมายเหตุ:</p>
+            <p>
+              1. หากไม่มีการจัดซื้อเกิดขึ้น ณ
+              หน่วยงานจัดซื้อนั้นๆในปีที่เลือกแสดง จะไม่มีการแสดงผลราคาเฉลี่ย
+            </p>
+            <p>2. * คือพัสดุที่มีการจ้างรีดที่ส่วนกลางด้วยอลูมิเนียมอินกอต</p>
+          </div>
         </div>
         <div className="bottom-container">
-          <h1 className="text-title">{`เปรียบเทียบราคาจัดซื้อพัสดุตามหน่วยงานจัดซื้อ ในปี ${selectedYear}`}
+          <h1 className="text-title">
+            {`เปรียบเทียบราคาจัดซื้อพัสดุตามหน่วยงานจัดซื้อ ในปี ${selectedYear}`}
           </h1>
-          <div className="dropdown-cat-group">
-            {isLoadingMaterialD3Data ? (
-              <p>Loading materials...</p>
-            ) : isErrorMaterialD3Data ? (
-              <p>Error fetching materials: {errorMaterialD3Data.message}</p>
-            ) : (
-              <Select
-                options={materialD3Options}
-                value={materialD3Options?.find(
-                  (option) => option.value === selectedMaterial
-                )}
-                onChange={(selectedOption) => {
-                  console.log("Selected MATNR:", selectedOption?.value);
-                  setSelectedMaterial(selectedOption?.value);
-                }}
-                placeholder="เลือกรายการพัสดุ..."
-                isClearable
-                isSearchable
-                styles={{
-                  control: (base) => ({
-                    ...base,
-                    padding: "5px",
-                  }),
-                }}
-              />
-            )}
+          <div className="dropdown-container">
+            <div className="D3-dropdown-cat-group">
+              {isLoadingMaterialD3Data ? (
+                <p>Loading materials...</p>
+              ) : isErrorMaterialD3Data ? (
+                <p>Error fetching materials: {errorMaterialD3Data.message}</p>
+              ) : (
+                <Select
+                  options={materialD3Options}
+                  value={materialD3Options?.find(
+                    (option) => option.value === selectedMaterial
+                  )}
+                  onChange={(selectedOption) => {
+                    console.log("Selected MATNR:", selectedOption?.value);
+                    setSelectedMaterial(selectedOption?.value);
+                  }}
+                  placeholder="เลือกรายการพัสดุ..."
+                  isClearable
+                  isSearchable
+                />
+              )}
+            </div>
           </div>
 
           {/* Toggle Button */}
-          <button className="chart-button" onClick={toggleChart}>
-            {showFirstChart ? "แยกตาม กฟข. หน้างาน" : "แยกตาม กฟข. 12 เขค"}
-          </button>
+          <div className="chart-button-group">
+            <button
+              className={`chart-button ${
+                selectedButton === "first" ? "active" : ""
+              }`}
+              disabled={!selectedMaterial}
+              onClick={() => handleButtonClick("first")}
+            >
+              แยกตาม กฟข. หน้างาน
+            </button>
+            <button
+              className={`chart-button ${
+                selectedButton === "second" ? "active" : ""
+              }`}
+              disabled={!selectedMaterial}
+              onClick={() => handleButtonClick("second")}
+            >
+              แยกตามการไฟฟ้าเขต{" "}
+            </button>
+          </div>
 
           {/* Chart Container */}
 
           {showFirstChart ? (
-            <div>
-              {/*<div className="price-summary">
-                <div>
-                  <p className="text-subtitle">
-                    ราคาต่ำสุด:{" "}
-                    {priceFormatter.format(materialPriceGroupDistrict?.PRICE_LOWEST)}{" "}
-                    บาท
-                  </p>
-                </div>
-                <div>
-                  <p className="text-subtitle">
-                    ราคาเฉลี่ย:{" "}
-                    {priceFormatter.format(materialPriceGroupDistrict?.PRICE_AVERAGE)}{" "}
-                    บาท
-                  </p>
-                </div>
-                <div>
-                  <p className="text-subtitle">
-                    ราคาสูงสุด:{" "}
-                    {priceFormatter.format(materialPriceGroupDistrict?.PRICE_HIGHEST)}{" "}
-                    บาท
-                  </p>
-                </div>
-              </div>*/}
-              <div>
-                <p className="text-subtitle">
-                  หน่วย: บาท ต่อ {materialPriceGroupDistrict?.UOM}
-                </p>
-              </div>
-            </div>
+            <div className="dropdown-container"> </div>
           ) : (
             <div>
-              <div className="dropdown-cat-group">
+              <div className="dropdown-container">
                 {isLoadingDistrictData ? (
                   <p>Loading districts...</p>
                 ) : (
@@ -451,49 +946,34 @@ const Dashboard3 = () => {
                   </select>
                 )}
               </div>
-              {/*<div className="price-summary">
-                <div>
-                  <p className="text-subtitle">
-                    ราคาต่ำสุด:{" "}
-                    {priceFormatter.format(materialPriceGroupEKGRP?.PRICE_LOWEST)}{" "}
-                    บาท
-                  </p>
-                </div>
-                <div>
-                  <p className="text-subtitle">
-                    ราคาเฉลี่ย:{" "}
-                    {priceFormatter.format(materialPriceGroupEKGRP?.PRICE_AVERAGE)}{" "}
-                    บาท
-                  </p>
-                </div>
-                <div>
-                  <p className="text-subtitle">
-                    ราคาสูงสุด:{" "}
-                    {priceFormatter.format(materialPriceGroupEKGRP?.PRICE_HIGHEST)}{" "}
-                    บาท
-                  </p>
-                </div>
-              </div>*/}
-              <div>
-                <p className="text-subtitle">
-                  หน่วย: บาท ต่อ {materialPriceGroupEKGRP?.UOM}
-                </p>
-              </div>
             </div>
           )}
           <div className="D3BarChart-container">
             {showFirstChart ? (
               <>
-                <div className="D3-CSV-container">
+                <div className="dropdown-download-container">
+                  <div>
+                    <p className="text-subtitle">
+                      หน่วย: บาท ต่อ {materialPriceGroupDistrict?.UOM}
+                    </p>
+                  </div>
                   <div className="download-button">
-                    <CSVLink
-                      data={csvBarDistrictData}
-                      headers={csvBarDistrictHeaders}
-                      filename={`PriceBreakdownByDistrict_${selectedYear}_${selectedMaterial}.csv`}
-                      style={getButtonStyle(false)} // Apply the button style
+                    <button
+                      onClick={() =>
+                        downloadXLSX_barDistrict(
+                          csvBarDistrictData, // Data
+                          csvBarDistrictHeaders, // Headers
+                          `PriceBreakdownByDistrict_${selectedYear}_${selectedMaterial}`,
+                          selectedYear, // File Name
+                          selectedCategory,
+                          selectedMaterial,
+                          dateInfoData // Date Info
+                        )
+                      }
+                      style={getButtonStyle(false)} // Apply button style
                     >
-                      Download CSV
-                    </CSVLink>
+                      Download XLSX
+                    </button>
                   </div>
                 </div>
                 <D3BarGraphReV
@@ -505,16 +985,30 @@ const Dashboard3 = () => {
               </>
             ) : (
               <>
-                <div className="D3-CSV-container">
+                <div className="dropdown-download-container">
+                  <div>
+                    <p className="text-subtitle">
+                      หน่วย: บาท ต่อ {materialPriceGroupEKGRP?.UOM}
+                    </p>
+                  </div>
                   <div className="download-button">
-                    <CSVLink
-                      data={csvBarEKGRPData}
-                      headers={csvBarEKGRPHeaders}
-                      filename={`PriceBreakdownByEKGRP_${selectedYear}_${selectedMaterial}.csv`}
-                      style={getButtonStyle(false)} // Apply the button style
+                    <button
+                      onClick={() =>
+                        downloadXLSX_barEKGRP(
+                          csvBarEKGRPData, // Data
+                          csvBarEKGRPHeaders, // Headers
+                          `PriceBreakdownByEKGRP_${selectedYear}_${selectedMaterial}`,
+                          selectedYear, // File Name
+                          selectedCategory,
+                          selectedMaterial,
+                          selectedDistrict,
+                          dateInfoData // Date Info
+                        )
+                      }
+                      style={getButtonStyle(false)} // Apply button style
                     >
-                      Download CSV
-                    </CSVLink>
+                      Download XLSX
+                    </button>
                   </div>
                 </div>
                 <D3BarGraphReV
@@ -526,8 +1020,8 @@ const Dashboard3 = () => {
               </>
             )}
             <h1 className="text-subtitle">
-              หมายเหตุ: หากไม่มีการจัดซื้อเกิดขึ้น ณ หน่วยงานจัดซื้อนั้นๆในปีที่เลือกแสดง
-              จะไม่มีการแสดงผลราคาเฉลี่ย
+              หมายเหตุ: หากไม่มีการจัดซื้อเกิดขึ้น ณ
+              หน่วยงานจัดซื้อนั้นๆในปีที่เลือกแสดง จะไม่มีการแสดงผลราคาเฉลี่ย
             </h1>
           </div>
         </div>

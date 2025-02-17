@@ -4,35 +4,18 @@
   position: relative;
 }
 
-.bubble-group {
-  cursor: pointer;
-}
-
-.bubble {
-  stroke-width: 1px;
-  stroke: #d3cce3;
-  filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.2)); /* Subtle shadow */
-}
-
 .bubble-label {
-  font-weight: 600;
-  fill: #2e073f;
+  font-size: 1rem;
+  color: #3e3e3e; /* Custom color for the title */
+  text-align: center; /* Center the title */
 }
 
 .bubble-value {
   font-weight: bold;
-  fill: #2e073f;
+  fill: #3e3e3e;
 }
 
 .bubble:hover {
-  stroke: #212121; /* Darker stroke on hover */
   transform: scale(1.05); /* Slightly enlarge on hover */
   transition: transform 0.2s, stroke 0.2s;
-}
-
-@media (max-width: 600px) {
-  .bubble-label,
-  .bubble-value {
-    font-size: 8px;
-  }
 }

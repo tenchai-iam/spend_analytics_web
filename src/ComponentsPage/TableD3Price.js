@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../ComponentsStyles/table.css";
+import "../ComponentsStyles/TablePrice.css";
 
 const TableD3Price = ({ title, data }) => {
   const [sortConfig, setSortConfig] = useState({
@@ -19,7 +20,6 @@ const TableD3Price = ({ title, data }) => {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     }).format(value);
-
 
   const formatQuantity = (value) =>
     new Intl.NumberFormat("en-US", {
@@ -60,7 +60,7 @@ const TableD3Price = ({ title, data }) => {
     return "";
   };
 
-    const specialMatNRs = [
+  const specialMatNRs = [
     "1020010002",
     "1020010007",
     "1020010009",
@@ -110,29 +110,41 @@ const TableD3Price = ({ title, data }) => {
           <tbody>
             {sortedData.map((row, index) => (
               <tr key={index}>
-                <td>{specialMatNRs.includes(row.matNR) ? `${row.matNR}*` : row.matNR}</td>
                 <td>
-                    {row.matName}
+                  {specialMatNRs.includes(row.matNR)
+                    ? `${row.matNR}*`
+                    : row.matNR}
                 </td>
-                <td>
+                <td className="matnr">{row.matName}</td>
+                <td className="number">
                   <span
-                    className={row.priceHQ < row.priceDistrict && row.priceHQ > 0 ? "lower" : ""}
+                    className={
+                      row.priceHQ < row.priceDistrict && row.priceHQ > 0
+                        ? "lower"
+                        : ""
+                    }
                   >
                     {row.priceHQ === 0 ? "-" : formatPrice(row.priceHQ)}{" "}
                   </span>
                 </td>
-                <td>
+                <td className="number">
                   <span
-                    className={row.priceDistrict < row.priceHQ && row.priceDistrict > 0 ? "lower" : ""}
+                    className={
+                      row.priceDistrict < row.priceHQ && row.priceDistrict > 0
+                        ? "lower"
+                        : ""
+                    }
                   >
-                    {row.priceDistrict === 0 ? "-" : formatPrice(row.priceDistrict)}{" "}
+                    {row.priceDistrict === 0
+                      ? "-"
+                      : formatPrice(row.priceDistrict)}{" "}
                   </span>
                 </td>
-                <td>
+                <td className="number">
                   {row.priceDiff < 0 ? "-" : formatPercentage(row.priceDiff)}
                 </td>
-                <td>{formatQuantity(row.quantityHQ)}</td>
-                <td>{formatQuantity(row.quantityRegion)}</td>
+                <td className="number">{formatQuantity(row.quantityHQ)}</td>
+                <td className="number">{formatQuantity(row.quantityRegion)}</td>
               </tr>
             ))}
           </tbody>
@@ -143,4 +155,3 @@ const TableD3Price = ({ title, data }) => {
 };
 
 export default TableD3Price;
-

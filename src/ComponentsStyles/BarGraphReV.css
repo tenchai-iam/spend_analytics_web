@@ -2,21 +2,14 @@
 .bar-chart-container {
   width: 100%;
   max-width: 100%; /* Set a maximum width for the container */
-  margin: 20px auto; /* Center the container */
-  padding: 20px; /* Add some padding */
-  background: #ffffff; /* Set a white background */
-  border: 1px solid #ddd; /* Add a subtle border */
-  border-radius: 8px; /* Round the corners */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Apply a shadow */
+  font-size: 0.8rem;
 }
 
 /* Chart Title */
 .bar-chart-title {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: #4a0072; /* Custom color for the title */
-  text-align: center; /* Center the title */
-  margin-bottom: 20px; /* Add spacing below the title */
+  font-size: 0.9rem;
+  color: #3e3e3e;
+  margin: 5px 0px 20px 15px;
 }
 
 .custom-tooltip {
@@ -29,6 +22,10 @@
   color: #333;
 }
 
+.difference-label {
+  color: #fff;
+}
+
 /* Responsive Styles */
 @media only screen and (max-width: 768px) {
   .bar-chart-container {
@@ -37,7 +34,7 @@
   }
 
   .bar-chart-title {
-    font-size: 1.2rem; /* Reduce title font size on smaller screens */
+    font-size: 0.9rem; /* Reduce title font size on smaller screens */
   }
 }
 

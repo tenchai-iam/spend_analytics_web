@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import NavbarComponent from "../ComponentsPage/NavbarComponent";
-import BackgroundComponent from "../ComponentsPage/BackgroundComponent";
 import BubbleChart from "./BubbleChart.js";
-import "../ComponentsStyles/Dashboard1.css"; // Updated to use Dashboard1.css
+import "../ComponentsStyles/Dashboard.css"; 
+import "../ComponentsStyles/Dashboard1.css"; 
 import YearDropdown from "./YearDropdown";
 import MapChart from "./MapChart.js";
 import LineGraphRe from "./LineGraphRe.js";
@@ -26,7 +26,8 @@ import {
   getD1DonutSpend,
   getD1PONumSpend,
 } from "../services/api_D1.js";
-import { CSVLink } from "react-csv"; // Import CSVLink from react-csv
+import XLSX from "xlsx-js-style";
+import { saveAs } from "file-saver";
 
 const Dashboard1 = () => {
   const [selectedYear, setSelectedYear] = useState(""); // State to hold the selected year
@@ -95,8 +96,8 @@ const Dashboard1 = () => {
       priceDistrict: Number(item.PRICE_REGION),
       priceDiff: Number(item.PRICE_DIFF) - 1,
     })) || [];
-  
-    const csvTablePriceHeaders = [
+
+  const csvTablePriceHeaders = [
     { label: "รหัสพัสดุ", key: "matNR" },
     { label: "ชื่อพัสดุ", key: "matName" },
     { label: "ราคาที่ส่วนกลาง", key: "priceHQ" },
@@ -116,6 +117,170 @@ const Dashboard1 = () => {
 
   const csvTablePriceData = formatCSVTablePriceData(dataTablePrice); // Use your table data as CSV data
 
+  const downloadXLSX_price = (
+    data,
+    headers,
+    fileName,
+    selectedYear,
+    selectedCategory,
+    dateInfoData
+  ) => {
+    // Format data with headers
+    const formattedData = data.map((item) =>
+      headers.reduce((acc, header) => {
+        acc[header.label] = item[header.key];
+        return acc;
+      }, {})
+    );
+
+    // Define the number of extra rows
+    const extraRowsAbove = Array(5).fill({}); // 3 rows above the table
+    const extraRowsBelow = Array(2).fill({}); // 2 rows below the table
+
+    // Combine all rows: extra rows above, header, data, and extra rows below
+    const headerRow = headers.reduce((acc, header) => {
+      acc[header.label] = header.label; // Add headers as keys
+      return acc;
+    }, {});
+    const fullData = [
+      ...extraRowsAbove,
+      headerRow,
+      ...formattedData,
+      ...extraRowsBelow,
+    ];
+
+    // Create worksheet
+    const worksheet = XLSX.utils.json_to_sheet(fullData, { skipHeader: true });
+    const workbook = XLSX.utils.book_new();
+
+    // Add merges for title row and rows below
+    const numColumns = headers.length; // Number of columns in the dataset
+    worksheet["!merges"] = [
+      { s: { r: 1, c: 0 }, e: { r: 1, c: numColumns - 1 } }, // Merge title row
+      { s: { r: 3, c: 0 }, e: { r: 3, c: numColumns - 1 } }, // Merge row 4
+      {
+        s: { r: fullData.length - 1, c: 0 },
+        e: { r: fullData.length - 1, c: numColumns - 1 },
+      }, // Merge info row
+    ];
+
+    // Add text to extra rows above
+    worksheet["A2"] = {
+      v: `ตาราง Top 10 รายการพัสดุที่มีราคาจัดซื้อระหว่างส่วนกลาง และ กฟข. แตกต่างกันมากที่สุด ปี ${selectedYear}`,
+    };
+    worksheet["A4"] = { v: `กลุ่มพัสดุ : ${selectedCategory || "-"}` };
+
+    // Style extra rows above
+    const styleRowsAbove = [1];
+    styleRowsAbove.forEach((rowIndex) => {
+      const cellAddress = XLSX.utils.encode_cell({ r: rowIndex, c: 0 });
+      worksheet[cellAddress].s = {
+        font: { bold: rowIndex === 1, sz: rowIndex === 1 ? 16 : 12 },
+        alignment: {
+          horizontal: rowIndex === 1 ? "center" : "left",
+          vertical: "center",
+        },
+      };
+    });
+
+    // Add and style rows below
+    const infoRowIndex = fullData.length - 1; // Index of the last row
+    worksheet[`A${infoRowIndex + 1}`] = {
+      v: `ข้อมูล ณ วันที่ ${dateInfoData?.day || "-"} / ${
+        dateInfoData?.month || "-"
+      } / ${dateInfoData?.year || "-"} เวลา 0${dateInfoData?.hour}:${
+        dateInfoData?.minute
+      }0 น.`,
+    };
+    worksheet[`A${infoRowIndex + 1}`].s = {
+      font: { sz: 12 },
+      alignment: {
+        horizontal: "left",
+        vertical: "center",
+      },
+    };
+
+    // Style headers
+    const headerRowIndex = extraRowsAbove.length;
+    for (let C = 0; C < headers.length; C++) {
+      const cellAddress = XLSX.utils.encode_cell({ r: headerRowIndex, c: C });
+      if (!worksheet[cellAddress]) {
+        worksheet[cellAddress] = { v: headers[C]?.label || "" };
+      }
+      worksheet[cellAddress].s = {
+        font: { bold: true },
+        alignment: {
+          horizontal: "center",
+          vertical: "center",
+          wrapText: true,
+        },
+        fill: { fgColor: { rgb: "D9D9D9" } },
+        border: {
+          top: { style: "thin", color: { rgb: "000000" } },
+          bottom: { style: "thin", color: { rgb: "000000" } },
+          left: { style: "thin", color: { rgb: "000000" } },
+          right: { style: "thin", color: { rgb: "000000" } },
+        },
+      };
+    }
+
+    // Style data cells
+    for (
+      let R = headerRowIndex + 1;
+      R < fullData.length - extraRowsBelow.length;
+      ++R
+    ) {
+      for (let C = 0; C < headers.length; ++C) {
+        const cellAddress = XLSX.utils.encode_cell({ r: R, c: C });
+        if (!worksheet[cellAddress]) continue;
+
+        // Determine horizontal alignment based on column index
+        const alignRight = C > 1; // Right-align for columns after the second
+        const alignLeft = C === 1; // Left-align for the second column
+        const horizontalAlignment = alignLeft
+          ? "left"
+          : alignRight
+          ? "right"
+          : "center";
+
+        // Apply cell styles
+        worksheet[cellAddress].s = {
+          alignment: {
+            horizontal: horizontalAlignment,
+            vertical: "center",
+            wrapText: true,
+          },
+          border: {
+            top: { style: "thin", color: { rgb: "000000" } },
+            bottom: { style: "thin", color: { rgb: "000000" } },
+            left: { style: "thin", color: { rgb: "000000" } },
+            right: { style: "thin", color: { rgb: "000000" } },
+          },
+        };
+      }
+    }
+
+    // Dynamically calculate column widths
+    const colWidths = headers.map((header) => {
+      const columnData = [
+        header.label,
+        ...formattedData.map((row) => row[header.label]?.toString() || ""),
+      ];
+      const maxLength = columnData.reduce(
+        (max, value) => Math.max(max, value.length),
+        0
+      );
+      return { wch: maxLength + 1 }; // Add a small buffer
+    });
+    worksheet["!cols"] = colWidths;
+
+    // Append worksheet to workbook and trigger download
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+    const xlsxData = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+    const blob = new Blob([xlsxData], { type: "application/octet-stream" });
+    saveAs(blob, `${fileName}.xlsx`);
+  };
+
   const {
     data: top5POValue,
     isLoading: isLoadingTop5POValue,
@@ -132,9 +297,9 @@ const Dashboard1 = () => {
       district: item.DISTRICT_NAME,
       lessThanQuantity: Number(item.PERCENT_PO_LESS),
       totalQuantity: Number(item.TOTAL_PO),
-      percentQuantity: Number(item.PO_LESS_EQUAL_500K_QUANTITY)/100,
+      percentQuantity: Number(item.PO_LESS_EQUAL_500K_QUANTITY) / 100,
     })) || [];
-  
+
   const csvTableValueHeaders = [
     { label: "หน่วยงานจัดซื้อ", key: "district" },
     { label: "จำนวน PO มูลค่าไม่เกิน 500,000 บาท", key: "lessThanQuantity" },
@@ -152,6 +317,158 @@ const Dashboard1 = () => {
     }));
 
   const csvTableValueData = formatCSVTableValueData(dataTableValue); // Use your table data as CSV data
+
+  const downloadXLSX_value = (
+    data,
+    headers,
+    fileName,
+    selectedYear,
+    dateInfoData
+  ) => {
+    // Format data with headers
+    const formattedData = data.map((item) =>
+      headers.reduce((acc, header) => {
+        acc[header.label] = item[header.key];
+        return acc;
+      }, {})
+    );
+
+    // Define the number of extra rows
+    const extraRowsAbove = Array(3).fill({}); // 3 rows above the table
+    const extraRowsBelow = Array(2).fill({}); // 2 rows below the table
+
+    // Combine all rows: extra rows above, header, data, and extra rows below
+    const headerRow = headers.reduce((acc, header) => {
+      acc[header.label] = header.label; // Add headers as keys
+      return acc;
+    }, {});
+    const fullData = [
+      ...extraRowsAbove,
+      headerRow,
+      ...formattedData,
+      ...extraRowsBelow,
+    ];
+
+    // Create worksheet
+    const worksheet = XLSX.utils.json_to_sheet(fullData, { skipHeader: true });
+    const workbook = XLSX.utils.book_new();
+
+    // Add merges for title row and rows below
+    const numColumns = headers.length; // Number of columns in the dataset
+    worksheet["!merges"] = [
+      { s: { r: 1, c: 0 }, e: { r: 1, c: numColumns - 1 } }, // Merge title row
+      {
+        s: { r: fullData.length - 1, c: 0 },
+        e: { r: fullData.length - 1, c: numColumns - 1 },
+      }, // Merge info row
+    ];
+
+    // Add text to extra rows above
+    worksheet["A2"] = {
+      v: `ตารางการจัดซื้อที่มีมูลค่าไม่เกิน 500,000 บาท ปี ${selectedYear}`,
+    };
+
+    // Style extra rows above
+    const styleRowsAbove = [1];
+    styleRowsAbove.forEach((rowIndex) => {
+      const cellAddress = XLSX.utils.encode_cell({ r: rowIndex, c: 0 });
+      worksheet[cellAddress].s = {
+        font: { bold: rowIndex === 1, sz: rowIndex === 1 ? 16 : 12 },
+        alignment: {
+          horizontal: rowIndex === 1 ? "center" : "left",
+          vertical: "center",
+        },
+      };
+    });
+
+    // Add and style rows below
+    const infoRowIndex = fullData.length - 1; // Index of the last row
+    worksheet[`A${infoRowIndex + 1}`] = {
+      v: `ข้อมูล ณ วันที่ ${dateInfoData?.day || "-"} / ${
+        dateInfoData?.month || "-"
+      } / ${dateInfoData?.year || "-"} เวลา 0${dateInfoData?.hour}:${
+        dateInfoData?.minute
+      }0 น.`,
+    };
+    worksheet[`A${infoRowIndex + 1}`].s = {
+      font: { sz: 12 },
+      alignment: {
+        horizontal: "left",
+        vertical: "center",
+      },
+    };
+
+    // Style headers
+    const headerRowIndex = extraRowsAbove.length;
+    for (let C = 0; C < headers.length; C++) {
+      const cellAddress = XLSX.utils.encode_cell({ r: headerRowIndex, c: C });
+      if (!worksheet[cellAddress]) {
+        worksheet[cellAddress] = { v: headers[C]?.label || "" };
+      }
+      worksheet[cellAddress].s = {
+        font: { bold: true },
+        alignment: {
+          horizontal: "center",
+          vertical: "center",
+          wrapText: true,
+        },
+        fill: { fgColor: { rgb: "D9D9D9" } },
+        border: {
+          top: { style: "thin", color: { rgb: "000000" } },
+          bottom: { style: "thin", color: { rgb: "000000" } },
+          left: { style: "thin", color: { rgb: "000000" } },
+          right: { style: "thin", color: { rgb: "000000" } },
+        },
+      };
+    }
+
+    // Style data cells
+    for (
+      let R = headerRowIndex + 1;
+      R < fullData.length - extraRowsBelow.length;
+      ++R
+    ) {
+      for (let C = 0; C < headers.length; ++C) {
+        const cellAddress = XLSX.utils.encode_cell({ r: R, c: C });
+        if (!worksheet[cellAddress]) continue;
+
+        const alignRight = C > 1; // Right-align for columns after the first
+        worksheet[cellAddress].s = {
+          alignment: {
+            horizontal: alignRight ? "right" : "center",
+            vertical: "center",
+            wrapText: true,
+          },
+          border: {
+            top: { style: "thin", color: { rgb: "000000" } },
+            bottom: { style: "thin", color: { rgb: "000000" } },
+            left: { style: "thin", color: { rgb: "000000" } },
+            right: { style: "thin", color: { rgb: "000000" } },
+          },
+        };
+      }
+    }
+
+    // Dynamically calculate column widths
+    const colWidths = headers.map((header) => {
+      const columnData = [
+        header.label,
+        ...formattedData.map((row) => row[header.label]?.toString() || ""),
+      ];
+      const maxLength = columnData.reduce(
+        (max, value) => Math.max(max, value.length),
+        0
+      );
+      return { wch: maxLength + 1 }; // Add a small buffer
+    });
+    worksheet["!cols"] = colWidths;
+
+    // Append worksheet to workbook and trigger download
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+    const xlsxData = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+    const blob = new Blob([xlsxData], { type: "application/octet-stream" });
+    saveAs(blob, `${fileName}.xlsx`);
+  };
 
   // Data mappings
   const months = [
@@ -369,7 +686,7 @@ const Dashboard1 = () => {
         value: Number(item.TOTAL_SPEND_MAT || 0) / 1_000_000,
       },
     ])?.flat() || [];
-  
+
   const {
     data: PONumSpendCSV,
     isLoading: isLoadingPONumSpendCSV,
@@ -423,6 +740,152 @@ const Dashboard1 = () => {
 
   const csvMapData = formatCSVTableMapData(dataPONumSpendCSV); // Use your table data as CSV data
 
+  const downloadXLSX_map = (data, headers, fileName, dateInfoData) => {
+    // Format data with headers
+    const formattedData = data.map((item) =>
+      headers.reduce((acc, header) => {
+        acc[header.label] = item[header.key];
+        return acc;
+      }, {})
+    );
+
+    // Define the number of extra rows
+    const extraRowsAbove = Array(3).fill({}); // 3 rows above the table
+    const extraRowsBelow = Array(2).fill({}); // 2 rows below the table
+
+    // Combine all rows: extra rows above, header, data, and extra rows below
+    const headerRow = headers.reduce((acc, header) => {
+      acc[header.label] = header.label; // Add headers as keys
+      return acc;
+    }, {});
+    const fullData = [
+      ...extraRowsAbove,
+      headerRow,
+      ...formattedData,
+      ...extraRowsBelow,
+    ];
+
+    // Create worksheet
+    const worksheet = XLSX.utils.json_to_sheet(fullData, { skipHeader: true });
+    const workbook = XLSX.utils.book_new();
+
+    // Add merges for title row and rows below
+    const numColumns = headers.length; // Number of columns in the dataset
+    worksheet["!merges"] = [
+      { s: { r: 1, c: 0 }, e: { r: 1, c: numColumns - 1 } }, // Merge title row
+      {
+        s: { r: fullData.length - 1, c: 0 },
+        e: { r: fullData.length - 1, c: numColumns - 1 },
+      }, // Merge info row
+    ];
+
+    // Add text to extra rows above
+    worksheet["A2"] = {
+      v: "ตารางจำนวน PO สั่งซื้อและมูลค่าจัดซื้อพัสดุสะสมตามหน่วยงานจัดซื้อ",
+    };
+
+    // Style extra rows above
+    const styleRowsAbove = [1];
+    styleRowsAbove.forEach((rowIndex) => {
+      const cellAddress = XLSX.utils.encode_cell({ r: rowIndex, c: 0 });
+      worksheet[cellAddress].s = {
+        font: { bold: rowIndex === 1, sz: rowIndex === 1 ? 16 : 12 },
+        alignment: {
+          horizontal: rowIndex === 1 ? "center" : "left",
+          vertical: "center",
+        },
+      };
+    });
+
+    // Add and style rows below
+    const infoRowIndex = fullData.length - 1; // Index of the last row
+    worksheet[`A${infoRowIndex + 1}`] = {
+      v: `ข้อมูล ณ วันที่ ${dateInfoData?.day || "-"} / ${
+        dateInfoData?.month || "-"
+      } / ${dateInfoData?.year || "-"} เวลา 0${dateInfoData?.hour}:${
+        dateInfoData?.minute
+      }0 น.`,
+    };
+    worksheet[`A${infoRowIndex + 1}`].s = {
+      font: { sz: 12 },
+      alignment: {
+        horizontal: "left",
+        vertical: "center",
+      },
+    };
+
+    // Style headers
+    const headerRowIndex = extraRowsAbove.length;
+    for (let C = 0; C < headers.length; C++) {
+      const cellAddress = XLSX.utils.encode_cell({ r: headerRowIndex, c: C });
+      if (!worksheet[cellAddress]) {
+        worksheet[cellAddress] = { v: headers[C]?.label || "" };
+      }
+      worksheet[cellAddress].s = {
+        font: { bold: true },
+        alignment: {
+          horizontal: "center",
+          vertical: "center",
+          wrapText: true,
+        },
+        fill: { fgColor: { rgb: "D9D9D9" } },
+        border: {
+          top: { style: "thin", color: { rgb: "000000" } },
+          bottom: { style: "thin", color: { rgb: "000000" } },
+          left: { style: "thin", color: { rgb: "000000" } },
+          right: { style: "thin", color: { rgb: "000000" } },
+        },
+      };
+    }
+
+    // Style data cells
+    for (
+      let R = headerRowIndex + 1;
+      R < fullData.length - extraRowsBelow.length;
+      ++R
+    ) {
+      for (let C = 0; C < headers.length; ++C) {
+        const cellAddress = XLSX.utils.encode_cell({ r: R, c: C });
+        if (!worksheet[cellAddress]) continue;
+
+        const alignRight = C > 0; // Right-align for columns after the first
+        worksheet[cellAddress].s = {
+          alignment: {
+            horizontal: alignRight ? "right" : "center",
+            vertical: "center",
+            wrapText: true,
+          },
+          border: {
+            top: { style: "thin", color: { rgb: "000000" } },
+            bottom: { style: "thin", color: { rgb: "000000" } },
+            left: { style: "thin", color: { rgb: "000000" } },
+            right: { style: "thin", color: { rgb: "000000" } },
+          },
+        };
+      }
+    }
+
+    // Dynamically calculate column widths
+    const colWidths = headers.map((header) => {
+      const columnData = [
+        header.label,
+        ...formattedData.map((row) => row[header.label]?.toString() || ""),
+      ];
+      const maxLength = columnData.reduce(
+        (max, value) => Math.max(max, value.length),
+        0
+      );
+      return { wch: maxLength + 1 }; // Add a small buffer
+    });
+    worksheet["!cols"] = colWidths;
+
+    // Append worksheet to workbook and trigger download
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+    const xlsxData = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+    const blob = new Blob([xlsxData], { type: "application/octet-stream" });
+    saveAs(blob, `${fileName}.xlsx`);
+  };
+
   const datadate = 1;
 
   // Fetch summary data for selected year and category using React Query
@@ -437,7 +900,7 @@ const Dashboard1 = () => {
     enabled: !!selectedYear, // Only run query if both year and category_group are selected
   });
 
-    const getButtonStyle = (isSelected) => ({
+  const getButtonStyle = (isSelected) => ({
     backgroundColor: isSelected ? "#8e44ad" : "#f0f0f0",
     color: isSelected ? "white" : "black",
     textDecoration: "none", // Remove underline
@@ -451,76 +914,95 @@ const Dashboard1 = () => {
 
   return (
     <div>
-      <BackgroundComponent />
       <NavbarComponent />
-      <div className="year-dropdown-container">
-        <YearDropdown
-          onSelectYear={setSelectedYear}
-          selectedYear={selectedYear}
-        />
+      <div className="text-dropdown-container">
+        <h1 className="header-title">ภาพรวมค่าใช้จ่าย</h1>
+        <div className="year-dropdown-container">
+          <YearDropdown
+            onSelectYear={setSelectedYear}
+            selectedYear={selectedYear}
+          />
+        </div>
       </div>
       <div className="dashboard1-container">
         <div className="table-container-L1">
           <div className="table-top-price-diff">
-              <div className="D1-CSV-container">
-                <div className="download-button">
-                  <CSVLink
-                    data={csvTablePriceData}
-                    headers={csvTablePriceHeaders}
-                    filename={`HQvsDistrictPriceComparison_${selectedYear}_${selectedCategory}.csv`}
-                    style={getButtonStyle(false)} // Apply the button style
+            <div className="dropdown-download-container">
+              <div className="D1-dropdown-cat-group">
+                {isCategoriesLoading ? (
+                  <p>Loading categories...</p>
+                ) : (
+                  <select
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
                   >
-                    Download CSV
-                  </CSVLink>
-                </div>
+                    <option value="">-- เลือกประเภทพัสดุ --</option>
+                    {categoryData
+                      ?.slice() // Create a shallow copy of the array to avoid modifying the original
+                      .sort((a, b) => {
+                        if (a.CATEGORY_ID === "100") return -1; // Move `100` to the top
+                        if (b.CATEGORY_ID === "100") return 1;
+                        return a.CATEGORY_ID.localeCompare(b.CATEGORY_ID); // Default alphabetical sort by ID
+                      })
+                      .map((category, index) => (
+                        <option key={index} value={category.CATEGORY_ID}>
+                          {`${category.CATEGORY_ID}: ${category.CATEGORY_NAME}`}
+                        </option>
+                      ))}
+                  </select>
+                )}
               </div>
-            <div className="dropdown-cat-group">
-              {isCategoriesLoading ? (
-                <p>Loading categories...</p>
-              ) : (
-                <select
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
+              <div className="download-button">
+                <button
+                  onClick={() =>
+                    downloadXLSX_price(
+                      csvTablePriceData, // Data
+                      csvTablePriceHeaders, // Headers
+                      `HQvsDistrictPriceComparison_${selectedYear}_${selectedCategory}`,
+                      selectedYear, // File Name
+                      selectedCategory,
+                      dateInfoData // Date Info
+                    )
+                  }
+                  style={getButtonStyle(false)} // Apply button style
                 >
-                  <option value="">-- เลือกประเภทพัสดุ --</option>
-                  {categoryData
-                    ?.slice() // Create a shallow copy of the array to avoid modifying the original
-                    .sort((a, b) => {
-                      if (a.CATEGORY_ID === "100") return -1; // Move `100` to the top
-                      if (b.CATEGORY_ID === "100") return 1;
-                      return a.CATEGORY_ID.localeCompare(b.CATEGORY_ID); // Default alphabetical sort by ID
-                    })
-                    .map((category, index) => (
-                      <option key={index} value={category.CATEGORY_ID}>
-                        {`${category.CATEGORY_ID}: ${category.CATEGORY_NAME}`}
-                      </option>
-                    ))}
-                </select>
-              )}
+                  Download XLSX
+                </button>
+              </div>
             </div>
             <TableD1Price
               title={`Top 10 รายการพัสดุที่มีราคาจัดซื้อระหว่างส่วนกลาง และ กฟข. แตกต่างกันมากที่สุด ปี ${selectedYear}`}
               data={dataTablePrice}
             />
-            <p>
-              หมายเหตุ: ราคาที่แสดงเป็นราคาเฉลี่ยในปีปัจจุบัน
-              ยกเว้นหากไม่มีการจัดซื้อในปีที่เลือกแสดง
-              จะใช้ราคาเฉลี่ยของปีก่อนหน้าที่มีการจัดซื้อ{" "};* คือพัสดุที่มีการจ้างรีดที่ส่วนกลางด้วยอลูมิเนียมอินกอต{" "}
-            </p>
+            <div className="remark-container">
+              <p> ⓘ หมายเหตุ:</p>
+              <p>
+                1. ราคาที่แสดงเป็นราคาเฉลี่ยในปีปัจจุบัน
+                ยกเว้นหากไม่มีการจัดซื้อในปีที่เลือกแสดง
+                จะใช้ราคาเฉลี่ยของปีก่อนหน้าที่มีการจัดซื้อ
+              </p>
+              <p>2. *คือพัสดุที่มีการจ้างรีดที่ส่วนกลางด้วยอลูมิเนียมอินกอท</p>
+            </div>
           </div>
           <div className="table-top-povalue-count">
-              <div className="D1-CSV-container">
-                <div className="download-button">
-                  <CSVLink
-                    data={csvTableValueData}
-                    headers={csvTableValueHeaders}
-                    filename={`DistrictPOValueComparison_${selectedYear}.csv`}
-                    style={getButtonStyle(false)} // Apply the button style
-                  >
-                    Download CSV
-                  </CSVLink>
-                </div>
+            <div className="download-container">
+              <div className="download-button">
+                <button
+                  onClick={() =>
+                    downloadXLSX_value(
+                      csvTableValueData, // Data
+                      csvTableValueHeaders, // Headers
+                      `DistrictPOValueComparison_${selectedYear}`,
+                      selectedYear, // File Name
+                      dateInfoData // Date Info
+                    )
+                  }
+                  style={getButtonStyle(false)} // Apply button style
+                >
+                  Download XLSX
+                </button>
               </div>
+            </div>
             <TableD1Value
               title={`การจัดซื้อที่มีมูลค่าไม่เกิน 500,000 บาท ปี ${selectedYear}`}
               data={dataTableValue}
@@ -534,7 +1016,7 @@ const Dashboard1 = () => {
               xAxisKey="month" // X-axis is month
               lineKeys={["mat", "nonMat"]}
               title={`มูลค่าการจัดหาทั้งหมดของ กฟภ. (ล้านบาท) ในปี ${selectedYear}`}
-              height={300} // Adjust height as needed
+              height={230} // Adjust height as needed
             />
           </div>
           <div className="right">
@@ -542,12 +1024,15 @@ const Dashboard1 = () => {
               data={dataBarSpend}
               xAxisKey="name"
               barKey="value"
-              title={`มูลค่าการจัดหาทั้งหมดของ กฟภ. (ล้านบาท) ในปี ${selectedYear}`}
+              title={" "}
               height={330}
             />
-            <p>
-              หมายเหตุ: พัสดุอุปกรณ์ไฟฟ้าคือพัสดุหลัก พัสดุรองที่มีรหัสพัสดุ
-              (รหัส 100 - 108) อื่นๆ หมายถึงงานจ้างบริการต่างๆ งานจัดซื้ออะไหล่
+            <p className="mat-legend">
+              ▬▬ พัสดุอุปกรณ์ไฟฟ้า คือ พัสดุหลัก พัสดุรองที่มีรหัสพัสดุ (รหัส
+              100 - 108)
+            </p>
+            <p className="nonMat-legend">
+              ▬▬ การจัดซื้ออื่น ๆ หมายถึงงานจ้างบริการต่าง ๆ งานจัดซื้ออะไหล่
               และ งานเช่า เป็นต้น
             </p>
           </div>
@@ -567,12 +1052,21 @@ const Dashboard1 = () => {
               data={dataBarPurchaseQ}
               xAxisKey="name"
               barKey="value"
-              title={`จำนวนใบสั่งซื้อ (PO) ในปี ${selectedYear}`}
+              title={``}
               height={330}
             />
-          <p>
-             หมายเหตุ: พัสดุอุปกรณ์ไฟฟ้าคือพัสดุหลัก พัสดุรองที่มีรหัสพัสดุ (รหัส 100 - 108) อื่นๆ หมายถึงงานจ้างบริการต่างๆ งานจัดซื้ออะไหล่ และ          งานเช่า เป็นต้น; บาง PO มีการจัดซื้อทั้งพัสดุอุปกรณ์ไฟฟ้า และ อื่นๆ จึงทำให้ผลรวมคลาดเคลื่อนกับจำนวน PO จัดหาทั้งหมดของ กฟภ.
-          </p>
+            <p className="mat-legend">
+              ▬▬ พัสดุอุปกรณ์ไฟฟ้า คือ พัสดุหลัก พัสดุรองที่มีรหัสพัสดุ (รหัส
+              100 - 108)
+            </p>
+            <p className="nonMat-legend">
+              ▬▬ การจัดซื้ออื่น ๆ หมายถึงงานจ้างบริการต่าง ๆ งานจัดซื้ออะไหล่
+              และ งานเช่า เป็นต้น
+            </p>
+            <p>
+              ⓘ หมายเหตุ: บาง PO มีการจัดซื้อทั้งพัสดุอุปกรณ์ไฟฟ้า และ อื่นๆ
+              จึงทำให้ผลรวมคลาดเคลื่อนกับจำนวน PO จัดหาทั้งหมดของ กฟภ.
+            </p>
           </div>
         </div>
         <div className="top-D1-grid-container">
@@ -581,12 +1075,13 @@ const Dashboard1 = () => {
               data={dataLineSupplierQuantity}
               xAxisKey="month"
               lineKeys={["mat", "nonMat"]}
-              title={`จำนวน Supplier ในปี ${selectedYear}`}
+              title={`จำนวน Supplier (ราย) ในปี ${selectedYear}`}
               height={230}
             />
             <p>
-              หมายเหตุ: นับเฉพาะ Supplier ที่เคยมีสัญญาจัดซื้อกับ กฟภ. อย่างน้อย
-              1 ครั้งในระยะเวลานั้นๆ; Supplier บางเจ้าอาจจะอยู่หลายเขตทำให้จำนวนรวมคลาดเคลื่อน
+              ⓘ หมายเหตุ: นับเฉพาะ Supplier ที่เคยมีสัญญาจัดซื้อกับ กฟภ.
+              อย่างน้อย 1 ครั้งในระยะเวลานั้นๆ; Supplier
+              บางเจ้าอาจจะอยู่หลายเขตทำให้จำนวนรวมคลาดเคลื่อน
             </p>
           </div>
           <div className="right">
@@ -594,11 +1089,16 @@ const Dashboard1 = () => {
               data={dataBarSupplierQ}
               xAxisKey="name"
               barKey="value"
-              title={`จำนวน Supplier ในปี ${selectedYear}`}
+              title={``}
               height={330}
             />
-            <p>
-              หมายเหตุ: พัสดุอุปกรณ์ไฟฟ้าคือพัสดุหลัก พัสดุรองที่มีรหัสพัสดุ (รหัส 100 - 108) อื่นๆ หมายถึงงานจ้างบริการต่างๆ งานจัดซื้ออะไหล่ และ           งานเช่า เป็นต้น
+            <p className="mat-legend">
+              ▬▬ พัสดุอุปกรณ์ไฟฟ้า คือ พัสดุหลัก พัสดุรองที่มีรหัสพัสดุ (รหัส
+              100 - 108)
+            </p>
+            <p className="nonMat-legend">
+              ▬▬ การจัดซื้ออื่น ๆ หมายถึงงานจ้างบริการต่าง ๆ งานจัดซื้ออะไหล่
+              และ งานเช่า เป็นต้น
             </p>
           </div>
         </div>
@@ -616,23 +1116,28 @@ const Dashboard1 = () => {
             <DonutChartRe
               data={dataDonutSpend}
               title={`มูลค่าจัดซื้อพัสดุตามหน่วยงานจัดซื้อ (ล้านบาท) ในปี ${selectedYear}`}
-              height={800}
+              height={700}
             />
           </div>
         </div>
         <div className="bottom-D1-container">
-            <div className="D1-CSV-container">
-              <div className="download-button">
-                <CSVLink
-                  data={csvMapData}
-                  headers={csvMapHeaders}
-                  filename={`PurchaseUnitbyPONumAndValue_${selectedYear}.csv`}
-                  style={getButtonStyle(false)} // Apply the button style
-                >
-                  Download CSV
-                </CSVLink>
-              </div>
+          <div className="download-container">
+            <div className="download-button">
+              <button
+                onClick={() =>
+                  downloadXLSX_map(
+                    csvMapData, // Data
+                    csvMapHeaders, // Headers
+                    `PurchaseUnitbyPONumAndValue_${selectedYear}`, // File Name
+                    dateInfoData // Date Info
+                  )
+                }
+                style={getButtonStyle(false)} // Apply button style
+              >
+                Download XLSX
+              </button>
             </div>
+          </div>
           <div className="map-wrapper">
             <div className="map-container">
               <MapChart data={dataPONumSpend} />

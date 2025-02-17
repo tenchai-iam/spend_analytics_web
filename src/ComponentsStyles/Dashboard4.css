@@ -1,14 +1,43 @@
 .data-date {
+  font-size: 0.8rem;
+  color: #3e3e3e;
+}
+
+.text-dropdown-container {
+  padding: 20px;
+  display: flex; /* Use Flexbox for layout */
+  justify-content: space-between; /* Place items on opposite ends */
+  align-items: center; /* Align items vertically */
+  font-size: 0.8rem;
+  width: 100%;
+}
+
+.header-title {
   font-size: 1rem;
-  color: #fff;
 }
 
 .year-dropdown-container {
   display: flex;
   justify-content: flex-end; /* This moves the dropdown to the right */
+  color: white;
+}
+
+.rm-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* This moves the dropdown to the right */
+  gap: 20px;
   padding-right: 20px; /* Optional: adjust padding as per your needs */
   margin-top: 20px;
-  color: white;
+  color: #3e3e3e;
+  font-size: 0.8rem;
+  vertical-align: middle;
+}
+
+.top-text {
+  line-height: 0.9;
+  font-size: 0.8rem;
+  margin: 0px;
 }
 
 .dashboard4-container {
@@ -22,59 +51,62 @@
   padding: 20px;
 }
 
-.D4-CSV-container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  margin-left: auto;
-}
-
 .summary-container-L1 {
   display: flex;
   flex-direction: row;
   gap: 20px;
-  box-sizing: border-box; /* Ensure padding is included in width */
-  margin: 0 auto;
   width: 100%;
 }
 
 .donut-Chart {
   flex: 1 1 40%;
   max-width: 1 1 40%;
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
-  border-radius: 8px;
   padding: 20px;
+  background-color: rgba(118, 118, 128, 0.08); /* Base dark color */
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.08),
+    /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
   box-sizing: border-box; /* Ensure padding is included in width */
-  color: black;
+  color: #3e3e3e;
+  font-size: 0.8rem;
+}
+
+.recharts-wrapper g:focus,
+.recharts-wrapper path:focus {
+  outline: none; /* Remove the focus rectangle */
 }
 
 .table-summary {
   flex: 1 1 60%;
   max-width: 1 1 60%;
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
-  border-radius: 8px;
-  box-sizing: border-box; /* Ensure padding is included in width */
-  color: black;
-}
-
-.download-button {
+  background-color: rgba(118, 118, 128, 0.08); /* Base dark color */
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.08),
+    /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
   padding: 20px;
+  box-sizing: border-box; /* Ensure padding is included in width */
+  color: #3e3e3e;
+  font-size: 0.8rem;
+  gap: 20px;
   align-items: center;
 }
 
+.download-button {
+  white-space: nowrap; /* Prevent the text from wrapping */
+}
+
 .btn-container-L1 {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* Default: 3 columns */
+  display: flex;
+  flex-direction: row;
   gap: 20px;
   box-sizing: border-box; /* Ensure padding is included in width */
-  margin: 0 auto;
   width: 100%;
 }
 
 .dropdown-group {
-  flex: 1 1 65%;
-  max-width: 1 1 65%;
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  flex: 1 1 40%;
+  max-width: 1 1 40%;
+  background-color: rgba(118, 118, 128, 0.08); /* Base dark color */
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.08),
+    /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
   border-radius: 8px;
   padding: 20px;
   display: flex;
@@ -82,10 +114,10 @@
   gap: 20px;
   box-sizing: border-box; /* Ensure padding is included in width */
   margin: 0 auto;
-  color: black;
+  color: #3e3e3e;
 }
 
-.dropdown-cat-group {
+.D4-dropdown-cat-group {
   font-size: 0.9rem;
   display: flex;
   flex-direction: column;
@@ -93,15 +125,17 @@
   z-index: 5;
 }
 
-.dropdown-group label {
-  font-weight: bold;
-  margin-bottom: 5px;
+.D4-dropdown-container {
+  font-size: 0.8rem;
+  width: 100%;
 }
 
 .lead-time {
-  flex: 1 1 17.5%;
-  max-width: 1 1 17.5%;
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  flex: 1 1 30%;
+  max-width: 1 1 30%;
+  background-color: rgba(118, 118, 128, 0.08); /* Base dark color */
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.08),
+    /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
   border-radius: 8px;
   padding: 20px;
   display: flex;
@@ -113,9 +147,11 @@
 }
 
 .demand-time {
-  flex: 1 1 17.5%;
-  max-width: 1 1 17.5%;
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  flex: 1 1 30%;
+  max-width: 1 1 30%;
+  background-color: rgba(118, 118, 128, 0.08); /* Base dark color */
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.08),
+    /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
   border-radius: 8px;
   padding: 20px;
   display: flex;
@@ -126,42 +162,39 @@
   color: black;
 }
 
-.button-group button {
-  cursor: pointer;
-  background-color: #4a0072;
-  color: white;
-  border: none;
-  border-radius: 5px;
+.button-group-lead {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.button-group-demand {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.button-group-lead button {
+  background-color: white;
+  color: #4a0072;
+  font-size: 0.8rem;
   flex: 1;
   transition: background-color 0.3s ease; /* Smooth hover transition */
-  min-width: 100px;
-  max-width: 300px;
+  min-width: 30px;
+  max-width: 200px;
 }
 
-.summary-container-L1 {
-  padding: 20px;
-  display: flex;
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
-  border-radius: 8px;
-  flex-wrap: wrap;
-  gap: 20px;
-  box-sizing: border-box; /* Ensure padding is included in width */
-  margin: 0 auto;
-  width: 100%;
+.button-group-demand button {
+  background-color: white;
+  color: #4a0072;
+  font-size: 0.8rem;
+  flex: 1;
+  transition: background-color 0.3s ease; /* Smooth hover transition */
+  min-width: 30px;
+  max-width: 200px;
 }
 
-.donutChart {
-  flex: 1 1 calc(40% - 30px);
-  max-width: calc(40%-30px);
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
-  border-radius: 8px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  box-sizing: border-box; /* Ensure padding is included in width */
-  color: black;
-  align-items: center;
+.button-group button:hover {
+  background-color: #4a0072;
+  color: white;
 }
 
 .text-summary {
@@ -183,20 +216,6 @@
   text-align: center;
 }
 
-.table-summary {
-  flex: 1 1 calc(60% - 30px);
-  max-width: calc(60%-30px);
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
-  border-radius: 8px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  box-sizing: border-box; /* Ensure padding is included in width */
-  color: black;
-  align-items: center;
-}
-
 .table-container-L1 {
   display: flex;
   flex-wrap: nowrap;
@@ -208,7 +227,9 @@
 
 .table-compare {
   max-width: 100%;
-  background-image: linear-gradient(to right, #d3cce3, #e9e4f0);
+  background-color: rgba(118, 118, 128, 0.08); /* Base dark color */
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.08),
+    /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
   border-radius: 8px;
   padding: 20px;
   display: flex;
@@ -219,16 +240,36 @@
   align-items: center;
 }
 
+.download-container {
+  display: flex; /* Use Flexbox for layout */
+  justify-content: right;
+  align-items: center; /* Align items vertically */
+  font-size: 0.8rem;
+  width: 100%;
+}
+
 .text-title {
   font-size: 1rem;
   margin-bottom: 10px;
-  color: black;
+  color: #3e3e3e;
 }
 
 .text-subtitle {
   font-size: 0.9rem;
   margin-bottom: 10px;
-  color: black;
+  color: #3e3e3e;
+}
+
+.remark-container {
+  font-size: 0.8rem;
+  padding: 10px;
+  gap: 0px;
+  justify-self: left;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 1px 3px rgba(118, 118, 128, 0.08),
+    /* Subtle shadow with #767680 */ 0px 4px 8px rgba(0, 0, 0, 0.1); /* Additional elevation */
+  width: 100%;
 }
 
 @media (max-width: 768px) {

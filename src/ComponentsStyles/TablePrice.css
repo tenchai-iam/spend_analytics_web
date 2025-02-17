@@ -1,0 +1,7 @@
+.lower {
+  padding: 3px;
+  color: #fff; /* Set text color to white for readability */
+  border-radius: 4px;
+  font-weight: bold;
+  background-color: green;
+}
