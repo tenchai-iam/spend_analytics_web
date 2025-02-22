@@ -8,7 +8,9 @@ import {
   Navigate,
 } from "react-router-dom";
 
+import { AuthProvider } from "./services/AuthContext.js"; // Ensure correct import
 import ProtectedRoute from "./services/ProtectedRoute";
+
 import Home from "./Home";
 import Dashboard1 from "./ComponentsPage/Dashboard1";
 import Dashboard2 from "./ComponentsPage/Dashboard2X";
@@ -25,55 +27,59 @@ const queryClient = new QueryClient();
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Router>
-        <div className="App">
-          <Routes>
-            <Route path="/" element={<ProtectedRoute element={Home} />} />
-            <Route
-              path="/dashboard1"
-              element={<ProtectedRoute element={Dashboard1} />}
-            />
-            <Route
-              path="/dashboard2"
-              element={<ProtectedRoute element={Dashboard2} />}
-            />
+      <AuthProvider>
+        {" "}
+        {/* Ensure AuthProvider wraps the entire app */}
+        <Router>
+          <div className="App">
+            <Routes>
+              <Route path="/" element={<ProtectedRoute element={Home} />} />
+              <Route
+                path="/dashboard1"
+                element={<ProtectedRoute element={Dashboard1} />}
+              />
+              <Route
+                path="/dashboard2"
+                element={<ProtectedRoute element={Dashboard2} />}
+              />
 
-            {/* Restrict access to Dashboard3 and Dashboard4 for user_level "B" */}
-            <Route
-              path="/dashboard3"
-              element={
-                <ProtectedRoute element={Dashboard3} allowedLevels={["B"]} />
-              }
-            />
-            <Route
-              path="/dashboard4"
-              element={
-                <ProtectedRoute element={Dashboard4} allowedLevels={["B"]} />
-              }
-            />
+              {/* Restrict access to Dashboard3 and Dashboard4 for user_level "B" */}
+              <Route
+                path="/dashboard3"
+                element={
+                  <ProtectedRoute element={Dashboard3} allowedLevels={["B"]} />
+                }
+              />
+              <Route
+                path="/dashboard4"
+                element={
+                  <ProtectedRoute element={Dashboard4} allowedLevels={["B"]} />
+                }
+              />
 
-            <Route
-              path="/dashboard5"
-              element={<ProtectedRoute element={Dashboard5} />}
-            />
-            <Route
-              path="/dashboard6"
-              element={<ProtectedRoute element={Dashboard6} />}
-            />
-            <Route
-              path="/dashboard7"
-              element={<ProtectedRoute element={Dashboard7} />}
-            />
-            <Route
-              path="/upload"
-              element={<ProtectedRoute element={Upload} />}
-            />
-            <Route path="/callback" element={<Callback />} />
+              <Route
+                path="/dashboard5"
+                element={<ProtectedRoute element={Dashboard5} />}
+              />
+              <Route
+                path="/dashboard6"
+                element={<ProtectedRoute element={Dashboard6} />}
+              />
+              <Route
+                path="/dashboard7"
+                element={<ProtectedRoute element={Dashboard7} />}
+              />
+              <Route
+                path="/upload"
+                element={<ProtectedRoute element={Upload} />}
+              />
+              <Route path="/callback" element={<Callback />} />
 
-            <Route path="*" element={<Navigate to="/" />} />
-          </Routes>
-        </div>
-      </Router>
+              <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
+          </div>
+        </Router>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
