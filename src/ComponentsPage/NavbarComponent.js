@@ -9,6 +9,11 @@ import "../ComponentsStyles/NavbarStyles.css"; // Import the custom Navbar CSS f
 const workd_url = process.env.REACT_APP_WORKD_URL;
 
 function NavbarComponent() {
+  // Retrieve user details from sessionStorage
+  const firstName = sessionStorage.getItem("first_name");
+  const lastName = sessionStorage.getItem("last_name");
+  const userLevel = sessionStorage.getItem("user_level"); // "B" can access Dashboard3 & Dashboard4
+
   return (
     <Navbar
       expand="lg"
@@ -39,65 +44,39 @@ function NavbarComponent() {
               หน้าหลัก
             </Nav.Link>
 
-            {/* Dropdown for Admin */}
+            {/* Dropdown for General Employees */}
             <NavDropdown title="สำหรับพนักงานทั่วไป" id="admin-dropdown">
-              <NavDropdown.Item
-                as={Link}
-                to="/dashboard1"
-                className="dropdown-item-custom"
-              >
+              <NavDropdown.Item as={Link} to="/dashboard1">
                 ภาพรวมค่าใช้จ่าย
               </NavDropdown.Item>
-              <NavDropdown.Item
-                as={Link}
-                to="/dashboard2"
-                className="dropdown-item-custom "
-              >
+              <NavDropdown.Item as={Link} to="/dashboard2">
                 ภาพรวม Supplier
               </NavDropdown.Item>
-              <NavDropdown.Item
-                as={Link}
-                to="/dashboard5"
-                className="dropdown-item-custom "
-              >
+              <NavDropdown.Item as={Link} to="/dashboard5">
                 ติดตามมูลค่า Stage 5
               </NavDropdown.Item>
-              <NavDropdown.Item
-                as={Link}
-                to="/dashboard6"
-                className="dropdown-item-custom "
-              >
+              <NavDropdown.Item as={Link} to="/dashboard6">
                 ภาพรวมมูลค่าพัสดุคงคลัง
               </NavDropdown.Item>
             </NavDropdown>
 
-            {/* Dropdown for Planning */}
-            <NavDropdown
-              title="สำหรับผู้จัดทำแผนจัดหาพัสดุ"
-              id="planning-dropdown"
-            >
-              <NavDropdown.Item
-                as={Link}
-                to="/dashboard3"
-                className="dropdown-item-custom"
+            {/* Dropdown for Planning - Hidden if user_level is NOT "B" */}
+            {userLevel === "B" && (
+              <NavDropdown
+                title="สำหรับผู้จัดทำแผนจัดหาพัสดุ"
+                id="planning-dropdown"
               >
-                เปรียบเทียบราคาจัดซื้อ
-              </NavDropdown.Item>
-              <NavDropdown.Item
-                as={Link}
-                to="/dashboard4"
-                className="dropdown-item-custom"
-              >
-                ปรับแผนเพิ่มเติมระหว่างปี
-              </NavDropdown.Item>
-              <NavDropdown.Item
-                as={Link}
-                to="/dashboard7"
-                className="dropdown-item-custom"
-              >
-                ปรับแผนเพิ่มเติมระหว่างปี (งบ C)
-              </NavDropdown.Item>
-            </NavDropdown>
+                <NavDropdown.Item as={Link} to="/dashboard3">
+                  เปรียบเทียบราคาจัดซื้อ
+                </NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/dashboard4">
+                  ปรับแผนเพิ่มเติมระหว่างปี
+                </NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/dashboard7">
+                  ปรับแผนเพิ่มเติมระหว่างปี (งบ C)
+                </NavDropdown.Item>
+              </NavDropdown>
+            )}
 
             {/* Link for Data Management */}
             <Nav.Link as={Link} to="/upload">
@@ -105,16 +84,23 @@ function NavbarComponent() {
             </Nav.Link>
           </Nav>
 
+          {/* Show First Name & Last Name */}
+          <div className="user-info ms-auto me-3">
+            <span className="text-white">
+              {firstName ? `${firstName} ${lastName}` : "ผู้ใช้งาน"}
+            </span>
+          </div>
+
           {/* Logout Button */}
           <Button
-            className="logout-button ms-auto"
+            className="logout-button"
             onClick={() => {
               window.location.href = workd_url;
             }}
           >
             &larr; ไปที่ระบบ
             <img
-              src={workd} // Replace with the path to your logo
+              src={workd}
               height="15"
               className="d-inline-block align-center"
               alt="Spend Insight"

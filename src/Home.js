@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect } from "react";
 import MenuCard from "./ComponentsPage/MenuCard";
 import "./ComponentsStyles/Home.css";
 import NavbarComponent from "./ComponentsPage/NavbarComponent";
@@ -8,14 +8,13 @@ import D2 from "./pic/02 - Supplier.png";
 import D3 from "./pic/03 - Price.png";
 import D4 from "./pic/04 - Procurement.png";
 import { useQuery } from "@tanstack/react-query";
-import { getHomeData, getYears, getDateInfo } from "./services/api.js"; // Import your API service function
+import { getHomeData, getYears, getDateInfo } from "./services/api.js"; // Import API service functions
 
 const Dashboard = ({ selectedYear }) => {
-  // Use React Query's useQuery to fetch data for the selected year
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["dashboardData", selectedYear], // Unique query key for caching
-    queryFn: () => getHomeData(selectedYear), // Fetch data based on the selected year
-    enabled: !!selectedYear, // Only fetch data if a year is selected
+    queryKey: ["dashboardData", selectedYear],
+    queryFn: () => getHomeData(selectedYear),
+    enabled: !!selectedYear,
   });
 
   if (!selectedYear) return <div>Please select a year to view data.</div>;
@@ -43,34 +42,32 @@ const Dashboard = ({ selectedYear }) => {
 
 // Main Home Component
 const Home = () => {
-  const [selectedYear, setSelectedYear] = useState(""); // State to hold the selected year
+  const [selectedYear, setSelectedYear] = useState("");
+  const userLevel = sessionStorage.getItem("user_level"); // Fetch user level
 
-  // Fetch available years using React Query
   const { data: yearsData, isLoading } = useQuery({
     queryKey: ["years"],
     queryFn: getYears,
   });
 
-  // Set the default year to the most recent one
   useEffect(() => {
     if (yearsData && yearsData.years.length > 0) {
-      const mostRecentYear = Math.max(...yearsData.years); // Get the most recent year
-      setSelectedYear(mostRecentYear.toString()); // Set as default selected year
+      const mostRecentYear = Math.max(...yearsData.years);
+      setSelectedYear(mostRecentYear.toString());
     }
   }, [yearsData]);
 
   const datadate = 1;
 
-  // Fetch summary data for selected year and category using React Query
   const {
     data: dateInfoData,
     isLoading: isLoadingDateInfoData,
     isError,
     error,
   } = useQuery({
-    queryKey: ["dateInfoData", datadate], // Unique query key for caching
-    queryFn: () => getDateInfo(datadate), // API call to fetch data based on datadate
-    enabled: !!selectedYear, // Only run query if both year and category_group are selected
+    queryKey: ["dateInfoData", datadate],
+    queryFn: () => getDateInfo(datadate),
+    enabled: !!selectedYear,
   });
 
   return (
@@ -88,7 +85,7 @@ const Home = () => {
       <Dashboard selectedYear={selectedYear} />
       <div>
         <div className="nav-container">
-          {/* First Section */}
+          {/* General Section */}
           <div className="nav-section">
             <h1 className="nav-title">General</h1>
             <p className="nav-subtitle">Dashboard ทั่วไป</p>
@@ -115,29 +112,33 @@ const Home = () => {
               />
             </div>
           </div>
-          <div className="nav-section">
-            <h1 className="nav-title">Procurement Planning</h1>
-            <p className="nav-subtitle">Dashboard สำหรับผู้จัดทำแผนพัสดุ</p>
-            <div className="menu-grid-procurement">
-              <MenuCard
-                image={D3}
-                buttonTitle="เปรียบเทียบราคาจัดซื้อ"
-                link="/dashboard3"
-              />
-              <MenuCard
-                image={D4}
-                buttonTitle="ปรับแผนเพิ่มเติมระหว่างปี"
-                link="/dashboard4"
-              />
-              <MenuCard
-                image={D4}
-                buttonTitle="ปรับแผนเพิ่มเติมระหว่างปี (งบ C)"
-                link="/dashboard7"
-              />
+
+          {/* Procurement Planning - Only show if user level is "B" */}
+          {userLevel === "B" && (
+            <div className="nav-section">
+              <h1 className="nav-title">Procurement Planning</h1>
+              <p className="nav-subtitle">Dashboard สำหรับผู้จัดทำแผนพัสดุ</p>
+              <div className="menu-grid-procurement">
+                <MenuCard
+                  image={D3}
+                  buttonTitle="เปรียบเทียบราคาจัดซื้อ"
+                  link="/dashboard3"
+                />
+                <MenuCard
+                  image={D4}
+                  buttonTitle="ปรับแผนเพิ่มเติมระหว่างปี"
+                  link="/dashboard4"
+                />
+                <MenuCard
+                  image={D4}
+                  buttonTitle="ปรับแผนเพิ่มเติมระหว่างปี (งบ C)"
+                  link="/dashboard7"
+                />
+              </div>
             </div>
-          </div>
-          <div></div>
+          )}
         </div>
+
         <div>
           <h1 className="data-date">
             ข้อมูล ณ วันที่ {dateInfoData?.day}/{dateInfoData?.month}/
