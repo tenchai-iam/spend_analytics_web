@@ -78,10 +78,12 @@ function NavbarComponent() {
               </NavDropdown>
             )}
 
-            {/* Link for Data Management */}
-            <Nav.Link as={Link} to="/upload">
-              จัดการข้อมูล
-            </Nav.Link>
+            {/* Show Upload NavLink ONLY for user_level "B" */}
+            {userLevel === "B" && (
+              <Nav.Link as={Link} to="/upload">
+                จัดการข้อมูล
+              </Nav.Link>
+            )}
           </Nav>
 
           {/* Show First Name & Last Name */}
