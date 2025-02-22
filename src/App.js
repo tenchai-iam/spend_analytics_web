@@ -57,21 +57,30 @@ export default function App() {
                 }
               />
 
-              <Route
+              <Route path="/dashboard5" element={<Dashboard5 />} />
+
+              {/* <Route
                 path="/dashboard5"
                 element={<ProtectedRoute element={Dashboard5} />}
-              />
-              <Route
+              /> */}
+
+              <Route path="/dashboard6" element={<Dashboard6 />} />
+
+              {/* <Route
                 path="/dashboard6"
                 element={<ProtectedRoute element={Dashboard6} />}
-              />
+              /> */}
               <Route
                 path="/dashboard7"
-                element={<ProtectedRoute element={Dashboard7} />}
+                element={
+                  <ProtectedRoute element={Dashboard7} allowedLevels={["B"]} />
+                }
               />
               <Route
                 path="/upload"
-                element={<ProtectedRoute element={Upload} />}
+                element={
+                  <ProtectedRoute element={Upload} allowedLevels={["B"]} />
+                }
               />
               <Route path="/callback" element={<Callback />} />
 
