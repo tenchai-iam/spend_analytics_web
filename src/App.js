@@ -8,6 +8,7 @@ import {
   Navigate,
 } from "react-router-dom";
 
+import ProtectedRoute from "./services/ProtectedRoute";
 import Home from "./Home";
 import Dashboard1 from "./ComponentsPage/Dashboard1";
 import Dashboard2 from "./ComponentsPage/Dashboard2X";
@@ -17,7 +18,6 @@ import Dashboard5 from "./ComponentsPage/Dashboard5";
 import Dashboard6 from "./ComponentsPage/Dashboard6";
 import Dashboard7 from "./ComponentsPage/Dashboard7";
 import Upload from "./ComponentsPage/Upload";
-import ProtectedRoute from "./services/ProtectedRoute.js";
 import Callback from "./services/Callback.js";
 
 const queryClient = new QueryClient();
@@ -28,7 +28,6 @@ export default function App() {
       <Router>
         <div className="App">
           <Routes>
-            {/* <Route path="/" element={<Home />} /> */}
             <Route path="/" element={<ProtectedRoute element={Home} />} />
             <Route
               path="/dashboard1"
@@ -38,24 +37,29 @@ export default function App() {
               path="/dashboard2"
               element={<ProtectedRoute element={Dashboard2} />}
             />
-            <Route path="/dashboard3" element={<Dashboard3 />} />
-            {/* <Route
+
+            {/* Restrict access to Dashboard3 and Dashboard4 for user_level "B" */}
+            <Route
               path="/dashboard3"
-              element={<ProtectedRoute element={Dashboard3} />}
-            /> */}
+              element={
+                <ProtectedRoute element={Dashboard3} allowedLevels={["B"]} />
+              }
+            />
             <Route
               path="/dashboard4"
-              element={<ProtectedRoute element={Dashboard4} />}
+              element={
+                <ProtectedRoute element={Dashboard4} allowedLevels={["B"]} />
+              }
             />
+
             <Route
               path="/dashboard5"
               element={<ProtectedRoute element={Dashboard5} />}
             />
-            <Route path="/dashboard6" element={<Dashboard6 />} />
-            {/* <Route
+            <Route
               path="/dashboard6"
               element={<ProtectedRoute element={Dashboard6} />}
-            /> */}
+            />
             <Route
               path="/dashboard7"
               element={<ProtectedRoute element={Dashboard7} />}
@@ -65,6 +69,7 @@ export default function App() {
               element={<ProtectedRoute element={Upload} />}
             />
             <Route path="/callback" element={<Callback />} />
+
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </div>
