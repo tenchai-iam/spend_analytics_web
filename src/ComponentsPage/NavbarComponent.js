@@ -84,6 +84,13 @@ function NavbarComponent() {
                 จัดการข้อมูล
               </Nav.Link>
             )}
+
+            {/* Show Upload NavLink ONLY for user_level "B" */}
+            {userLevel === "C" && (
+              <Nav.Link as={Link} to="/admin">
+                ดูแลระบบ
+              </Nav.Link>
+            )}
           </Nav>
 
           {/* Show First Name & Last Name */}

@@ -19,6 +19,7 @@ import Dashboard4 from "./ComponentsPage/Dashboard4N";
 import Dashboard5 from "./ComponentsPage/Dashboard5";
 import Dashboard6 from "./ComponentsPage/Dashboard6";
 import Dashboard7 from "./ComponentsPage/Dashboard7";
+import Admin from "./ComponentsPage/Admin";
 import Upload from "./ComponentsPage/Upload";
 import Callback from "./services/Callback.js";
 
@@ -81,6 +82,12 @@ export default function App() {
                 path="/upload"
                 element={
                   <ProtectedRoute element={Upload} allowedLevels={["B"]} />
+                }
+              />
+              <Route
+                path="/admin"
+                element={
+                  <ProtectedRoute element={Admin} allowedLevels={["C"]} />
                 }
               />
               <Route path="/callback" element={<Callback />} />
