@@ -61,7 +61,7 @@ function NavbarComponent() {
             </NavDropdown>
 
             {/* Dropdown for Planning - Hidden if user_level is NOT "B" */}
-            {userLevel === "B" && (
+            {(userLevel === "B" || userLevel === "C") && (
               <NavDropdown
                 title="สำหรับผู้จัดทำแผนจัดหาพัสดุ"
                 id="planning-dropdown"
@@ -79,7 +79,7 @@ function NavbarComponent() {
             )}
 
             {/* Show Upload NavLink ONLY for user_level "B" */}
-            {userLevel === "B" && (
+            {(userLevel === "B" || userLevel === "C") && (
               <Nav.Link as={Link} to="/upload">
                 จัดการข้อมูล
               </Nav.Link>

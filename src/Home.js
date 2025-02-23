@@ -114,7 +114,7 @@ const Home = () => {
           </div>
 
           {/* Procurement Planning - Only show if user level is "B" */}
-          {userLevel === "B" && (
+          {(userLevel === "B" || userLevel === "C") && (
             <div className="nav-section">
               <h1 className="nav-title">Procurement Planning</h1>
               <p className="nav-subtitle">Dashboard สำหรับผู้จัดทำแผนพัสดุ</p>

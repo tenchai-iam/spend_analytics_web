@@ -49,13 +49,19 @@ export default function App() {
               <Route
                 path="/dashboard3"
                 element={
-                  <ProtectedRoute element={Dashboard3} allowedLevels={["B"]} />
+                  <ProtectedRoute
+                    element={Dashboard3}
+                    allowedLevels={["B", "C"]}
+                  />
                 }
               />
               <Route
                 path="/dashboard4"
                 element={
-                  <ProtectedRoute element={Dashboard4} allowedLevels={["B"]} />
+                  <ProtectedRoute
+                    element={Dashboard4}
+                    allowedLevels={["B", "C"]}
+                  />
                 }
               />
 
@@ -75,13 +81,16 @@ export default function App() {
               <Route
                 path="/dashboard7"
                 element={
-                  <ProtectedRoute element={Dashboard7} allowedLevels={["B"]} />
+                  <ProtectedRoute
+                    element={Dashboard7}
+                    allowedLevels={["B", "C"]}
+                  />
                 }
               />
               <Route
                 path="/upload"
                 element={
-                  <ProtectedRoute element={Upload} allowedLevels={["B"]} />
+                  <ProtectedRoute element={Upload} allowedLevels={["B", "C"]} />
                 }
               />
               <Route
