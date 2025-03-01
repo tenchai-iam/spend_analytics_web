@@ -1,6 +1,8 @@
 import React, { createContext, useState, useEffect } from "react";
 import axios from "axios";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
@@ -15,8 +17,10 @@ export const AuthProvider = ({ children }) => {
       return;
     }
 
+    `${API_URL}/api/get_hrplatform_data`
+
     axios
-      .get("https://dev-spendi-tcc.pea.co.th/api/get_hrplatform_data", {
+      .get(`${API_URL}/api/get_hrplatform_data`, {
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
       })

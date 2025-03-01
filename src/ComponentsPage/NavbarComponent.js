@@ -88,7 +88,7 @@ function NavbarComponent() {
             {/* Show Upload NavLink ONLY for user_level "B" */}
             {userLevel === "C" && (
               <Nav.Link as={Link} to="/admin">
-                ดูแลระบบ
+                จัดการระบบ
               </Nav.Link>
             )}
           </Nav>

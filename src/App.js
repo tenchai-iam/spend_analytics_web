@@ -93,12 +93,13 @@ export default function App() {
                   <ProtectedRoute element={Upload} allowedLevels={["B", "C"]} />
                 }
               />
-              <Route
+              <Route path="/admin" element={<Admin />} />
+              {/* <Route
                 path="/admin"
                 element={
                   <ProtectedRoute element={Admin} allowedLevels={["C"]} />
                 }
-              />
+              /> */}
               <Route path="/callback" element={<Callback />} />
 
               <Route path="*" element={<Navigate to="/" />} />
