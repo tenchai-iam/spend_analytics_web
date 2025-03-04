@@ -93,7 +93,7 @@ export default function App() {
                   <ProtectedRoute element={Upload} allowedLevels={["B", "C"]} />
                 }
               />
-              <Route path="/admin" element={<Admin />} />
+              {/* <Route path="/admin" element={<Admin />} /> */}
               {/* <Route
                 path="/admin"
                 element={
