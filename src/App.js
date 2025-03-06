@@ -34,8 +34,8 @@ export default function App() {
         <Router>
           <div className="App">
             <Routes>
-              {/* <Route path="/" element={<Home />} /> */}
-              <Route path="/" element={<ProtectedRoute element={Home} />} />
+              <Route path="/" element={<Home />} />
+              {/* <Route path="/" element={<ProtectedRoute element={Home} />} /> */}
               <Route
                 path="/dashboard1"
                 element={<ProtectedRoute element={Dashboard1} />}
