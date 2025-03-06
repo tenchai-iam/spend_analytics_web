@@ -7,6 +7,7 @@ import NavbarComponent from "../ComponentsPage/NavbarComponent";
 import File from "../pic/File.svg";
 import UploadButton from "../pic/Upload.svg";
 import TableUser from "./TableUser.js";
+import axios from "axios";
 
 const API_URL = process.env.REACT_APP_API_URL;
 

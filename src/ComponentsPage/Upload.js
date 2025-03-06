@@ -41,11 +41,11 @@ const UploadPage = () => {
       endpoint: `${API_URL}/upload_and_update_ingot`,
     },
     {
-      title: "ข้อมูล WBS plan งบ P&I และอืิ่นๆ",
+      title: "ข้อมูล WBS plan งบ P&I และอื่นๆ",
       endpoint: `${API_URL}/upload_wbs_planpi_file`,
     },
     {
-      title: "ข้อมูล WBS unplanned งบ P&I และอืิ่นๆ",
+      title: "ข้อมูล WBS unplanned งบ P&I และอื่นๆ",
       endpoint: `${API_URL}/upload_wbs_unplanpi_file`,
     },
     {
