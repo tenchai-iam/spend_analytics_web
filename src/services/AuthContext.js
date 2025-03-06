@@ -17,10 +17,10 @@ export const AuthProvider = ({ children }) => {
       return;
     }
 
-    `${API_URL}/get_hrplatform_data`
+    `${API_URL}/get_hrplatform_data`;
 
     axios
-      .get(`${API_URL}/api/get_hrplatform_data`, {
+      .get(`${API_URL}/get_hrplatform_data`, {
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
       })
