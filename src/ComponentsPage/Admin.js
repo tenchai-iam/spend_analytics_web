@@ -8,6 +8,7 @@ import File from "../pic/File.svg";
 import UploadButton from "../pic/Upload.svg";
 import TableUser from "./TableUser.js";
 import axios from "axios";
+import { getUsers } from "../services/api.js";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -105,6 +106,25 @@ const Admin = () => {
     }
   };
 
+  const {
+    data: userLevel,
+    isLoading: isLoadingUserLevel,
+    isError: isErrorUserLevel,
+    error: errorUserLevel,
+  } = useQuery({
+    queryKey: ["userLevel"], // Unique query key for caching
+    queryFn: getUsers, // API call to fetch data
+  });
+
+  const dataUserLevel =
+    userLevel?.map((user) => ({
+      costCenter: user.cost_center?.trim() || "Not Required", // Trim spaces and handle missing values
+      employeeId: user.emp_id || "Not Required", // Default "None" for missing values
+      level: user.user_level,
+    })) || [];
+
+  console.log(dataUserLevel); // Debugging output
+
   return (
     <>
       <NavbarComponent />
@@ -192,6 +212,10 @@ const Admin = () => {
                 )}
               </div>
             </div>
+            <TableUser
+              data={dataUserLevel}
+              title={"ตารางข้อมูลการจัดการผู้ใช้ระบบ"}
+            />
           </div>
         </div>
       </div>

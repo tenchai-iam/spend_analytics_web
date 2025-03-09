@@ -10,6 +10,12 @@
   border: 1px solid #ddd; /* Optional: Add a border around the table */
 }
 
+.tableUser-wrapper {
+  max-height: 500px; /* Set your preferred max height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  border: 1px solid #ddd; /* Optional: Add a border around the table */
+}
+
 .table-wrapper-NS {
   overflow-y: auto; /* Enable vertical scrolling */
   border: 1px solid #ddd; /* Optional: Add a border around the table */
