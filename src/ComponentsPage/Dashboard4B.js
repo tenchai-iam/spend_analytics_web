@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import "../ComponentsStyles/Dashboard.css";
-import "../ComponentsStyles/Dashboard7.css";
-import NavbarComponent from "../ComponentsPage/NavbarComponent";
+import "../ComponentsStyles/Dashboard4.css";
+import NavbarComponent from "./NavbarComponent";
 import YearDropdown from "./YearDropdown";
 
-const Dashboard7 = () => {
+const Dashboard4B = () => {
   const [selectedYear, setSelectedYear] = useState(""); // State to hold the selected year
 
   return (
@@ -24,4 +24,4 @@ const Dashboard7 = () => {
   );
 };
 
-export default Dashboard7;
+export default Dashboard4B;

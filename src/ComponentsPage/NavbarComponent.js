@@ -52,8 +52,11 @@ function NavbarComponent() {
               <NavDropdown.Item as={Link} to="/dashboard2">
                 ภาพรวม Supplier
               </NavDropdown.Item>
-              <NavDropdown.Item as={Link} to="/dashboard5">
-                ติดตามมูลค่า Stage 5
+              <NavDropdown.Item as={Link} to="/dashboard5A">
+                ติดตามมูลค่า Stage 5 งบ P&I
+              </NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/dashboard5B">
+                ติดตามมูลค่า Stage 5 งบ C
               </NavDropdown.Item>
               <NavDropdown.Item as={Link} to="/dashboard6">
                 ภาพรวมมูลค่าพัสดุคงคลัง
@@ -69,11 +72,11 @@ function NavbarComponent() {
                 <NavDropdown.Item as={Link} to="/dashboard3">
                   เปรียบเทียบราคาจัดซื้อ
                 </NavDropdown.Item>
-                <NavDropdown.Item as={Link} to="/dashboard4">
+                <NavDropdown.Item as={Link} to="/dashboard4A">
                   ปรับแผนเพิ่มเติมระหว่างปี
                 </NavDropdown.Item>
-                <NavDropdown.Item as={Link} to="/dashboard7">
-                  ปรับแผนเพิ่มเติมระหว่างปี (งบ C)
+                <NavDropdown.Item as={Link} to="/dashboard4B">
+                  ปรับแผนเพิ่มเติมระหว่างปี งบ C
                 </NavDropdown.Item>
               </NavDropdown>
             )}

@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import "../ComponentsStyles/Dashboard.css";
 import "../ComponentsStyles/Dashboard5.css";
-import NavbarComponent from "../ComponentsPage/NavbarComponent";
-import YearDropdown from "./YearDropdown";
-import D5GroupBarRe from "../ComponentsPage/D5GroupBarRe";
+import NavbarComponent from "./NavbarComponent.js";
+import YearDropdown from "./YearDropdown.js";
+import D5GroupBarRe from "./D5GroupBarRe.js";
 import { getYears, getDateInfo } from "../services/api.js"; // Import your API service function
 import { getPlannedValue, getUnplannedValue } from "../services/api_D5.js";
 
-const Dashboard5 = () => {
+const Dashboard5A = () => {
   const [selectedYear, setSelectedYear] = useState(""); // State to hold the selected year
 
   // Fetch available years using React Query
@@ -67,7 +67,7 @@ const Dashboard5 = () => {
     <div>
       <NavbarComponent />
       <div className="text-dropdown-container">
-        <h1 className="header-title">ติดตามมูลค่า Stage 5</h1>
+        <h1 className="header-title">ติดตามมูลค่า Stage 5 งบ P&I และอื่นๆ</h1>
         <div className="year-dropdown-container">
           <YearDropdown
             onSelectYear={setSelectedYear}
@@ -78,14 +78,14 @@ const Dashboard5 = () => {
       <div className="dashboard-container">
         <div className="D6-bar-chart-container">
           <D5GroupBarRe
-            title={`มูลค่า Stage 5 - งบ P&I และอื่นๆ Planned ในปี ${selectedYear}`}
+            title={`มูลค่า Stage 5 - Planned ในปี ${selectedYear}`}
             data={dataPlannedValue}
             barKeys={["base", "normalized", "actual"]}
           />
         </div>
         <div className="D6-bar-chart-container">
           <D5GroupBarRe
-            title={`มูลค่า Stage 5 - งบ P&I และอื่นๆ Unplanned ในปี ${selectedYear}`}
+            title={`มูลค่า Stage 5 - Unplanned ในปี ${selectedYear}`}
             data={dataUnplannedValue}
             barKeys={["base", "normalized", "actual"]}
           />
@@ -95,4 +95,4 @@ const Dashboard5 = () => {
   );
 };
 
-export default Dashboard5;
+export default Dashboard5A;

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "../ComponentsStyles/Dashboard2.css";
 import Card from "./D2Card.js"; // Import the Card component
-import YearDropdown from "./YearDropdown";
-import NavbarComponent from "../ComponentsPage/NavbarComponent";
-import BarGraphReH from "./BarGraphReH";
+import YearDropdown from "./YearDropdown.js";
+import NavbarComponent from "./NavbarComponent.js";
+import BarGraphReH from "./BarGraphReH.js";
 import { useQuery } from "@tanstack/react-query";
 import { getYears, getDateInfo } from "../services/api.js"; // Import your API service function
 import {

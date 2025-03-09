@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import NavbarComponent from "../ComponentsPage/NavbarComponent";
+import NavbarComponent from "./NavbarComponent.js";
 import "../ComponentsStyles/Dashboard4.css"; // Updated to use Dashboard3.css
-import YearDropdown from "./YearDropdown";
+import YearDropdown from "./YearDropdown.js";
 import Table4 from "./Table4.js";
 import D4DonutChartRe from "./D4DonutChartRe.js";
 import TableD4Priority from "./TableD4Priority.js";
-import D4GroupBarRe from "./D4GroupBarRe";
+import D4GroupBarRe from "./D4GroupBarRe.js";
 import Select from "react-select"; // Import react-select
 import { useQuery } from "@tanstack/react-query";
 import { getYears, getDateInfo } from "../services/api.js"; // Import your API service function
@@ -20,7 +20,7 @@ import {
 import XLSX from "xlsx-js-style";
 import { saveAs } from "file-saver";
 
-const Dashboard4 = () => {
+const Dashboard4A = () => {
   const [selectedYear, setSelectedYear] = useState(""); // State to hold the selected year
   const [selectedMaterialGroup, setSelectedMaterialGroup] = useState("High");
   const [selectedCategory, setSelectedCategory] = useState(""); // State to hold the selected category
@@ -864,4 +864,4 @@ const Dashboard4 = () => {
   );
 };
 
-export default Dashboard4;
+export default Dashboard4A;
