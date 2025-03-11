@@ -3,10 +3,14 @@ import { useQuery } from "@tanstack/react-query";
 import "../ComponentsStyles/Dashboard.css";
 import "../ComponentsStyles/Dashboard5.css";
 import NavbarComponent from "./NavbarComponent.js";
-import YearDropdown from "./YearDropdown.js";
+import YearDropdownD5 from "./YearDropdownD5.js";
 import D5GroupBarRe from "./D5GroupBarRe.js";
-import { getYears, getDateInfo } from "../services/api.js"; // Import your API service function
-import { getPlannedValue, getUnplannedValue } from "../services/api_D5.js";
+import { getDateInfo } from "../services/api.js"; // Import your API service function
+import {
+  getYearsD5,
+  getPlannedValue,
+  getUnplannedValue,
+} from "../services/api_D5.js";
 
 const Dashboard5B = () => {
   const [selectedYear, setSelectedYear] = useState(""); // State to hold the selected year
@@ -14,14 +18,8 @@ const Dashboard5B = () => {
   // Fetch available years using React Query
   const { data: yearsData, isLoading } = useQuery({
     queryKey: ["years"],
-    queryFn: getYears,
+    queryFn: getYearsD5,
   });
-
-  // const dataPlannedValue = {
-  //   base: 100,
-  //   normalized: 50,
-  //   actual: 25,
-  // };
 
   // Fetch planned value data for selected year using React Query
   const {
@@ -69,7 +67,7 @@ const Dashboard5B = () => {
       <div className="text-dropdown-container">
         <h1 className="header-title">ติดตามมูลค่า Stage 5 งบ C</h1>
         <div className="year-dropdown-container">
-          <YearDropdown
+          <YearDropdownD5
             onSelectYear={setSelectedYear}
             selectedYear={selectedYear}
           />

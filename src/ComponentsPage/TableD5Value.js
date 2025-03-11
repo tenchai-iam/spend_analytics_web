@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../ComponentsStyles/table.css";
 
-const TableUser = ({ title, data }) => {
+const TableD5Value = ({ title, data }) => {
   const [sortConfig, setSortConfig] = useState({
     key: null,
     direction: "ascending",
@@ -13,11 +13,10 @@ const TableUser = ({ title, data }) => {
       maximumFractionDigits: 0,
     }).format(value);
 
-  const formatPercentage = (value) =>
+  const formatValue = (value) =>
     new Intl.NumberFormat("en-US", {
-      style: "percent",
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
+      minimumFractionDigits: 3,
+      maximumFractionDigits: 3,
     }).format(value);
 
   const sortedData = [...data].sort((a, b) => {
@@ -60,23 +59,37 @@ const TableUser = ({ title, data }) => {
         <table>
           <thead>
             <tr>
-              <th onClick={() => handleSort("employeeId")}>
-                รหัสพนักงาน {renderSortArrow("employeeId")}
+              <th onClick={() => handleSort("totalQuantity")}>
+                กลุ่มพัสดุ {renderSortArrow("totalQuantity")}
               </th>
-              <th onClick={() => handleSort("costCenter")}>
-                รหัส Cost Center {renderSortArrow("costCenter")}
+              <th onClick={() => handleSort("percentQuantity")}>
+                มูลค่า Baseline {renderSortArrow("percentQuantity")}
               </th>
-              <th onClick={() => handleSort("level")}>
-                User Level {renderSortArrow("level")}
+              <th onClick={() => handleSort("percentQuantity")}>
+                ส่วนต่าง Normalized - Baseline{" "}
+                {renderSortArrow("percentQuantity")}
+              </th>
+              <th onClick={() => handleSort("percentQuantity")}>
+                มูลค่า Normalized {renderSortArrow("percentQuantity")}
+              </th>
+              <th onClick={() => handleSort("percentQuantity")}>
+                ส่วนต่าง Actual - Normalized{" "}
+                {renderSortArrow("percentQuantity")}
+              </th>
+              <th onClick={() => handleSort("percentQuantity")}>
+                มูลค่า Actual {renderSortArrow("percentQuantity")}
               </th>
             </tr>
           </thead>
           <tbody>
             {sortedData.map((row, index) => (
               <tr key={index}>
-                <td>{row.employeeId}</td>
-                <td>{row.costCenter}</td>
-                <td>{row.level}</td>
+                <td>{row.cat_group}</td>
+                <td className="number">{formatValue(row.base)}</td>
+                <td className="number">{formatValue(row.diff_base_nor)}</td>
+                <td className="number">{formatValue(row.normalized)}</td>
+                <td className="number">{formatValue(row.diff_actual_nor)}</td>
+                <td className="number">{formatValue(row.actual)}</td>
               </tr>
             ))}
           </tbody>
@@ -86,4 +99,4 @@ const TableUser = ({ title, data }) => {
   );
 };
 
-export default TableUser;
+export default TableD5Value;
