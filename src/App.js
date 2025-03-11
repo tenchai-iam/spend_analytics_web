@@ -95,6 +95,9 @@ export default function App() {
                 path="/dashboard6"
                 element={<ProtectedRoute element={Dashboard6} />}
               /> */}
+
+              {/* <Route path="/upload" element={<Upload />} /> */}
+
               <Route
                 path="/upload"
                 element={

@@ -8,10 +8,10 @@ import "../ComponentsStyles/upload.css";
 const API_URL = process.env.REACT_APP_API_URL;
 
 const UploadPage = () => {
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState({});
   const [uploadStatus, setUploadStatus] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const fileInputRef = useRef(null);
+  const fileInputRefs = useRef({});
   const formRefs = useRef({});
 
   // Configuration for each upload section
@@ -58,16 +58,18 @@ const UploadPage = () => {
     },
   ];
 
-  // Handle file selection
-  const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
+  const handleFileChange = (event, index) => {
+    setSelectedFiles((prev) => ({
+      ...prev,
+      [index]: event.target.files[0],
+    }));
   };
 
-  // Handle form submission to upload the file
-  const handleUpload = async (event, endpoint) => {
+  const handleUpload = async (event, index, endpoint) => {
     event.preventDefault();
 
-    if (!selectedFile) {
+    const file = selectedFiles[index];
+    if (!file) {
       alert("Please select a file to upload.");
       return;
     }
@@ -76,13 +78,11 @@ const UploadPage = () => {
     setUploadStatus(""); // Reset status before new upload
 
     const formData = new FormData();
-    formData.append("file", selectedFile);
+    formData.append("file", file);
 
     try {
       const response = await axios.post(endpoint, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+        headers: { "Content-Type": "multipart/form-data" },
       });
       setUploadStatus(response.data.message || "Upload successful!");
     } catch (error) {
@@ -95,10 +95,6 @@ const UploadPage = () => {
     }
   };
 
-  const handleImageClick = () => {
-    fileInputRef.current.click();
-  };
-
   return (
     <div>
       <NavbarComponent />
@@ -109,35 +105,34 @@ const UploadPage = () => {
         <div className="upload-container-L1">
           {uploadSections.map((section, index) => (
             <div key={index} className="upload-module">
-              <h1 className="text-title ">{section.title}</h1>
+              <h1 className="text-title">{section.title}</h1>
               <form
                 ref={(el) => (formRefs.current[index] = el)}
-                onSubmit={(event) => handleUpload(event, section.endpoint)}
+                onSubmit={(event) =>
+                  handleUpload(event, index, section.endpoint)
+                }
                 className="form-container"
               >
                 <input
                   type="file"
-                  ref={fileInputRef}
-                  onChange={handleFileChange}
+                  ref={(el) => (fileInputRefs.current[index] = el)}
+                  onChange={(event) => handleFileChange(event, index)}
                   style={{ display: "none" }}
                 />
-
-                {/* Image for file selection */}
                 <img
                   src={File}
                   alt="Select File"
                   className="file-image"
-                  onClick={handleImageClick}
+                  onClick={() => fileInputRefs.current[index]?.click()}
                 />
-
-                {selectedFile && <p>Selected: {selectedFile.name}</p>}
-
-                {/* Image acting as the upload button */}
+                {selectedFiles[index] && (
+                  <p>Selected: {selectedFiles[index].name}</p>
+                )}
                 <img
                   src={UploadButton}
                   alt="Upload"
                   className="upload-button-image"
-                  onClick={() => formRefs.current[index].requestSubmit()}
+                  onClick={() => formRefs.current[index]?.requestSubmit()}
                   disabled={isLoading}
                 />
               </form>
