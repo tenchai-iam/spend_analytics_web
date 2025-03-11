@@ -186,6 +186,20 @@ const Dashboard5A = () => {
     }
   };
 
+  const datadate = 1;
+
+  // Fetch summary data for selected year and category using React Query
+  const {
+    data: dateInfoData,
+    isLoading: isLoadingDateInfoData,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["dateInfoData", datadate], // Unique query key for caching
+    queryFn: () => getDateInfo(datadate), // API call to fetch data based on datadate
+    enabled: !!selectedYear, // Only run query if both year and category_group are selected
+  });
+
   return (
     <div>
       <NavbarComponent />
@@ -234,6 +248,16 @@ const Dashboard5A = () => {
             barKeys={["base", "normalized", "actual"]}
           />
           <TableD5Value data={dataUnplannedValueSummary} />
+        </div>
+        <div>
+          <h1 className="data-date">
+            ข้อมูล ณ วันที่ {dateInfoData?.day}/{dateInfoData?.month}/
+            {dateInfoData?.year}
+          </h1>
+          <p className="data-date">
+            หมายเหตุ: ข้อมูลภายในระบบ Spend Insight เป็นข้อมูลภายในของกฟภ.
+            ห้ามเผยแพร่ให้กับผู้ใช้งานภายนอก
+          </p>
         </div>
       </div>
     </div>
