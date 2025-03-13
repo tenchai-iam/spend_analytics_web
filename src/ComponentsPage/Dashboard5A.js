@@ -63,7 +63,7 @@ const Dashboard5A = () => {
         base: item.BASE / 1_000_000, // Convert BASE to millions
         normalized: item.NORMALIZED / 1_000_000, // Convert NORMALIZED to millions
         actual: item.ACTUAL / 1_000_000, // Convert ACTUAL to millions
-        diff_base_nor: item.DIF_NORMALIZED_BASE / 1_000_000,
+        diff_base_nor: item.DIFF_NORMALIZED_BASE / 1_000_000,
         diff_actual_nor: item.DIFF_ACTUAL_NORMALIZED / 1_000_000,
         cat_group: item.cat_group,
       }))
@@ -106,7 +106,7 @@ const Dashboard5A = () => {
         base: item.BASE / 1_000_000, // Convert BASE to millions
         normalized: item.NORMALIZED / 1_000_000, // Convert NORMALIZED to millions
         actual: item.ACTUAL / 1_000_000, // Convert ACTUAL to millions
-        diff_base_nor: item.DIF_NORMALIZED_BASE / 1_000_000,
+        diff_base_nor: item.DIFF_NORMALIZED_BASE / 1_000_000,
         diff_actual_nor: item.DIFF_ACTUAL_NORMALIZED / 1_000_000,
         cat_group: item.cat_group,
       }))
