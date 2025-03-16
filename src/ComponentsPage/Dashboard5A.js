@@ -22,7 +22,7 @@ const Dashboard5A = () => {
 
   // Fetch available years using React Query
   const { data: yearsData, isLoading } = useQuery({
-    queryKey: ["years"],
+    queryKey: ["YEARS"],
     queryFn: getYearsD5,
   });
 
@@ -101,16 +101,18 @@ const Dashboard5A = () => {
     enabled: Boolean(selectedYear), // Only run query if year are selected
   });
 
-  const dataUnplannedValueSummary = unplannedValueS
+  console.log(unplannedValueS);
+
+  const dataUnplannedValueSummary = Array.isArray(unplannedValueS)
     ? unplannedValueS.map((item) => ({
-        base: item.BASE / 1_000_000, // Convert BASE to millions
-        normalized: item.NORMALIZED / 1_000_000, // Convert NORMALIZED to millions
-        actual: item.ACTUAL / 1_000_000, // Convert ACTUAL to millions
+        base: item.BASE / 1_000_000,
+        normalized: item.NORMALIZED / 1_000_000,
+        actual: item.ACTUAL / 1_000_000,
         diff_base_nor: item.DIFF_NORMALIZED_BASE / 1_000_000,
         diff_actual_nor: item.DIFF_ACTUAL_NORMALIZED / 1_000_000,
         cat_group: item.cat_group,
       }))
-    : []; // Default to an empty array if no data is available
+    : [];
 
   const getButtonStyle = (isSelected) => ({
     backgroundColor: isSelected ? "#8e44ad" : "#f0f0f0",
