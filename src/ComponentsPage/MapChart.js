@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { Map } from "react-map-gl/maplibre";
 import DeckGL from "@deck.gl/react";
-import { AmbientLight, PointLight, LightingEffect } from "@deck.gl/core";
 import { ColumnLayer } from "@deck.gl/layers";
 import "../ComponentsStyles/MapChart.css"; // Ensure CSS is imported
 import { GeoJsonLayer } from "@deck.gl/layers";
 
-const THAILAND_GEOJSON_URL = "/src/json/Thailand_S.json";
+const THAILAND_GEOJSON_URL = "/json/Thailand_S.json";
 
 const thailandLayer = new GeoJsonLayer({
   id: "thailand-boundary",
@@ -50,17 +49,6 @@ const CATEGORY_NAMES = {
   TOTAL_SPEND_MAT: "มูลค่าพัสดุสะสม",
   TOTAL_PO_MAT: "จำนวน PO สั่งซื้อพัสดุสะสม",
 };
-
-const ambientLight = new AmbientLight({
-  color: [255, 255, 255],
-  intensity: 1.0,
-});
-const pointLight = new PointLight({
-  color: [255, 255, 255],
-  intensity: 1.0,
-  position: [100.5018, 13.7563, 8000],
-});
-const lightingEffect = new LightingEffect({ ambientLight, pointLight });
 
 const ELEVATION_SCALE_PO = 30;
 const ELEVATION_SCALE_SPEND = 30;
@@ -147,6 +135,8 @@ const MapChart = ({ data, mapStyle }) => {
     },
   });
 
+  console.log("ColumnLayer: ", columnLayer);
+
   return (
     <div className="map-container">
       <Legend /> {/* Include Legend at the top */}
@@ -154,7 +144,6 @@ const MapChart = ({ data, mapStyle }) => {
         <div className="map-section">
           <DeckGL
             layers={[thailandLayer, columnLayer]}
-            effects={[lightingEffect]} // ✅ Keep lighting effect
             initialViewState={INITIAL_VIEW_STATE}
             controller={{ dragRotate: false }}
             getTooltip={getTooltip}
@@ -167,7 +156,7 @@ const MapChart = ({ data, mapStyle }) => {
                 sources: {
                   localTiles: {
                     type: "raster",
-                    tiles: ["/tiles/{z}/{x}/{y}.png"], // Use local tiles from public folder
+                    tiles: ["/tiles/{z}/{x}/{y}.png"],
                     tileSize: 256,
                   },
                 },
@@ -251,10 +240,9 @@ const DataTable = ({ data }) => {
             items.find((d) => d.type === "TOTAL_PO_MAT")?.value || 0;
           const totalSpend =
             items.find((d) => d.type === "TOTAL_SPEND_MAT")?.value || 0;
-          const locationName = LOCATION_NAMES[location] || location;
           return (
             <tr key={location}>
-              <td>{locationName}</td>
+              <td>{LOCATION_NAMES[location]}</td>
               <td>{quantityFormatter.format(totalPO)}</td>
               <td>{priceFormatter.format(totalSpend)}</td>
             </tr>
