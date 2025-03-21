@@ -4,6 +4,7 @@ import DeckGL from "@deck.gl/react";
 import { ColumnLayer } from "@deck.gl/layers";
 import "../ComponentsStyles/MapChart.css"; // Ensure CSS is imported
 import { GeoJsonLayer } from "@deck.gl/layers";
+import { GridLayer } from "@deck.gl/aggregation-layers";
 
 const THAILAND_GEOJSON_URL = "/json/Thailand_S.json";
 
@@ -113,8 +114,8 @@ const MapChart = ({ data, mapStyle }) => {
   const columnLayer = new ColumnLayer({
     id: "3d-bar-chart",
     data,
-    diskResolution: 50,
-    radius: 15000,
+    diskResolution: 2,
+    radius: 10000,
     getPosition: (d) => getOffsetPosition(d.position, d.type),
     getFillColor: (d) =>
       d.type === "TOTAL_PO_MAT"
@@ -127,15 +128,14 @@ const MapChart = ({ data, mapStyle }) => {
         : ELEVATION_SCALE_PO),
     pickable: true,
     extruded: true,
-    material: {
-      ambient: 0.64,
-      diffuse: 0.6,
-      shininess: 32,
-      specularColor: [51, 51, 51],
-    },
+    material: null,
+    // material: {
+    //   ambient: 0.64,
+    //   diffuse: 0.6,
+    //   shininess: 32,
+    //   specularColor: [51, 51, 51],
+    // },
   });
-
-  console.log("ColumnLayer: ", columnLayer);
 
   return (
     <div className="map-container">
@@ -148,6 +148,7 @@ const MapChart = ({ data, mapStyle }) => {
             controller={{ dragRotate: false }}
             getTooltip={getTooltip}
             style={{ height: "100%", width: "100%" }}
+            webgl2={true}
           >
             <Map
               reuseMaps
