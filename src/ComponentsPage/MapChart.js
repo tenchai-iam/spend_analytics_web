@@ -148,11 +148,11 @@ const MapChart = ({ data, mapStyle }) => {
             controller={{ dragRotate: false }}
             getTooltip={getTooltip}
             style={{ height: "100%", width: "100%" }}
-            // webgl2={true}
+            webgl2={true}
           >
             <Map
               reuseMaps
-              crossOrigin="anonymous"
+              // crossOrigin="anonymous"
               mapStyle={{
                 version: 8,
                 sources: {
