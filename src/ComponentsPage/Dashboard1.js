@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import NavbarComponent from "../ComponentsPage/NavbarComponent";
 import BubbleChart from "./BubbleChart.js";
-import "../ComponentsStyles/Dashboard.css"; 
-import "../ComponentsStyles/Dashboard1.css"; 
+import "../ComponentsStyles/Dashboard.css";
+import "../ComponentsStyles/Dashboard1.css";
 import YearDropdown from "./YearDropdown";
 import MapChart from "./MapChart.js";
 import LineGraphRe from "./LineGraphRe.js";

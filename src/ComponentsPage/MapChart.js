@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Map } from "react-map-gl/maplibre";
 import DeckGL from "@deck.gl/react";
-import { ColumnLayer } from "@deck.gl/layers";
+import { ColumnLayer, ScatterplotLayer } from "@deck.gl/layers";
 import "../ComponentsStyles/MapChart.css"; // Ensure CSS is imported
 import { GeoJsonLayer } from "@deck.gl/layers";
+import { PolygonLayer } from "@deck.gl/layers";
 import { GridLayer } from "@deck.gl/aggregation-layers";
 
 const THAILAND_GEOJSON_URL = "/json/Thailand_S.json";
@@ -12,8 +13,8 @@ const thailandLayer = new GeoJsonLayer({
   id: "thailand-boundary",
   data: THAILAND_GEOJSON_URL,
   filled: true,
-  stroked: true,
-  lineWidthMinPixels: 2,
+  stroked: false,
+  lineWidthMinPixels: 1,
   getFillColor: [34, 139, 34, 80], // Green with transparency
   getLineColor: [0, 0, 0, 255], // Black borders
 });
@@ -128,13 +129,12 @@ const MapChart = ({ data, mapStyle }) => {
         : ELEVATION_SCALE_PO),
     pickable: true,
     extruded: true,
-    material: null,
-    // material: {
-    //   ambient: 0.64,
-    //   diffuse: 0.6,
-    //   shininess: 32,
-    //   specularColor: [51, 51, 51],
-    // },
+    material: {
+      ambient: 0.64,
+      diffuse: 0.6,
+      shininess: 32,
+      specularColor: [51, 51, 51],
+    },
   });
 
   return (
@@ -148,11 +148,10 @@ const MapChart = ({ data, mapStyle }) => {
             controller={{ dragRotate: false }}
             getTooltip={getTooltip}
             style={{ height: "100%", width: "100%" }}
-            webgl2={true}
+            webgl2={false}
           >
             <Map
               reuseMaps
-              // crossOrigin="anonymous"
               mapStyle={{
                 version: 8,
                 sources: {
@@ -174,7 +173,6 @@ const MapChart = ({ data, mapStyle }) => {
               }}
               style={{ height: "100%", width: "100%" }}
             />
-            console.log("Loading tile: ", z, x, y);
           </DeckGL>
         </div>
         <div className="table-section">
