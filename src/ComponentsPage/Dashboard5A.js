@@ -9,10 +9,10 @@ import TableD5Value from "./TableD5Value.js";
 import { getDateInfo } from "../services/api.js"; // Import your API service function
 import {
   getYearsD5,
-  getPlannedValue,
-  getPlannedValueSummary,
-  getUnplannedValue,
-  getUnplannedValueSummary,
+  getPlannedPIValue,
+  getPlannedPIValueSummary,
+  getUnplannedPIValue,
+  getUnplannedPIValueSummary,
 } from "../services/api_D5.js";
 
 const API_URL = process.env.REACT_APP_API_URL; // Ensure it's defined
@@ -34,7 +34,7 @@ const Dashboard5A = () => {
     error: errorPlannedValue,
   } = useQuery({
     queryKey: ["plannedValue", selectedYear], // Unique query key for caching
-    queryFn: () => getPlannedValue(selectedYear), // API call to fetch data based on year selected
+    queryFn: () => getPlannedPIValue(selectedYear), // API call to fetch data based on year selected
     enabled: Boolean(selectedYear), // Only run query if year are selected
   });
 
@@ -54,7 +54,7 @@ const Dashboard5A = () => {
     error: errorPlannedValueS,
   } = useQuery({
     queryKey: ["plannedValueS", selectedYear], // Unique query key for caching
-    queryFn: () => getPlannedValueSummary(selectedYear), // API call to fetch data based on year selected
+    queryFn: () => getPlannedPIValueSummary(selectedYear), // API call to fetch data based on year selected
     enabled: Boolean(selectedYear), // Only run query if year are selected
   });
 
@@ -77,7 +77,7 @@ const Dashboard5A = () => {
     error: errorUnplannedValue,
   } = useQuery({
     queryKey: ["unplannedValue", selectedYear], // Unique query key for caching
-    queryFn: () => getUnplannedValue(selectedYear), // API call to fetch data based on year selected
+    queryFn: () => getUnplannedPIValue(selectedYear), // API call to fetch data based on year selected
     enabled: Boolean(selectedYear), // Only run query if year are selected
   });
 
@@ -97,7 +97,7 @@ const Dashboard5A = () => {
     error: errorUnplannedValueS,
   } = useQuery({
     queryKey: ["unplannedValueS", selectedYear], // Unique query key for caching
-    queryFn: () => getUnplannedValueSummary(selectedYear), // API call to fetch data based on year selected
+    queryFn: () => getUnplannedPIValueSummary(selectedYear), // API call to fetch data based on year selected
     enabled: Boolean(selectedYear), // Only run query if year are selected
   });
 

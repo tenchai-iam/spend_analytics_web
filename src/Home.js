@@ -102,14 +102,14 @@ const Home = () => {
               />
               <MenuCard
                 image={D1}
-                buttonTitle="ติดตามมูลค่า Stage 5"
-                link="/dashboard5"
+                buttonTitle="ติดตามมูลค่า Stage 5 งบ P&I"
+                link="/dashboard5A"
               />
-              <MenuCard
-                image={D2}
-                buttonTitle="ภาพรวมมูลค่าพัสดุคงคลัง"
-                link="/dashboard6"
-              />
+              {/* <MenuCard
+                image={D1}
+                buttonTitle="ติดตามมูลค่า Stage 5 งบ C"
+                link="/dashboard5B"
+              /> */}
             </div>
           </div>
 
@@ -127,13 +127,13 @@ const Home = () => {
                 <MenuCard
                   image={D4}
                   buttonTitle="ปรับแผนเพิ่มเติมระหว่างปี"
-                  link="/dashboard4"
+                  link="/dashboard4A"
                 />
-                <MenuCard
+                {/* <MenuCard
                   image={D4}
                   buttonTitle="ปรับแผนเพิ่มเติมระหว่างปี (งบ C)"
-                  link="/dashboard7"
-                />
+                  link="/dashboard4B"
+                /> */}
               </div>
             </div>
           )}
