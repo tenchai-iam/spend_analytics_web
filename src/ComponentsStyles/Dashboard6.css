@@ -39,6 +39,14 @@
   color: white;
 }
 
+.select-container {
+  display: flex; /* Use Flexbox for layout */
+  flex-direction: row;
+  align-items: center; /* Align items vertically */
+  font-size: 0.8rem;
+  justify-content: start;
+}
+
 .D6-inflowoutflow-container {
   display: flex;
   flex-direction: row;

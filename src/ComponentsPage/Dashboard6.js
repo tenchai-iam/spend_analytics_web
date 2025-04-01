@@ -193,6 +193,27 @@ const Dashboard6 = () => {
     setCurrentBarView(view); // Change to the selected view
   };
 
+  const options = [
+    { label: "กฟน.1", value: "A" },
+    { label: "กฟน.2", value: "B" },
+    { label: "กฟน.3", value: "C" },
+    { label: "กฟฉ.1", value: "D" },
+    { label: "กฟฉ.2", value: "E" },
+    { label: "กฟฉ.3", value: "F" },
+    { label: "กฟก.1", value: "G" },
+    { label: "กฟก.2", value: "H" },
+    { label: "กฟก.3", value: "I" },
+    { label: "กฟต.1", value: "J" },
+    { label: "กฟต.2", value: "K" },
+    { label: "กฟต.3", value: "L" },
+  ];
+
+  const [selectedDistrict, setSelectedDistrict] = useState("H");
+
+  const handleChangeDistrict = (event) => {
+    setSelectedDistrict(event.target.value);
+  };
+
   return (
     <div>
       <NavbarComponent />
@@ -245,6 +266,22 @@ const Dashboard6 = () => {
                 ▬▬ มูลค่าพัสดุคงคลัง ณ วันที่ {dateInfoData?.day}/
                 {dateInfoData?.month}/{dateInfoData?.year}
               </p>
+              <div className="select-container">
+                <select
+                  value={selectedDistrict}
+                  onChange={handleChangeDistrict}
+                  className="border rounded-lg px-4 py-2"
+                >
+                  <option value="" disabled selected>
+                    เลือกการไฟฟ้าเขต...
+                  </option>
+                  {options.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </>
           )}
           {currentBarView === 2 && (
@@ -284,6 +321,22 @@ const Dashboard6 = () => {
                 ▬▬ มูลค่าพัสดุคงคลังปัจจุบัน ณ สิ้นเดือน {selectedMonth} ปี{" "}
                 {selectedYear}
               </p>
+              <div className="select-container">
+                <select
+                  value={selectedDistrict}
+                  onChange={handleChangeDistrict}
+                  className="border rounded-lg px-4 py-2"
+                >
+                  <option value="" disabled selected>
+                    เลือกการไฟฟ้าเขต...
+                  </option>
+                  {options.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </>
           )}
         </div>
