@@ -42,8 +42,16 @@
   color: black;
 }
 
-.text-title {
-  font-size: 1rem;
+.title-download-container {
+  display: flex; /* Use Flexbox for layout */
+  justify-content: space-between; /* Place items on opposite ends */
+  align-items: top; /* Align items vertically */
+  font-size: 0.8rem;
+  width: 100%;
+}
+
+.upload-title {
+  font-size: 0.8rem;
   margin-bottom: 10px;
   color: #3e3e3e;
 }

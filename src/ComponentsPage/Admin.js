@@ -79,6 +79,7 @@ const Admin = () => {
     textAlign: "center",
     display: "inline-block", // Ensure button-like appearance
   });
+
   const handleDownload = async () => {
     try {
       const response = await fetch(`${API_URL}/download_user_level`, {

@@ -46,7 +46,6 @@ export default function App() {
                 path="/dashboard2"
                 element={<ProtectedRoute element={Dashboard2} />}
               />
-
               {/* Restrict access to Dashboard3 and Dashboard4 for user_level "B" */}
               <Route
                 path="/dashboard3"
@@ -75,36 +74,28 @@ export default function App() {
                   />
                 }
               />
-
               <Route path="/dashboard5A" element={<Dashboard5A />} />
-
               {/* <Route
                 path="/dashboard5"
                 element={<ProtectedRoute element={Dashboard5} />}
               /> */}
-
               <Route path="/dashboard5B" element={<Dashboard5B />} />
-
               {/* <Route
   path="/dashboard5"
   element={<ProtectedRoute element={Dashboard5} />}
 /> */}
-
               <Route path="/dashboard6" element={<Dashboard6 />} />
-
               {/* <Route
                 path="/dashboard6"
                 element={<ProtectedRoute element={Dashboard6} />}
               /> */}
-
-              {/* <Route path="/upload" element={<Upload />} /> */}
-
-              <Route
+              <Route path="/upload" element={<Upload />} />
+              {/* <Route
                 path="/upload"
                 element={
                   <ProtectedRoute element={Upload} allowedLevels={["B", "C"]} />
                 }
-              />
+              /> */}
               {/* <Route path="/admin" element={<Admin />} /> */}
               <Route
                 path="/admin"
@@ -113,7 +104,6 @@ export default function App() {
                 }
               />
               <Route path="/callback" element={<Callback />} />
-
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>
           </div>
