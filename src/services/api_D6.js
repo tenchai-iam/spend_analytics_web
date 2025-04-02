@@ -62,3 +62,67 @@ export const getD6Month = async (year) => {
   );
   return response.data;
 };
+
+export const getTargetInventoryMonthPlant = async (year, district) => {
+  const response = await axios.post(
+    `${API_URL}/inventoryYearTargetByPlant`,
+    {
+      year: year, // Pass the year value in the request body
+      district: district,
+    },
+    { timeout: 5000 }
+  );
+  return response.data;
+};
+
+export const getCurrentInventoryMonthPlant = async (
+  year,
+  month,
+  category_group,
+  district
+) => {
+  const response = await axios.post(
+    `${API_URL}/inventoryMonthByPlant`,
+    {
+      year: year, // Pass the year value in the request body
+      month: month,
+      category_group: String(category_group),
+      district: district,
+    },
+    { timeout: 5000 }
+  );
+  return response.data;
+};
+
+export const getTargetInventoryDayPlant = async (
+  year,
+  category_group,
+  district
+) => {
+  const response = await axios.post(
+    `${API_URL}/inventoryMonthYOYTargetByPlant`,
+    {
+      year: year, // Pass the year value in the request body
+      district: district,
+    },
+    { timeout: 5000 }
+  );
+  return response.data;
+};
+
+export const getCurrentInventoryDayPlant = async (
+  year,
+  category_group,
+  district
+) => {
+  const response = await axios.post(
+    `${API_URL}/inventoryDayByPlant`,
+    {
+      year: year, // Pass the year value in the request body
+      category_group: String(category_group), // Pass the category group value in the request body
+      district: district,
+    },
+    { timeout: 5000 }
+  );
+  return response.data;
+};

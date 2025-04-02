@@ -9,8 +9,12 @@ import { getYears, getDateInfo } from "../services/api.js"; // Import your API s
 import {
   getTargetInventoryMonth,
   getCurrentInventoryMonth,
+  getTargetInventoryMonthPlant,
+  getCurrentInventoryMonthPlant,
   getTargetInventoryDay,
   getCurrentInventoryDay,
+  getTargetInventoryDayPlant,
+  getCurrentInventoryDayPlant,
   getD6Month,
 } from "../services/api_D6.js";
 
@@ -65,9 +69,9 @@ const Dashboard6 = () => {
   // Fetch target inventory data for selected year, month and category using React Query
   const {
     data: targetInventoryMonth,
-    isLoading: isLoadingPreviousMonthInventory,
-    isError: isErrorPreviousMonthInventory,
-    error: errorPreviousMonthInventory,
+    isLoading: isLoadingTargetInventoryMonth,
+    isError: isErrorTargetInventoryMonth,
+    error: errorTargetInventoryMonth,
   } = useQuery({
     queryKey: ["targetInventoryMonth", selectedYear], // Unique query key for caching
     queryFn: () => getTargetInventoryMonth(selectedYear), // API call to fetch data based on year and category are selected
@@ -80,20 +84,6 @@ const Dashboard6 = () => {
       amtused_MT: item.amtused / 1000000, // Convert amtused to millions
       amtused_MA: 0,
     })) || [];
-
-  const datadate = 1;
-
-  // Fetch summary data for selected year and category using React Query
-  const {
-    data: dateInfoData,
-    isLoading: isLoadingDateInfoData,
-    isError,
-    error,
-  } = useQuery({
-    queryKey: ["dateInfoData", datadate], // Unique query key for caching
-    queryFn: () => getDateInfo(datadate), // API call to fetch data based on datadate
-    enabled: !!selectedYear, // Only run query if both year and category_group are selected
-  });
 
   const {
     data: currentMonthInventory,
@@ -208,11 +198,160 @@ const Dashboard6 = () => {
     { label: "กฟต.3", value: "L" },
   ];
 
-  const [selectedDistrict, setSelectedDistrict] = useState("H");
+  const [selectedDistrict, setSelectedDistrict] = useState("");
 
   const handleChangeDistrict = (event) => {
     setSelectedDistrict(event.target.value);
   };
+
+  const {
+    data: targetInventoryMonthPlant,
+    isLoading: isLoadingTargetInventoryMonthPlant,
+    isError: isErrorTargetInventoryMonthPlant,
+    error: errorTargetInventoryMonthPlant,
+  } = useQuery({
+    queryKey: ["targetInventoryMonthPlant", selectedYear, selectedDistrict], // Unique query key for caching
+    queryFn: () => getTargetInventoryMonthPlant(selectedYear, selectedDistrict), // API call to fetch data based on year and district are selected
+    enabled:
+      Boolean(selectedYear) &&
+      Boolean(selectedMonth) &&
+      Boolean(selectedDistrict), // Only run query if year, month and district are selected
+  });
+
+  const dataTargetInventoryMonthPlant =
+    targetInventoryMonthPlant?.inventory_data.map((item) => ({
+      EKGRP: item.EKGRP, // Map EKGRP directly
+      amtused_MT: item.amtused / 1000000, // Convert amtused to millions
+      amtused_MA: 0,
+    })) || [];
+
+  const {
+    data: currentMonthInventoryPlant,
+    isLoading: isLoadingCurrentMonthInventoryPlant,
+    isError: isErrorCurrentMonthInventoryPlant,
+    error: errorCurrentMonthInventoryPlant,
+  } = useQuery({
+    queryKey: [
+      "currentMonthInventoryPlant",
+      selectedYear,
+      selectedMonth,
+      selectedCategory,
+      selectedDistrict,
+    ], // Unique query key for caching
+    queryFn: () =>
+      getCurrentInventoryMonthPlant(
+        selectedYear,
+        selectedMonth,
+        selectedCategory,
+        selectedDistrict
+      ), // API call to fetch data based on year and category are selected
+    enabled:
+      Boolean(selectedYear) &&
+      Boolean(selectedMonth) &&
+      Boolean(selectedCategory) &&
+      Boolean(selectedDistrict), // Only run query if year, month and category are selected
+  });
+
+  const dataCurrentMonthInventoryPlant =
+    currentMonthInventoryPlant?.inventory_data.map((item) => ({
+      EKGRP: item.EKGRP, // Map EKGRP directly
+      amtused_MT: 0,
+      amtused_MA: item.total_inventory / 1000000, // Convert amtused to millions
+    })) || [];
+
+  // Merge the two datasets by EKGRP
+  const dataMonthInventoryPlant = [
+    ...dataTargetInventoryMonthPlant,
+    ...dataCurrentMonthInventoryPlant,
+  ].reduce((acc, curr) => {
+    const existingItem = acc.find((item) => item.EKGRP === curr.EKGRP);
+    if (existingItem) {
+      existingItem.amtused_MT += curr.amtused_MT;
+      existingItem.amtused_MA += curr.amtused_MA;
+    } else {
+      acc.push(curr);
+    }
+    return acc;
+  }, []);
+
+  // get data for inventory day graph
+  const {
+    data: targetDayInventoryPlant,
+    isLoading: isLoadingTargetDayInventoryPlant,
+    isError: isErrorTargetDayInventoryPlant,
+    error: errorTargetDayInventoryPlant,
+  } = useQuery({
+    queryKey: ["targetDayInventoryPlant", selectedYear, selectedDistrict], // Unique query key for caching
+    queryFn: () => getTargetInventoryDayPlant(selectedYear, selectedDistrict), // API call to fetch data based on year and category are selected
+    enabled: Boolean(selectedYear) && Boolean(selectedDistrict), // Only run query if year, month and category are selected
+  });
+
+  const dataTargetDayInventoryPlant =
+    targetDayInventoryPlant?.inventory_data.map((item) => ({
+      EKGRP: item.EKGRP, // Map EKGRP directly
+      amtused_MT: item.inventory / 1000000, // Convert amtused to millions
+      amtused_MA: 0,
+    })) || [];
+
+  const {
+    data: currentDayInventoryPlant,
+    isLoading: isLoadingCurrentDayInventoryPlant,
+    isError: isErrorCurrentDayInventoryPlant,
+    error: errorCurrentDayInventoryPlant,
+  } = useQuery({
+    queryKey: [
+      "currentDayInventoryPlant",
+      selectedYear,
+      selectedCategory,
+      selectedDistrict,
+    ], // Unique query key for caching
+    queryFn: () =>
+      getCurrentInventoryDayPlant(
+        selectedYear,
+        selectedCategory,
+        selectedDistrict
+      ), // API call to fetch data based on year and category are selected
+    enabled:
+      Boolean(selectedYear) &&
+      Boolean(selectedCategory) &&
+      Boolean(selectedDistrict), // Only run query if year, month and category are selected
+  });
+
+  const dataCurrentDayInventoryPlant =
+    currentDayInventoryPlant?.inventory_data.map((item) => ({
+      EKGRP: item.EKGRP, // Map EKGRP directly
+      amtused_MT: 0,
+      amtused_MA: item.total_inventory / 1000000, // Convert amtused to millions,
+    })) || [];
+
+  // Merge the two datasets by EKGRP
+  const dataDayInventoryPlant = [
+    ...dataTargetDayInventoryPlant,
+    ...dataCurrentDayInventoryPlant,
+  ].reduce((acc, curr) => {
+    const existingItem = acc.find((item) => item.EKGRP === curr.EKGRP);
+    if (existingItem) {
+      existingItem.amtused_MT += curr.amtused_MT;
+      existingItem.amtused_MA += curr.amtused_MA;
+    } else {
+      acc.push(curr);
+    }
+    return acc;
+  }, []);
+
+  const datadate = 1;
+
+  // Fetch summary data for selected year and category using React Query
+  const {
+    data: dateInfoData,
+    isLoading: isLoadingDateInfoData,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["dateInfoData", datadate], // Unique query key for caching
+    queryFn: () => getDateInfo(datadate), // API call to fetch data based on datadate
+    enabled: !!selectedYear, // Only run query if both year and category_group are selected
+  });
 
   return (
     <div>
@@ -255,7 +394,7 @@ const Dashboard6 = () => {
                 data={dataDayInventory}
                 xAxisKey="EKGRP"
                 barKeys={["amtused_MT", "amtused_MA"]}
-                title={"รายงานมูลค่าพัสดุคงคลังต่อวัน (ล้านบาท)"}
+                title={"รายงานมูลค่าพัสดุคงคลังรายวัน (ล้านบาท)"}
                 height={330}
               />
               <p className="mat-legend">
@@ -282,6 +421,13 @@ const Dashboard6 = () => {
                   ))}
                 </select>
               </div>
+              <D6BarGraphReV
+                data={dataDayInventoryPlant}
+                xAxisKey="EKGRP"
+                barKeys={["amtused_MT", "amtused_MA"]}
+                title={"รายงานมูลค่าพัสดุคงคลังตามคลังพัสดุรายวัน (ล้านบาท)"}
+                height={330}
+              />
             </>
           )}
           {currentBarView === 2 && (
@@ -311,7 +457,7 @@ const Dashboard6 = () => {
                 data={dataMonthInventory}
                 xAxisKey="EKGRP"
                 barKeys={["amtused_MT", "amtused_MA"]}
-                title={"รายงานมูลค่าพัสดุคงคลังต่อเดือน (ล้านบาท)"}
+                title={"รายงานมูลค่าพัสดุคงคลังรายเดือน (ล้านบาท)"}
                 height={330}
               />
               <p className="mat-legend">
@@ -337,6 +483,13 @@ const Dashboard6 = () => {
                   ))}
                 </select>
               </div>
+              <D6BarGraphReV
+                data={dataMonthInventoryPlant}
+                xAxisKey="EKGRP"
+                barKeys={["amtused_MT", "amtused_MA"]}
+                title={"รายงานมูลค่าพัสดุคงคลังตามคลังพัสดุรายเดือน (ล้านบาท)"}
+                height={330}
+              />
             </>
           )}
         </div>
