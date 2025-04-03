@@ -289,7 +289,7 @@ const Dashboard6 = () => {
   const dataTargetDayInventoryPlant =
     targetDayInventoryPlant?.inventory_data.map((item) => ({
       EKGRP: item.EKGRP, // Map EKGRP directly
-      amtused_MT: item.inventory / 1000000, // Convert amtused to millions
+      amtused_MT: item.amtused / 1000000, // Convert amtused to millions
       amtused_MA: 0,
     })) || [];
 
