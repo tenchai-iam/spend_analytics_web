@@ -94,11 +94,7 @@ export const getCurrentInventoryMonthPlant = async (
   return response.data;
 };
 
-export const getTargetInventoryDayPlant = async (
-  year,
-  category_group,
-  district
-) => {
+export const getTargetInventoryDayPlant = async (year, district) => {
   const response = await axios.post(
     `${API_URL}/inventoryMonthYOYTargetByPlant`,
     {

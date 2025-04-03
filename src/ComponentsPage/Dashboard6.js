@@ -66,6 +66,27 @@ const Dashboard6 = () => {
   //   "อื่นๆ",
   // ];
 
+  const options = [
+    { label: "กฟน.1", value: "A" },
+    { label: "กฟน.2", value: "B" },
+    { label: "กฟน.3", value: "C" },
+    { label: "กฟฉ.1", value: "D" },
+    { label: "กฟฉ.2", value: "E" },
+    { label: "กฟฉ.3", value: "F" },
+    { label: "กฟก.1", value: "G" },
+    { label: "กฟก.2", value: "H" },
+    { label: "กฟก.3", value: "I" },
+    { label: "กฟต.1", value: "J" },
+    { label: "กฟต.2", value: "K" },
+    { label: "กฟต.3", value: "L" },
+  ];
+
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+
+  const handleChangeDistrict = (event) => {
+    setSelectedDistrict(event.target.value);
+  };
+
   // Fetch target inventory data for selected year, month and category using React Query
   const {
     data: targetInventoryMonth,
@@ -181,27 +202,6 @@ const Dashboard6 = () => {
 
   const handleViewChange = (view) => {
     setCurrentBarView(view); // Change to the selected view
-  };
-
-  const options = [
-    { label: "กฟน.1", value: "A" },
-    { label: "กฟน.2", value: "B" },
-    { label: "กฟน.3", value: "C" },
-    { label: "กฟฉ.1", value: "D" },
-    { label: "กฟฉ.2", value: "E" },
-    { label: "กฟฉ.3", value: "F" },
-    { label: "กฟก.1", value: "G" },
-    { label: "กฟก.2", value: "H" },
-    { label: "กฟก.3", value: "I" },
-    { label: "กฟต.1", value: "J" },
-    { label: "กฟต.2", value: "K" },
-    { label: "กฟต.3", value: "L" },
-  ];
-
-  const [selectedDistrict, setSelectedDistrict] = useState("");
-
-  const handleChangeDistrict = (event) => {
-    setSelectedDistrict(event.target.value);
   };
 
   const {
