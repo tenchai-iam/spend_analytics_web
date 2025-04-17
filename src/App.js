@@ -37,11 +37,11 @@ export default function App() {
             <Routes>
               {/* <Route path="/" element={<Home />} /> */}
               <Route path="/" element={<ProtectedRoute element={Home} />} />
-              <Route path="/dashboard1" element={<Dashboard1 />} />
-              {/* <Route
+              {/* <Route path="/dashboard1" element={<Dashboard1 />} /> */}
+              <Route
                 path="/dashboard1"
                 element={<ProtectedRoute element={Dashboard1} />}
-              /> */}
+              />
               <Route
                 path="/dashboard2"
                 element={<ProtectedRoute element={Dashboard2} />}
@@ -74,28 +74,43 @@ export default function App() {
                   />
                 }
               />
-              <Route path="/dashboard5A" element={<Dashboard5A />} />
-              {/* <Route
-                path="/dashboard5"
-                element={<ProtectedRoute element={Dashboard5} />}
-              /> */}
-              <Route path="/dashboard5B" element={<Dashboard5B />} />
-              {/* <Route
-  path="/dashboard5"
-  element={<ProtectedRoute element={Dashboard5} />}
-/> */}
-              <Route path="/dashboard6" element={<Dashboard6 />} />
-              {/* <Route
+              {/* <Route path="/dashboard5A" element={<Dashboard5A />} /> */}
+              <Route
+                path="/dashboard5A"
+                element={
+                  <ProtectedRoute
+                    element={Dashboard5A}
+                    allowedLevels={["B", "C"]}
+                  />
+                }
+              />
+              {/* <Route path="/dashboard5B" element={<Dashboard5B />} /> */}
+              <Route
+                path="/dashboard5B"
+                element={
+                  <ProtectedRoute
+                    element={Dashboard5B}
+                    allowedLevels={["B", "C"]}
+                  />
+                }
+              />
+              {/* <Route path="/dashboard6" element={<Dashboard6 />} /> */}
+              <Route
                 path="/dashboard6"
-                element={<ProtectedRoute element={Dashboard6} />}
-              /> */}
-              <Route path="/upload" element={<Upload />} />
-              {/* <Route
+                element={
+                  <ProtectedRoute
+                    element={Dashboard6}
+                    allowedLevels={["B", "C"]}
+                  />
+                }
+              />
+              {/* <Route path="/upload" element={<Upload />} /> */}
+              <Route
                 path="/upload"
                 element={
                   <ProtectedRoute element={Upload} allowedLevels={["B", "C"]} />
                 }
-              /> */}
+              />
               {/* <Route path="/admin" element={<Admin />} /> */}
               <Route
                 path="/admin"
