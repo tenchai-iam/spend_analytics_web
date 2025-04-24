@@ -94,8 +94,8 @@ export default function App() {
                   />
                 }
               />
-              {/* <Route path="/dashboard6" element={<Dashboard6 />} /> */}
-              <Route
+              <Route path="/dashboard6" element={<Dashboard6 />} />
+              {/* <Route
                 path="/dashboard6"
                 element={
                   <ProtectedRoute
@@ -103,7 +103,7 @@ export default function App() {
                     allowedLevels={["B", "C"]}
                   />
                 }
-              />
+              /> */}
               {/* <Route path="/upload" element={<Upload />} /> */}
               <Route
                 path="/upload"
