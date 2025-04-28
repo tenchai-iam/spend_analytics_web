@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: tcc-harbor.pea.co.th/logistic/spend-analytic/web/prod
-  pullPolicy: Always #IfNotPresent
+  pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
 
@@ -43,10 +43,10 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
-  type: NodePort
+  type: ClusterIP
   port: 80
 
-ngress:
+ingress:
   enabled: true
   annotations:
     kubernetes.io/ingress.class: nginx
