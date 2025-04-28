@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import "../ComponentsStyles/Dashboard.css";
-import "../ComponentsStyles/Dashboard6.css";
+import XLSX from "xlsx-js-style";
+import { saveAs } from "file-saver";
+
+
 import NavbarComponent from "../ComponentsPage/NavbarComponent";
 import YearDropdown from "./YearDropdown";
 import D6BarGraphReV from "./D6BarGraphReV.js";
@@ -18,12 +20,21 @@ import {
   getD6Month,
 } from "../services/api_D6.js";
 
+import "../ComponentsStyles/Dashboard.css";
+import "../ComponentsStyles/Dashboard6.css";
+
 const Dashboard6 = () => {
   const [selectedYear, setSelectedYear] = useState(""); // State to hold the selected year
   const [selectedMonth, setSelectedMonth] = useState(""); // State to hold the selected year
   const [selectedCategory, setSelectedCategory] = useState("999"); // State to hold the selected category id
   const [selectedButton, setSelectedButton] = useState(0); // Track selected button index
   const [currentBarView, setCurrentBarView] = useState(1); // State to toggle between card and graph view
+
+  const formatValue = (value) =>
+    new Intl.NumberFormat("en-US", {
+      minimumFractionDigits: 3,
+      maximumFractionDigits: 3,
+    }).format(value);
 
   // Fetch available years using React Query
   const { data: yearsData, isLoading } = useQuery({
@@ -79,7 +90,13 @@ const Dashboard6 = () => {
     { label: "กฟต.1", value: "J" },
     { label: "กฟต.2", value: "K" },
     { label: "กฟต.3", value: "L" },
+    { label: "ส่วนกลาง", value: "Z" },
   ];
+
+  const ekgrpLabelMap = options.reduce((acc, cur) => {
+    acc[cur.value] = cur.label;
+    return acc;
+  }, {});
 
   const [selectedDistrict, setSelectedDistrict] = useState("");
 
@@ -133,20 +150,22 @@ const Dashboard6 = () => {
       amtused_MA: item.total_inventory / 1000000, // Convert amtused to millions
     })) || [];
 
-  // Merge the two datasets by EKGRP
-  const dataMonthInventory = [
-    ...dataTargetInventoryMonth,
-    ...dataCurrentMonthInventory,
-  ].reduce((acc, curr) => {
-    const existingItem = acc.find((item) => item.EKGRP === curr.EKGRP);
-    if (existingItem) {
-      existingItem.amtused_MT += curr.amtused_MT;
-      existingItem.amtused_MA += curr.amtused_MA;
-    } else {
-      acc.push(curr);
-    }
-    return acc;
-  }, []);
+    const dataMonthInventory = [
+      ...dataTargetInventoryMonth,
+      ...dataCurrentMonthInventory,
+    ].reduce((acc, curr) => {
+      const existingItem = acc.find((item) => item.EKGRP === curr.EKGRP);
+      if (existingItem) {
+        existingItem.amtused_MT += curr.amtused_MT;
+        existingItem.amtused_MA += curr.amtused_MA;
+      } else {
+        acc.push({
+          ...curr,
+          // label: ekgrpLabelMap[curr.EKGRP] || curr.EKGRP, // Add label here
+        });
+      }
+      return acc;
+    }, []);
 
   // get data for inventory day graph
   const {
@@ -353,6 +372,363 @@ const Dashboard6 = () => {
     enabled: !!selectedYear, // Only run query if both year and category_group are selected
   });
 
+  const getButtonStyle = (isSelected) => ({
+    backgroundColor: isSelected ? "#8e44ad" : "#f0f0f0",
+    color: isSelected ? "white" : "black",
+    textDecoration: "none", // Remove underline
+    border: "1px solid #ccc",
+    borderRadius: "4px",
+    padding: "10px 15px",
+    cursor: "pointer",
+    textAlign: "center",
+    display: "inline-block", // Ensure button-like appearance
+  });
+
+  // ###########################################################
+
+  // Function to format data for CSV export
+  const formatDayInvCSVData = (data) => {
+    if (!Array.isArray(data)) {
+      console.error("Expected an array but received:", data);
+      return []; // Avoid errors by returning an empty array
+    }
+
+    return data
+    .filter((item) => item.EKGRP && item.amtused_MT != null && item.amtused_MA != null) // Ensure valid entries
+      .map((item) => ({
+        EKGRP: item.EKGRP,
+        amtused_MT: formatValue(item.amtused_MT), // Material Number
+        amtused_MA: formatValue(item.amtused_MA), // Convert "-" values to "0"
+
+      }));
+  };
+
+  // Format CSV Data
+  const csvTableDayInvData = formatDayInvCSVData(dataDayInventory);
+
+  const csvTableDayInvHeaders = [
+    { label: "สังกัด", key: "EKGRP" },
+    { label: `เป้าหมายมูลค่าพัสดุคงคลังโดยใช้ 86% ของมูลค่าพัสดุของเดือน ${dateInfoData?.month} ปี ${selectedYear - 1}`, key: "amtused_MT" },
+    { label: `มูลค่าพัสดุคงคลัง ณ วันที่ ${dateInfoData?.day}/${dateInfoData?.month}/${dateInfoData?.year}`, key: "amtused_MA" },
+  ];
+
+  const downloadXLSX_DayInv = (data, headers, fileName, dateInfoData) => {
+    // Format data with headers
+    const formattedData = data.map((item) =>
+      headers.reduce((acc, header) => {
+        acc[header.label] = item[header.key];
+        return acc;
+      }, {})
+    );
+
+    // Define the number of extra rows
+    const extraRowsAbove = Array(3).fill({}); // 7 rows above the table
+    const extraRowsBelow = Array(2).fill({}); // 2 rows below the table
+
+    // Combine all rows: extra rows above, header, data, and extra rows below
+    const headerRow = headers.reduce((acc, header) => {
+      acc[header.label] = header.label; // Add headers as keys
+      return acc;
+    }, {});
+    const fullData = [
+      ...extraRowsAbove,
+      headerRow,
+      ...formattedData,
+      ...extraRowsBelow,
+    ];
+
+    // Create worksheet
+    const worksheet = XLSX.utils.json_to_sheet(fullData, { skipHeader: true });
+    const workbook = XLSX.utils.book_new();
+
+    // Add merges for title row and rows below
+    const numColumns = headers.length; // Number of columns in the dataset
+    worksheet["!merges"] = [
+      { s: { r: 1, c: 0 }, e: { r: 1, c: numColumns - 1 } }, // Merge title row
+      {
+        s: { r: fullData.length - 1, c: 0 },
+        e: { r: fullData.length - 1, c: numColumns - 1 },
+      }, // Merge info row
+    ];
+
+    // Add text to extra rows above
+    worksheet["A2"] = { v: `รายงานมูลค่าพัสดุคงคลังรายวัน (ล้านบาท)` };
+    // worksheet["A4"] = { v: `รหัสพัสดุ : ${selectedMaterial || "-"}` };
+
+    // Style extra rows above
+    const styleRowsAbove = [1, 3, 4, 5];
+    styleRowsAbove.forEach((rowIndex) => {
+      const cellAddress = XLSX.utils.encode_cell({ r: rowIndex, c: 0 });
+      worksheet[cellAddress].s = {
+        font: { bold: rowIndex === 1, sz: rowIndex === 1 ? 16 : 12 },
+        alignment: {
+          horizontal: rowIndex === 1 ? "center" : "left",
+          vertical: "center",
+        },
+      };
+    });
+
+    // Add and style rows below
+    const infoRowIndex = fullData.length - 1; // Index of the last row
+    worksheet[`A${infoRowIndex + 1}`] = {
+      v: `ข้อมูล ณ วันที่ ${dateInfoData?.day || "-"} / ${
+        dateInfoData?.month || "-"
+      } / ${dateInfoData?.year || "-"} เวลา 0${dateInfoData?.hour}:${
+        dateInfoData?.minute
+      }0 น.`,
+    };
+    worksheet[`A${infoRowIndex + 1}`].s = {
+      font: { sz: 12 },
+      alignment: {
+        horizontal: "left",
+        vertical: "center",
+      },
+    };
+
+    // Style headers
+    const headerRowIndex = extraRowsAbove.length;
+    for (let C = 0; C < headers.length; C++) {
+      const cellAddress = XLSX.utils.encode_cell({ r: headerRowIndex, c: C });
+      if (!worksheet[cellAddress]) {
+        worksheet[cellAddress] = { v: headers[C]?.label || "" };
+      }
+      worksheet[cellAddress].s = {
+        font: { bold: true },
+        alignment: {
+          horizontal: "center",
+          vertical: "center",
+          wrapText: true,
+        },
+        fill: { fgColor: { rgb: "D9D9D9" } },
+        border: {
+          top: { style: "thin", color: { rgb: "000000" } },
+          bottom: { style: "thin", color: { rgb: "000000" } },
+          left: { style: "thin", color: { rgb: "000000" } },
+          right: { style: "thin", color: { rgb: "000000" } },
+        },
+      };
+    }
+
+    // Style data cells
+    for (
+      let R = headerRowIndex + 1;
+      R < fullData.length - extraRowsBelow.length;
+      ++R
+    ) {
+      for (let C = 0; C < headers.length; ++C) {
+        const cellAddress = XLSX.utils.encode_cell({ r: R, c: C });
+        if (!worksheet[cellAddress]) continue;
+
+        const alignRight = C > 0; // Right-align for columns after the first
+        worksheet[cellAddress].s = {
+          alignment: {
+            horizontal: alignRight ? "right" : "center",
+            vertical: "center",
+            wrapText: true,
+          },
+          border: {
+            top: { style: "thin", color: { rgb: "000000" } },
+            bottom: { style: "thin", color: { rgb: "000000" } },
+            left: { style: "thin", color: { rgb: "000000" } },
+            right: { style: "thin", color: { rgb: "000000" } },
+          },
+        };
+      }
+    }
+
+    // Dynamically calculate column widths
+    const colWidths = headers.map((header) => {
+      const columnData = [
+        header.label,
+        ...formattedData.map((row) => row[header.label]?.toString() || ""),
+      ];
+      const maxLength = columnData.reduce(
+        (max, value) => Math.max(max, value.length),
+        0
+      );
+      return { wch: maxLength + 1 }; // Add a small buffer
+    });
+    worksheet["!cols"] = colWidths;
+
+    // Append worksheet to workbook and trigger download
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+    const xlsxData = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+    const blob = new Blob([xlsxData], { type: "application/octet-stream" });
+    saveAs(blob, `${fileName}.xlsx`);
+  };
+
+// ###########################################################
+
+// Function to format data for CSV export
+const formatMonthInvCSVData = (data) => {
+  if (!Array.isArray(data)) {
+    console.error("Expected an array but received:", data);
+    return []; // Avoid errors by returning an empty array
+  }
+
+  return data
+  .filter((item) => item.EKGRP && item.amtused_MT != null && item.amtused_MA != null) // Ensure valid entries
+    .map((item) => ({
+      EKGRP: item.EKGRP,
+      amtused_MT: formatValue(item.amtused_MT), // Material Number
+      amtused_MA: formatValue(item.amtused_MA), // Convert "-" values to "0"
+
+    }));
+};
+
+// Format CSV Data
+const csvTableMonthInvData = formatMonthInvCSVData(dataMonthInventory);
+
+const csvTableMonthInvHeaders = [
+  { label: "สังกัด", key: "EKGRP" },
+  { label: `เป้าหมายมูลค่าพัสดุคงคลัง ณ สิ้นปี ${dateInfoData?.year}`, key: "amtused_MT" },
+  { label: `มูลค่าพัสดุคงคลัง ณ สิ้นเดือน ${selectedMonth}`, key: "amtused_MA" },
+];
+
+const downloadXLSX_MonthInv = (data, headers, fileName, dateInfoData) => {
+  // Format data with headers
+  const formattedData = data.map((item) =>
+    headers.reduce((acc, header) => {
+      acc[header.label] = item[header.key];
+      return acc;
+    }, {})
+  );
+
+  // Define the number of extra rows
+  const extraRowsAbove = Array(3).fill({}); // 7 rows above the table
+  const extraRowsBelow = Array(2).fill({}); // 2 rows below the table
+
+  // Combine all rows: extra rows above, header, data, and extra rows below
+  const headerRow = headers.reduce((acc, header) => {
+    acc[header.label] = header.label; // Add headers as keys
+    return acc;
+  }, {});
+  const fullData = [
+    ...extraRowsAbove,
+    headerRow,
+    ...formattedData,
+    ...extraRowsBelow,
+  ];
+
+  // Create worksheet
+  const worksheet = XLSX.utils.json_to_sheet(fullData, { skipHeader: true });
+  const workbook = XLSX.utils.book_new();
+
+  // Add merges for title row and rows below
+  const numColumns = headers.length; // Number of columns in the dataset
+  worksheet["!merges"] = [
+    { s: { r: 1, c: 0 }, e: { r: 1, c: numColumns - 1 } }, // Merge title row
+    {
+      s: { r: fullData.length - 1, c: 0 },
+      e: { r: fullData.length - 1, c: numColumns - 1 },
+    }, // Merge info row
+  ];
+
+  // Add text to extra rows above
+  worksheet["A2"] = { v: `รายงานมูลค่าพัสดุคงคลัง ณ สิ้นเดือน ${selectedMonth}/${dateInfoData?.year} (ล้านบาท)` };
+  // worksheet["A4"] = { v: `รหัสพัสดุ : ${selectedMaterial || "-"}` };
+
+  // Style extra rows above
+  const styleRowsAbove = [1, 3, 4, 5];
+  styleRowsAbove.forEach((rowIndex) => {
+    const cellAddress = XLSX.utils.encode_cell({ r: rowIndex, c: 0 });
+    worksheet[cellAddress].s = {
+      font: { bold: rowIndex === 1, sz: rowIndex === 1 ? 16 : 12 },
+      alignment: {
+        horizontal: rowIndex === 1 ? "center" : "left",
+        vertical: "center",
+      },
+    };
+  });
+
+  // Add and style rows below
+  const infoRowIndex = fullData.length - 1; // Index of the last row
+  worksheet[`A${infoRowIndex + 1}`] = {
+    v: `ข้อมูล ณ วันที่ ${dateInfoData?.day || "-"} / ${
+      dateInfoData?.month || "-"
+    } / ${dateInfoData?.year || "-"} เวลา 0${dateInfoData?.hour}:${
+      dateInfoData?.minute
+    }0 น.`,
+  };
+  worksheet[`A${infoRowIndex + 1}`].s = {
+    font: { sz: 12 },
+    alignment: {
+      horizontal: "left",
+      vertical: "center",
+    },
+  };
+
+  // Style headers
+  const headerRowIndex = extraRowsAbove.length;
+  for (let C = 0; C < headers.length; C++) {
+    const cellAddress = XLSX.utils.encode_cell({ r: headerRowIndex, c: C });
+    if (!worksheet[cellAddress]) {
+      worksheet[cellAddress] = { v: headers[C]?.label || "" };
+    }
+    worksheet[cellAddress].s = {
+      font: { bold: true },
+      alignment: {
+        horizontal: "center",
+        vertical: "center",
+        wrapText: true,
+      },
+      fill: { fgColor: { rgb: "D9D9D9" } },
+      border: {
+        top: { style: "thin", color: { rgb: "000000" } },
+        bottom: { style: "thin", color: { rgb: "000000" } },
+        left: { style: "thin", color: { rgb: "000000" } },
+        right: { style: "thin", color: { rgb: "000000" } },
+      },
+    };
+  }
+
+  // Style data cells
+  for (
+    let R = headerRowIndex + 1;
+    R < fullData.length - extraRowsBelow.length;
+    ++R
+  ) {
+    for (let C = 0; C < headers.length; ++C) {
+      const cellAddress = XLSX.utils.encode_cell({ r: R, c: C });
+      if (!worksheet[cellAddress]) continue;
+
+      const alignRight = C > 0; // Right-align for columns after the first
+      worksheet[cellAddress].s = {
+        alignment: {
+          horizontal: alignRight ? "right" : "center",
+          vertical: "center",
+          wrapText: true,
+        },
+        border: {
+          top: { style: "thin", color: { rgb: "000000" } },
+          bottom: { style: "thin", color: { rgb: "000000" } },
+          left: { style: "thin", color: { rgb: "000000" } },
+          right: { style: "thin", color: { rgb: "000000" } },
+        },
+      };
+    }
+  }
+
+  // Dynamically calculate column widths
+  const colWidths = headers.map((header) => {
+    const columnData = [
+      header.label,
+      ...formattedData.map((row) => row[header.label]?.toString() || ""),
+    ];
+    const maxLength = columnData.reduce(
+      (max, value) => Math.max(max, value.length),
+      0
+    );
+    return { wch: maxLength + 1 }; // Add a small buffer
+  });
+  worksheet["!cols"] = colWidths;
+
+  // Append worksheet to workbook and trigger download
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+  const xlsxData = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+  const blob = new Blob([xlsxData], { type: "application/octet-stream" });
+  saveAs(blob, `${fileName}.xlsx`)};
+
   return (
     <div>
       <NavbarComponent />
@@ -390,6 +766,21 @@ const Dashboard6 = () => {
         <div className="D6-bar-chart-container">
           {currentBarView === 1 && (
             <>
+            <div className="download-container">
+          <button
+            onClick={() =>
+              downloadXLSX_DayInv(
+                csvTableDayInvData, // Data
+                csvTableDayInvHeaders, // Headers
+                `DayInv_${selectedYear}`, // File Name
+                dateInfoData // Date Info
+              )
+            }
+            style={getButtonStyle(false)} // Apply button style
+          >
+            Download XLSX
+          </button>
+        </div>
               <D6BarGraphReV
                 data={dataDayInventory}
                 xAxisKey="EKGRP"
@@ -452,6 +843,19 @@ const Dashboard6 = () => {
                     </select>
                   )}
                 </div>
+                <button
+            onClick={() =>
+              downloadXLSX_MonthInv(
+                csvTableMonthInvData, // Data
+                csvTableMonthInvHeaders, // Headers
+                `MonthInventory_${selectedMonth}_${dateInfoData?.Year}`, // File Name
+                dateInfoData // Date Info
+              )
+            }
+            style={getButtonStyle(false)} // Apply button style
+          >
+            Download XLSX
+          </button>
               </div>
               <D6BarGraphReV
                 data={dataMonthInventory}
@@ -461,7 +865,7 @@ const Dashboard6 = () => {
                 height={330}
               />
               <p className="mat-legend">
-                ▬▬ เป้าหมายมูลค่าพัสดุคงคลัง ณ ต้นปี {selectedYear}
+                ▬▬ เป้าหมายมูลค่าพัสดุคงคลัง ณ สิ้นปี {selectedYear}
               </p>
               <p className="nonMat-legend">
                 ▬▬ มูลค่าพัสดุคงคลังปัจจุบัน ณ สิ้นเดือน {selectedMonth} ปี{" "}
