@@ -906,7 +906,7 @@ const Dashboard3 = () => {
               disabled={!selectedMaterial}
               onClick={() => handleButtonClick("first")}
             >
-              แยกตาม กฟข. หน้างาน
+              แยกตามการไฟฟ้าเขต
             </button>
             <button
               className={`chart-button ${
@@ -915,7 +915,7 @@ const Dashboard3 = () => {
               disabled={!selectedMaterial}
               onClick={() => handleButtonClick("second")}
             >
-              แยกตามการไฟฟ้าเขต{" "}
+              แยกตามการไฟฟ้าหน้างาน{" "}
             </button>
           </div>
 
