@@ -13,6 +13,7 @@ import {
   getD3Materials,
   getD3Districts,
   getD3CategoryPriceTable,
+  getD3CategoryPriceTable12M,
   getD3MaterialPriceGroupDistrict,
   getD3MaterialPriceByDistrict,
   getD3MaterialPriceGroupEKGRP,
@@ -310,6 +311,28 @@ const Dashboard3 = () => {
     const blob = new Blob([xlsxData], { type: "application/octet-stream" });
     saveAs(blob, `${fileName}.xlsx`);
   };
+
+  const {
+    data: categoryPriceTable12M,
+    isLoading: isLoadingCategoryPriceTable12M,
+    isError: isErrorCategoryPriceTable12M,
+    error: errorCategoryPriceTable12M,
+  } = useQuery({
+    queryKey: ["categoryPriceTable12M", selectedCategory], // Unique query key for caching
+    queryFn: () => getD3CategoryPriceTable12M(selectedCategory), // API call to fetch data based on year and category are selected
+    enabled: Boolean(selectedCategory), // Only run query if year and category are selected
+  });
+
+  const dataTablePrice24M =
+    categoryPriceTable12M?.data?.map((item) => ({
+      matNR: item.MATNR,
+      matName: item.MAKTX,
+      priceHQ: Number(item.PRICE_HQ),
+      priceDistrict: Number(item.PRICE_REGION),
+      priceDiff: Number(item.PRICE_DIFF) - 1,
+      quantityHQ: Number(item.QUANTITY_HQ),
+      quantityRegion: Number(item.QUANTITY_REGION),
+    })) || [];
 
   const {
     data: materialPriceGroupDistrict,
@@ -860,11 +883,15 @@ const Dashboard3 = () => {
             title={`เปรียบเทียบราคาและจำนวนจัดซื้อส่วนกลาง vs. กฟข. ในปี ${selectedYear}`}
             data={dataTablePrice}
           />
+          <TableD3Price
+            title={`เปรียบเทียบราคาและจำนวนจัดซื้อส่วนกลาง vs. กฟข. ย้อนหลัง 24 เดือน`}
+            data={dataTablePrice24M}
+          />
           <div className="remark-container">
             <p>ⓘ หมายเหตุ:</p>
             <p>
-              1. หากไม่มีการจัดซื้อเกิดขึ้น ณ
-              หน่วยงานจัดซื้อนั้นๆในปีที่เลือกแสดง จะไม่มีการแสดงผลราคาเฉลี่ย
+              1. หากไม่มีการจัดซื้อเกิดขึ้น ณ หน่วยงานจัดซื้อนั้นๆในช่วงที่กำหนด
+              จะไม่มีการแสดงผลราคาเฉลี่ย
             </p>
             <p>2. * คือพัสดุที่มีการจ้างรีดที่ส่วนกลางด้วยอลูมิเนียมอินกอต</p>
           </div>
@@ -906,7 +933,7 @@ const Dashboard3 = () => {
               disabled={!selectedMaterial}
               onClick={() => handleButtonClick("first")}
             >
-              แยกตาม กฟข. หน้างาน
+              แยกตามการไฟฟ้าเขต
             </button>
             <button
               className={`chart-button ${
@@ -915,7 +942,7 @@ const Dashboard3 = () => {
               disabled={!selectedMaterial}
               onClick={() => handleButtonClick("second")}
             >
-              แยกตามการไฟฟ้าเขต{" "}
+              แยกตามการไฟฟ้าหน้างาน{" "}
             </button>
           </div>
 
