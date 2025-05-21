@@ -1,0 +1,11 @@
+FROM gitlab.pea.co.th:443/developer/spend-analytics/web/dependency_proxy/containers/node:18-alpine as base
+
+RUN apk add --no-cache git
+
+WORKDIR /app
+
+COPY package.json package-lock.json* ./
+
+RUN npm install --force
+
+COPY . .
