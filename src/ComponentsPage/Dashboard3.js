@@ -323,7 +323,7 @@ const Dashboard3 = () => {
     enabled: Boolean(selectedCategory), // Only run query if year and category are selected
   });
 
-  const dataTablePrice12M =
+  const dataTablePrice24M =
     categoryPriceTable12M?.data?.map((item) => ({
       matNR: item.MATNR,
       matName: item.MAKTX,
@@ -884,8 +884,8 @@ const Dashboard3 = () => {
             data={dataTablePrice}
           />
           <TableD3Price
-            title={`เปรียบเทียบราคาและจำนวนจัดซื้อส่วนกลาง vs. กฟข. ย้อนหลัง 12 เดือน`}
-            data={dataTablePrice12M}
+            title={`เปรียบเทียบราคาและจำนวนจัดซื้อส่วนกลาง vs. กฟข. ย้อนหลัง 24 เดือน`}
+            data={dataTablePrice24M}
           />
           <div className="remark-container">
             <p>ⓘ หมายเหตุ:</p>
