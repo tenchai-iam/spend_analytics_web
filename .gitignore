@@ -174,7 +174,7 @@ sketch
 .ionide
 
 .chart
-.kaniko
+#.kaniko
 .deployment
 .codesandbox
 yarn.lock
