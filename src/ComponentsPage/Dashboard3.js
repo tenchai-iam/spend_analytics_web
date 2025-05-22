@@ -313,18 +313,18 @@ const Dashboard3 = () => {
   };
 
   const {
-    data: categoryPriceTable12M,
-    isLoading: isLoadingCategoryPriceTable12M,
-    isError: isErrorCategoryPriceTable12M,
-    error: errorCategoryPriceTable12M,
+    data: categoryPriceTable24M,
+    isLoading: isLoadingCategoryPriceTable24M,
+    isError: isErrorCategoryPriceTable24M,
+    error: errorCategoryPriceTable24M,
   } = useQuery({
-    queryKey: ["categoryPriceTable12M", selectedCategory], // Unique query key for caching
+    queryKey: ["categoryPriceTable24M", selectedCategory], // Unique query key for caching
     queryFn: () => getD3CategoryPriceTable12M(selectedCategory), // API call to fetch data based on year and category are selected
     enabled: Boolean(selectedCategory), // Only run query if year and category are selected
   });
 
   const dataTablePrice24M =
-    categoryPriceTable12M?.data?.map((item) => ({
+    categoryPriceTable24M?.data?.map((item) => ({
       matNR: item.MATNR,
       matName: item.MAKTX,
       priceHQ: Number(item.PRICE_HQ),
@@ -333,6 +333,193 @@ const Dashboard3 = () => {
       quantityHQ: Number(item.QUANTITY_HQ),
       quantityRegion: Number(item.QUANTITY_REGION),
     })) || [];
+
+  const csvTablePrice24MHeaders = [
+    { label: "รหัสพัสดุ", key: "matNR" },
+    { label: "ชื่อพัสดุ", key: "matName" },
+    { label: "ราคาที่ส่วนกลาง", key: "priceHQ" },
+    { label: "ราคาเฉลี่ยที่ กฟข.", key: "priceDistrict" },
+    { label: "% ราคาที่แตกต่าง", key: "priceDiff" },
+    { label: "จำนวนพัสดุเฉลี่ยต่อ PO ที่ส่วนกลาง", key: "quantityHQ" },
+    { label: "จำนวนพัสดุเฉลี่ยต่อ PO ที่ กฟข.", key: "quantityRegion" },
+  ];
+
+  // Format the data for CSV
+  const formatCSVTablePrice24MData = (data) =>
+    data.map((item) => ({
+      matNR: item.matNR,
+      matName: item.matName,
+      priceHQ: formatPrice(item.priceHQ),
+      priceDistrict: formatPrice(item.priceDistrict),
+      priceDiff: formatPercentage(item.priceDiff),
+      quantityHQ: formatQuantity(item.quantityHQ),
+      quantityRegion: formatQuantity(item.quantityRegion),
+    }));
+
+  const csvTablePrice24MData = formatCSVTablePrice24MData(dataTablePrice24M); // Use your table data as CSV data
+
+  const downloadXLSX_catPrice24M = (
+    data,
+    headers,
+    fileName,
+    selectedCategory,
+    dateInfoData
+  ) => {
+    // Format data with headers
+    const formattedData = data.map((item) =>
+      headers.reduce((acc, header) => {
+        acc[header.label] = item[header.key];
+        return acc;
+      }, {})
+    );
+
+    // Define the number of extra rows
+    const extraRowsAbove = Array(5).fill({}); // 3 rows above the table
+    const extraRowsBelow = Array(2).fill({}); // 2 rows below the table
+
+    // Combine all rows: extra rows above, header, data, and extra rows below
+    const headerRow = headers.reduce((acc, header) => {
+      acc[header.label] = header.label; // Add headers as keys
+      return acc;
+    }, {});
+    const fullData = [
+      ...extraRowsAbove,
+      headerRow,
+      ...formattedData,
+      ...extraRowsBelow,
+    ];
+
+    // Create worksheet
+    const worksheet = XLSX.utils.json_to_sheet(fullData, { skipHeader: true });
+    const workbook = XLSX.utils.book_new();
+
+    // Add merges for title row and rows below
+    const numColumns = headers.length; // Number of columns in the dataset
+    worksheet["!merges"] = [
+      { s: { r: 1, c: 0 }, e: { r: 1, c: numColumns - 1 } }, // Merge title row
+      { s: { r: 3, c: 0 }, e: { r: 3, c: numColumns - 1 } }, // Merge row 4
+      {
+        s: { r: fullData.length - 1, c: 0 },
+        e: { r: fullData.length - 1, c: numColumns - 1 },
+      }, // Merge info row
+    ];
+
+    // Add text to extra rows above
+    worksheet["A2"] = {
+      v: `ตารางเปรียบเทียบราคาและจำนวนจัดซื้อส่วนกลาง vs. กฟข. ย้อนหลัง 24 เดือน`,
+    };
+    worksheet["A4"] = { v: `กลุ่มพัสดุ : ${selectedCategory || "-"}` };
+
+    // Style extra rows above
+    const styleRowsAbove = [1];
+    styleRowsAbove.forEach((rowIndex) => {
+      const cellAddress = XLSX.utils.encode_cell({ r: rowIndex, c: 0 });
+      worksheet[cellAddress].s = {
+        font: { bold: rowIndex === 1, sz: rowIndex === 1 ? 16 : 12 },
+        alignment: {
+          horizontal: rowIndex === 1 ? "center" : "left",
+          vertical: "center",
+        },
+      };
+    });
+
+    // Add and style rows below
+    const infoRowIndex = fullData.length - 1; // Index of the last row
+    worksheet[`A${infoRowIndex + 1}`] = {
+      v: `ข้อมูล ณ วันที่ ${dateInfoData?.day || "-"} / ${
+        dateInfoData?.month || "-"
+      } / ${dateInfoData?.year || "-"} เวลา 0${dateInfoData?.hour}:${
+        dateInfoData?.minute
+      }0 น.`,
+    };
+    worksheet[`A${infoRowIndex + 1}`].s = {
+      font: { sz: 12 },
+      alignment: {
+        horizontal: "left",
+        vertical: "center",
+      },
+    };
+
+    // Style headers
+    const headerRowIndex = extraRowsAbove.length;
+    for (let C = 0; C < headers.length; C++) {
+      const cellAddress = XLSX.utils.encode_cell({ r: headerRowIndex, c: C });
+      if (!worksheet[cellAddress]) {
+        worksheet[cellAddress] = { v: headers[C]?.label || "" };
+      }
+      worksheet[cellAddress].s = {
+        font: { bold: true },
+        alignment: {
+          horizontal: "center",
+          vertical: "center",
+          wrapText: true,
+        },
+        fill: { fgColor: { rgb: "D9D9D9" } },
+        border: {
+          top: { style: "thin", color: { rgb: "000000" } },
+          bottom: { style: "thin", color: { rgb: "000000" } },
+          left: { style: "thin", color: { rgb: "000000" } },
+          right: { style: "thin", color: { rgb: "000000" } },
+        },
+      };
+    }
+
+    // Style data cells
+    for (
+      let R = headerRowIndex + 1;
+      R < fullData.length - extraRowsBelow.length;
+      ++R
+    ) {
+      for (let C = 0; C < headers.length; ++C) {
+        const cellAddress = XLSX.utils.encode_cell({ r: R, c: C });
+        if (!worksheet[cellAddress]) continue;
+
+        // Determine horizontal alignment based on column index
+        const alignRight = C > 0; // Right-align for columns after the first
+        const alignLeft = C === 1; // Left-align for the second column
+        const horizontalAlignment = alignLeft
+          ? "left"
+          : alignRight
+          ? "right"
+          : "center";
+
+        // Apply cell styles
+        worksheet[cellAddress].s = {
+          alignment: {
+            horizontal: horizontalAlignment,
+            vertical: "center",
+            wrapText: true,
+          },
+          border: {
+            top: { style: "thin", color: { rgb: "000000" } },
+            bottom: { style: "thin", color: { rgb: "000000" } },
+            left: { style: "thin", color: { rgb: "000000" } },
+            right: { style: "thin", color: { rgb: "000000" } },
+          },
+        };
+      }
+    }
+
+    // Dynamically calculate column widths
+    const colWidths = headers.map((header) => {
+      const columnData = [
+        header.label,
+        ...formattedData.map((row) => row[header.label]?.toString() || ""),
+      ];
+      const maxLength = columnData.reduce(
+        (max, value) => Math.max(max, value.length),
+        0
+      );
+      return { wch: maxLength + 1 }; // Add a small buffer
+    });
+    worksheet["!cols"] = colWidths;
+
+    // Append worksheet to workbook and trigger download
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+    const xlsxData = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+    const blob = new Blob([xlsxData], { type: "application/octet-stream" });
+    saveAs(blob, `${fileName}.xlsx`);
+  };
 
   const {
     data: materialPriceGroupDistrict,
@@ -701,7 +888,7 @@ const Dashboard3 = () => {
         dateInfoData?.month || "-"
       } / ${dateInfoData?.year || "-"} เวลา 0${dateInfoData?.hour}:${
         dateInfoData?.minute
-      }0 น.`,
+      } น.`,
     };
     worksheet[`A${infoRowIndex + 1}`].s = {
       font: { sz: 12 },
@@ -883,6 +1070,22 @@ const Dashboard3 = () => {
             title={`เปรียบเทียบราคาและจำนวนจัดซื้อส่วนกลาง vs. กฟข. ในปี ${selectedYear}`}
             data={dataTablePrice}
           />
+          <div className="download-button">
+            <button
+              onClick={() =>
+                downloadXLSX_catPrice24M(
+                  csvTablePrice24MData, // Data
+                  csvTablePrice24MHeaders, // Headers
+                  `HQvsDistrictPriceAndQuantityComparison24M_${selectedCategory}`,
+                  selectedCategory,
+                  dateInfoData // Date Info
+                )
+              }
+              style={getButtonStyle(false)} // Apply button style
+            >
+              Download XLSX
+            </button>
+          </div>
           <TableD3Price
             title={`เปรียบเทียบราคาและจำนวนจัดซื้อส่วนกลาง vs. กฟข. ย้อนหลัง 24 เดือน`}
             data={dataTablePrice24M}
