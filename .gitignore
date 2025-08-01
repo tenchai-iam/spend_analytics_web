@@ -173,9 +173,9 @@ sketch
 .history
 .ionide
 
-.chart
+#.chart
 #.kaniko
-.deployment
+#.deployment
 .codesandbox
 yarn.lock
 
