@@ -5,6 +5,7 @@ import YearDropdown from "./YearDropdown";
 import NavbarComponent from "../ComponentsPage/NavbarComponent";
 import D3BarGraphReV from "./D3BarGraphReV";
 import TableD3Price from "./TableD3Price";
+import TableD3Allocation from "./TableD3Allocation.js"
 import Select from "react-select"; // Import react-select
 import { useQuery } from "@tanstack/react-query";
 import { getYears, getDateInfo } from "../services/api.js"; // Import your API service function
@@ -14,6 +15,7 @@ import {
   getD3Districts,
   getD3CategoryPriceTable,
   getD3CategoryPriceTable12M,
+  getD3PlanAllocation,
   getD3MaterialPriceGroupDistrict,
   getD3MaterialPriceByDistrict,
   getD3MaterialPriceGroupEKGRP,
@@ -520,6 +522,31 @@ const Dashboard3 = () => {
     const blob = new Blob([xlsxData], { type: "application/octet-stream" });
     saveAs(blob, `${fileName}.xlsx`);
   };
+
+    const {
+    data: planAllocation,
+    isLoading: isLoadingPlanAllocation,
+    isError: isErrorPlanAllocation,
+    error: errorPlanAllocation,
+  } = useQuery({
+    queryKey: ["planAllocation", selectedCategory], // Unique query key for caching
+    queryFn: () => getD3PlanAllocation(selectedCategory), // API call to fetch data based on year and category are selected
+    enabled: Boolean(selectedCategory), // Only run query if year and category are selected
+  });
+
+  const dataTablePlanAllocation =
+    planAllocation?.data?.map((item) => ({
+      matNR: item.matnr,
+      matName: item.mat_name,
+      priceHQ: Number(item.hq_price),
+      priceDistrict: Number(item.district_price),
+      quantityHQ: Number(item.hq_volume),
+      quantityRegion: Number(item.district_volume),
+      quantityTotal: Number(item.hq_volume+item.district_volume),
+      budgetHQ: Number(item.hq_budget),
+      budgetRegion: Number(item.district_budget),
+      budgetTotal: Number(item.hq_budget+item.district_budget)
+    })) || [];
 
   const {
     data: materialPriceGroupDistrict,
@@ -1099,6 +1126,10 @@ const Dashboard3 = () => {
             <p>2. * คือพัสดุที่มีการจ้างรีดที่ส่วนกลางด้วยอลูมิเนียมอินกอต</p>
           </div>
         </div>
+                  <TableD3Allocation
+            title={`เปรียบเทียบจำนวนจัดซื้อส่วนกลาง vs. กฟข. เพื่อจัดทำแผน (คำนวณจากราคาย้อนหลัง 24 เดือน)`}
+            data={dataTablePlanAllocationM}
+          />
         <div className="bottom-container">
           <h1 className="text-title">
             {`เปรียบเทียบราคาจัดซื้อพัสดุตามหน่วยงานจัดซื้อ ในปี ${selectedYear}`}

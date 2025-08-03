@@ -47,6 +47,18 @@ export const getD3CategoryPriceTable12M = async (category_id) => {
 };
 
 // Fetch average spend data for a specific year and category using a POST request
+export const getD3PlanAllocation = async () => {
+  const response = await axios.post(
+    `${API_URL}/dashboard_3_plan_volume_allocation`,
+    {
+      category_id: String(category_id), // Pass the category ID value in the request body
+    },
+    { timeout: 5000 }
+  );
+  return response.data;
+};
+
+// Fetch average spend data for a specific year and category using a POST request
 export const getD3MaterialPriceGroupDistrict = async (year, matnr) => {
   const response = await axios.post(
     `${API_URL}/dashboard_3_get_price_details`,
@@ -110,3 +122,4 @@ export const getD3MaterialPriceByEKGRP = async (year, matnr, district) => {
   );
   return response.data;
 };
+
