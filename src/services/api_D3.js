@@ -47,7 +47,7 @@ export const getD3CategoryPriceTable12M = async (category_id) => {
 };
 
 // Fetch average spend data for a specific year and category using a POST request
-export const getD3PlanAllocation = async () => {
+export const getD3PlanAllocation = async (category_id) => {
   const response = await axios.post(
     `${API_URL}/dashboard_3_plan_volume_allocation`,
     {

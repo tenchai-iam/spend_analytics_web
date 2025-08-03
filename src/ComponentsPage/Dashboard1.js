@@ -26,37 +26,15 @@ import {
   getD1DonutSpend,
   getD1PONumSpend,
 } from "../services/api_D1.js";
-import XLSX from "xlsx-js-style";
-import { saveAs } from "file-saver";
+import { downloadXLSX, formatters } from "../utils/downloadXLSX";
 
 const Dashboard1 = () => {
   const [selectedYear, setSelectedYear] = useState(""); // State to hold the selected year
   const [selectedCategory, setSelectedCategory] = useState(""); // State to hold the selected category
 
-  const formatPrice = (value) =>
-    new Intl.NumberFormat("en-US", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(value);
-
-  const formatQuantity = (value) =>
-    new Intl.NumberFormat("en-US", {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(value);
-
-  const formatPercentage = (value) =>
-    new Intl.NumberFormat("en-US", {
-      style: "percent",
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(value);
-
-  const formatTotal = (value) =>
-    new Intl.NumberFormat("en-US", {
-      minimumFractionDigits: 3,
-      maximumFractionDigits: 3,
-    }).format(value);
+  const formatPrice = formatters.price;
+  const formatQuantity = formatters.quantity;
+  const formatPercentage = formatters.percentage;
 
   // Fetch available years using React Query
   const { data: yearsData, isLoading } = useQuery({
@@ -97,7 +75,7 @@ const Dashboard1 = () => {
       priceDiff: Number(item.PRICE_DIFF) - 1,
     })) || [];
 
-  const csvTablePriceHeaders = [
+  const tablePriceHeaders = [
     { label: "รหัสพัสดุ", key: "matNR" },
     { label: "ชื่อพัสดุ", key: "matName" },
     { label: "ราคาที่ส่วนกลาง", key: "priceHQ" },
@@ -105,17 +83,6 @@ const Dashboard1 = () => {
     { label: "% ราคาที่แตกต่าง", key: "priceDiff" },
   ];
 
-  // Format the data for CSV
-  const formatCSVTablePriceData = (data) =>
-    data.map((item) => ({
-      matNR: item.matNR,
-      matName: item.matName,
-      priceHQ: formatPrice(item.priceHQ),
-      priceDistrict: formatPrice(item.priceDistrict),
-      priceDiff: formatPercentage(item.priceDiff),
-    }));
-
-  const csvTablePriceData = formatCSVTablePriceData(dataTablePrice); // Use your table data as CSV data
 
   const downloadXLSX_price = (
     data,
@@ -125,160 +92,29 @@ const Dashboard1 = () => {
     selectedCategory,
     dateInfoData
   ) => {
-    // Format data with headers
-    const formattedData = data.map((item) =>
-      headers.reduce((acc, header) => {
-        acc[header.label] = item[header.key];
-        return acc;
-      }, {})
-    );
-
-    // Define the number of extra rows
-    const extraRowsAbove = Array(5).fill({}); // 3 rows above the table
-    const extraRowsBelow = Array(2).fill({}); // 2 rows below the table
-
-    // Combine all rows: extra rows above, header, data, and extra rows below
-    const headerRow = headers.reduce((acc, header) => {
-      acc[header.label] = header.label; // Add headers as keys
-      return acc;
-    }, {});
-    const fullData = [
-      ...extraRowsAbove,
-      headerRow,
-      ...formattedData,
-      ...extraRowsBelow,
-    ];
-
-    // Create worksheet
-    const worksheet = XLSX.utils.json_to_sheet(fullData, { skipHeader: true });
-    const workbook = XLSX.utils.book_new();
-
-    // Add merges for title row and rows below
-    const numColumns = headers.length; // Number of columns in the dataset
-    worksheet["!merges"] = [
-      { s: { r: 1, c: 0 }, e: { r: 1, c: numColumns - 1 } }, // Merge title row
-      { s: { r: 3, c: 0 }, e: { r: 3, c: numColumns - 1 } }, // Merge row 4
-      {
-        s: { r: fullData.length - 1, c: 0 },
-        e: { r: fullData.length - 1, c: numColumns - 1 },
-      }, // Merge info row
-    ];
-
-    // Add text to extra rows above
-    worksheet["A2"] = {
-      v: `ตาราง Top 10 รายการพัสดุที่มีราคาจัดซื้อระหว่างส่วนกลาง และ กฟข. แตกต่างกันมากที่สุด ปี ${selectedYear}`,
-    };
-    worksheet["A4"] = { v: `กลุ่มพัสดุ : ${selectedCategory || "-"}` };
-
-    // Style extra rows above
-    const styleRowsAbove = [1];
-    styleRowsAbove.forEach((rowIndex) => {
-      const cellAddress = XLSX.utils.encode_cell({ r: rowIndex, c: 0 });
-      worksheet[cellAddress].s = {
-        font: { bold: rowIndex === 1, sz: rowIndex === 1 ? 16 : 12 },
-        alignment: {
-          horizontal: rowIndex === 1 ? "center" : "left",
-          vertical: "center",
-        },
-      };
-    });
-
-    // Add and style rows below
-    const infoRowIndex = fullData.length - 1; // Index of the last row
-    worksheet[`A${infoRowIndex + 1}`] = {
-      v: `ข้อมูล ณ วันที่ ${dateInfoData?.day || "-"} / ${
-        dateInfoData?.month || "-"
-      } / ${dateInfoData?.year || "-"} เวลา 0${dateInfoData?.hour}:${
-        dateInfoData?.minute
-      }0 น.`,
-    };
-    worksheet[`A${infoRowIndex + 1}`].s = {
-      font: { sz: 12 },
-      alignment: {
-        horizontal: "left",
-        vertical: "center",
+    downloadXLSX({
+      data: dataTablePrice, // Use raw unformatted data
+      headers,
+      fileName,
+      title: `ตาราง Top 10 รายการพัสดุที่มีราคาจัดซื้อระหว่างส่วนกลาง และ กฟข. แตกต่างกันมากที่สุด ปี ${selectedYear}`,
+      filters: [`กลุ่มพัสดุ : ${selectedCategory || "-"}`],
+      dateInfo: dateInfoData,
+      preserveRawNumbers: true,
+      columnTypes: {
+        0: "text",       // รหัสพัสดุ
+        1: "text",       // ชื่อพัสดุ
+        2: "currency",   // ราคาที่ส่วนกลาง
+        3: "currency",   // ราคาเฉลี่ยที่ กฟข.
+        4: "percentage"  // % ราคาที่แตกต่าง
       },
-    };
-
-    // Style headers
-    const headerRowIndex = extraRowsAbove.length;
-    for (let C = 0; C < headers.length; C++) {
-      const cellAddress = XLSX.utils.encode_cell({ r: headerRowIndex, c: C });
-      if (!worksheet[cellAddress]) {
-        worksheet[cellAddress] = { v: headers[C]?.label || "" };
+      columnAlignment: {
+        0: "center",
+        1: "left",
+        2: "right",
+        3: "right",
+        4: "right"
       }
-      worksheet[cellAddress].s = {
-        font: { bold: true },
-        alignment: {
-          horizontal: "center",
-          vertical: "center",
-          wrapText: true,
-        },
-        fill: { fgColor: { rgb: "D9D9D9" } },
-        border: {
-          top: { style: "thin", color: { rgb: "000000" } },
-          bottom: { style: "thin", color: { rgb: "000000" } },
-          left: { style: "thin", color: { rgb: "000000" } },
-          right: { style: "thin", color: { rgb: "000000" } },
-        },
-      };
-    }
-
-    // Style data cells
-    for (
-      let R = headerRowIndex + 1;
-      R < fullData.length - extraRowsBelow.length;
-      ++R
-    ) {
-      for (let C = 0; C < headers.length; ++C) {
-        const cellAddress = XLSX.utils.encode_cell({ r: R, c: C });
-        if (!worksheet[cellAddress]) continue;
-
-        // Determine horizontal alignment based on column index
-        const alignRight = C > 1; // Right-align for columns after the second
-        const alignLeft = C === 1; // Left-align for the second column
-        const horizontalAlignment = alignLeft
-          ? "left"
-          : alignRight
-          ? "right"
-          : "center";
-
-        // Apply cell styles
-        worksheet[cellAddress].s = {
-          alignment: {
-            horizontal: horizontalAlignment,
-            vertical: "center",
-            wrapText: true,
-          },
-          border: {
-            top: { style: "thin", color: { rgb: "000000" } },
-            bottom: { style: "thin", color: { rgb: "000000" } },
-            left: { style: "thin", color: { rgb: "000000" } },
-            right: { style: "thin", color: { rgb: "000000" } },
-          },
-        };
-      }
-    }
-
-    // Dynamically calculate column widths
-    const colWidths = headers.map((header) => {
-      const columnData = [
-        header.label,
-        ...formattedData.map((row) => row[header.label]?.toString() || ""),
-      ];
-      const maxLength = columnData.reduce(
-        (max, value) => Math.max(max, value.length),
-        0
-      );
-      return { wch: maxLength + 1 }; // Add a small buffer
     });
-    worksheet["!cols"] = colWidths;
-
-    // Append worksheet to workbook and trigger download
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-    const xlsxData = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-    const blob = new Blob([xlsxData], { type: "application/octet-stream" });
-    saveAs(blob, `${fileName}.xlsx`);
   };
 
   const {
@@ -300,23 +136,13 @@ const Dashboard1 = () => {
       percentQuantity: Number(item.PO_LESS_EQUAL_500K_QUANTITY) / 100,
     })) || [];
 
-  const csvTableValueHeaders = [
+  const tableValueHeaders = [
     { label: "หน่วยงานจัดซื้อ", key: "district" },
     { label: "จำนวน PO มูลค่าไม่เกิน 500,000 บาท", key: "lessThanQuantity" },
     { label: "จำนวน PO ทั้งหมด", key: "totalQuantity" },
     { label: "% PO มูลค่าไม่เกิน 500,000 บาท", key: "percentQuantity" },
   ];
 
-  // Format the data for CSV
-  const formatCSVTableValueData = (data) =>
-    data.map((item) => ({
-      district: item.district,
-      lessThanQuantity: formatQuantity(item.lessThanQuantity),
-      totalQuantity: formatQuantity(item.totalQuantity),
-      percentQuantity: formatPercentage(item.percentQuantity),
-    }));
-
-  const csvTableValueData = formatCSVTableValueData(dataTableValue); // Use your table data as CSV data
 
   const downloadXLSX_value = (
     data,
@@ -325,149 +151,27 @@ const Dashboard1 = () => {
     selectedYear,
     dateInfoData
   ) => {
-    // Format data with headers
-    const formattedData = data.map((item) =>
-      headers.reduce((acc, header) => {
-        acc[header.label] = item[header.key];
-        return acc;
-      }, {})
-    );
-
-    // Define the number of extra rows
-    const extraRowsAbove = Array(3).fill({}); // 3 rows above the table
-    const extraRowsBelow = Array(2).fill({}); // 2 rows below the table
-
-    // Combine all rows: extra rows above, header, data, and extra rows below
-    const headerRow = headers.reduce((acc, header) => {
-      acc[header.label] = header.label; // Add headers as keys
-      return acc;
-    }, {});
-    const fullData = [
-      ...extraRowsAbove,
-      headerRow,
-      ...formattedData,
-      ...extraRowsBelow,
-    ];
-
-    // Create worksheet
-    const worksheet = XLSX.utils.json_to_sheet(fullData, { skipHeader: true });
-    const workbook = XLSX.utils.book_new();
-
-    // Add merges for title row and rows below
-    const numColumns = headers.length; // Number of columns in the dataset
-    worksheet["!merges"] = [
-      { s: { r: 1, c: 0 }, e: { r: 1, c: numColumns - 1 } }, // Merge title row
-      {
-        s: { r: fullData.length - 1, c: 0 },
-        e: { r: fullData.length - 1, c: numColumns - 1 },
-      }, // Merge info row
-    ];
-
-    // Add text to extra rows above
-    worksheet["A2"] = {
-      v: `ตารางการจัดซื้อที่มีมูลค่าไม่เกิน 500,000 บาท ปี ${selectedYear}`,
-    };
-
-    // Style extra rows above
-    const styleRowsAbove = [1];
-    styleRowsAbove.forEach((rowIndex) => {
-      const cellAddress = XLSX.utils.encode_cell({ r: rowIndex, c: 0 });
-      worksheet[cellAddress].s = {
-        font: { bold: rowIndex === 1, sz: rowIndex === 1 ? 16 : 12 },
-        alignment: {
-          horizontal: rowIndex === 1 ? "center" : "left",
-          vertical: "center",
-        },
-      };
-    });
-
-    // Add and style rows below
-    const infoRowIndex = fullData.length - 1; // Index of the last row
-    worksheet[`A${infoRowIndex + 1}`] = {
-      v: `ข้อมูล ณ วันที่ ${dateInfoData?.day || "-"} / ${
-        dateInfoData?.month || "-"
-      } / ${dateInfoData?.year || "-"} เวลา 0${dateInfoData?.hour}:${
-        dateInfoData?.minute
-      }0 น.`,
-    };
-    worksheet[`A${infoRowIndex + 1}`].s = {
-      font: { sz: 12 },
-      alignment: {
-        horizontal: "left",
-        vertical: "center",
+    downloadXLSX({
+      data: dataTableValue, // Use raw unformatted data
+      headers,
+      fileName,
+      title: `ตารางการจัดซื้อที่มีมูลค่าไม่เกิน 500,000 บาท ปี ${selectedYear}`,
+      filters: [],
+      dateInfo: dateInfoData,
+      preserveRawNumbers: true,
+      columnTypes: {
+        0: "text",        // หน่วยงานจัดซื้อ
+        1: "number",      // จำนวน PO มูลค่าไม่เกิน 500,000 บาท
+        2: "number",      // จำนวน PO ทั้งหมด
+        3: "percentage"   // % PO มูลค่าไม่เกิน 500,000 บาท
       },
-    };
-
-    // Style headers
-    const headerRowIndex = extraRowsAbove.length;
-    for (let C = 0; C < headers.length; C++) {
-      const cellAddress = XLSX.utils.encode_cell({ r: headerRowIndex, c: C });
-      if (!worksheet[cellAddress]) {
-        worksheet[cellAddress] = { v: headers[C]?.label || "" };
+      columnAlignment: {
+        0: "center",
+        1: "right",
+        2: "right",
+        3: "right"
       }
-      worksheet[cellAddress].s = {
-        font: { bold: true },
-        alignment: {
-          horizontal: "center",
-          vertical: "center",
-          wrapText: true,
-        },
-        fill: { fgColor: { rgb: "D9D9D9" } },
-        border: {
-          top: { style: "thin", color: { rgb: "000000" } },
-          bottom: { style: "thin", color: { rgb: "000000" } },
-          left: { style: "thin", color: { rgb: "000000" } },
-          right: { style: "thin", color: { rgb: "000000" } },
-        },
-      };
-    }
-
-    // Style data cells
-    for (
-      let R = headerRowIndex + 1;
-      R < fullData.length - extraRowsBelow.length;
-      ++R
-    ) {
-      for (let C = 0; C < headers.length; ++C) {
-        const cellAddress = XLSX.utils.encode_cell({ r: R, c: C });
-        if (!worksheet[cellAddress]) continue;
-
-        const alignRight = C > 1; // Right-align for columns after the first
-        worksheet[cellAddress].s = {
-          alignment: {
-            horizontal: alignRight ? "right" : "center",
-            vertical: "center",
-            wrapText: true,
-          },
-          border: {
-            top: { style: "thin", color: { rgb: "000000" } },
-            bottom: { style: "thin", color: { rgb: "000000" } },
-            left: { style: "thin", color: { rgb: "000000" } },
-            right: { style: "thin", color: { rgb: "000000" } },
-          },
-        };
-      }
-    }
-
-    // Dynamically calculate column widths
-    const colWidths = headers.map((header) => {
-      const columnData = [
-        header.label,
-        ...formattedData.map((row) => row[header.label]?.toString() || ""),
-      ];
-      const maxLength = columnData.reduce(
-        (max, value) => Math.max(max, value.length),
-        0
-      );
-      return { wch: maxLength + 1 }; // Add a small buffer
     });
-    worksheet["!cols"] = colWidths;
-
-    // Append worksheet to workbook and trigger download
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-    const xlsxData = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-    const blob = new Blob([xlsxData], { type: "application/octet-stream" });
-    saveAs(blob, `${fileName}.xlsx`);
   };
 
   // Data mappings
@@ -698,16 +402,14 @@ const Dashboard1 = () => {
     enabled: !!selectedYear,
   });
 
-  const dataPONumSpendCSV =
-    PONumSpendCSV?.map((item) => [
-      {
-        location: item.EKGRP,
-        valuePO: Number(item.TOTAL_PO_MAT || 0),
-        valueSpend: Number(item.TOTAL_SPEND_MAT || 0) / 1_000_000,
-      },
-    ])?.flat() || [];
+  const dataMapTable =
+    PONumSpendCSV?.map((item) => ({
+      location: item.EKGRP,
+      valuePO: Number(item.TOTAL_PO_MAT || 0),
+      valueSpend: Number(item.TOTAL_SPEND_MAT || 0) / 1_000_000,
+    })) || [];
 
-  const csvMapHeaders = [
+  const mapHeaders = [
     { label: "หน่วยงานจัดซื้อ", key: "location" },
     { label: "จำนวน PO สั่งซื้อพัสดุสะสม", key: "valuePO" },
     { label: "มูลค่าจัดซื้อพัสดุสะสม (ล้านบาท)", key: "valueSpend" },
@@ -730,160 +432,32 @@ const Dashboard1 = () => {
     Z: "ส่วนกลาง",
   };
 
-  // Format the data for CSV
-  const formatCSVTableMapData = (data) =>
-    data.map((item) => ({
-      location: LOCATION_NAMES[item.location] || item.location,
-      valuePO: formatQuantity(item.valuePO),
-      valueSpend: formatTotal(item.valueSpend),
-    }));
-
-  const csvMapData = formatCSVTableMapData(dataPONumSpendCSV); // Use your table data as CSV data
+  // Transform location codes to display names for Excel export
+  const dataMapTableFormatted = dataMapTable.map((item) => ({
+    ...item,
+    location: LOCATION_NAMES[item.location] || item.location,
+  }));
 
   const downloadXLSX_map = (data, headers, fileName, dateInfoData) => {
-    // Format data with headers
-    const formattedData = data.map((item) =>
-      headers.reduce((acc, header) => {
-        acc[header.label] = item[header.key];
-        return acc;
-      }, {})
-    );
-
-    // Define the number of extra rows
-    const extraRowsAbove = Array(3).fill({}); // 3 rows above the table
-    const extraRowsBelow = Array(2).fill({}); // 2 rows below the table
-
-    // Combine all rows: extra rows above, header, data, and extra rows below
-    const headerRow = headers.reduce((acc, header) => {
-      acc[header.label] = header.label; // Add headers as keys
-      return acc;
-    }, {});
-    const fullData = [
-      ...extraRowsAbove,
-      headerRow,
-      ...formattedData,
-      ...extraRowsBelow,
-    ];
-
-    // Create worksheet
-    const worksheet = XLSX.utils.json_to_sheet(fullData, { skipHeader: true });
-    const workbook = XLSX.utils.book_new();
-
-    // Add merges for title row and rows below
-    const numColumns = headers.length; // Number of columns in the dataset
-    worksheet["!merges"] = [
-      { s: { r: 1, c: 0 }, e: { r: 1, c: numColumns - 1 } }, // Merge title row
-      {
-        s: { r: fullData.length - 1, c: 0 },
-        e: { r: fullData.length - 1, c: numColumns - 1 },
-      }, // Merge info row
-    ];
-
-    // Add text to extra rows above
-    worksheet["A2"] = {
-      v: "ตารางจำนวน PO สั่งซื้อและมูลค่าจัดซื้อพัสดุสะสมตามหน่วยงานจัดซื้อ",
-    };
-
-    // Style extra rows above
-    const styleRowsAbove = [1];
-    styleRowsAbove.forEach((rowIndex) => {
-      const cellAddress = XLSX.utils.encode_cell({ r: rowIndex, c: 0 });
-      worksheet[cellAddress].s = {
-        font: { bold: rowIndex === 1, sz: rowIndex === 1 ? 16 : 12 },
-        alignment: {
-          horizontal: rowIndex === 1 ? "center" : "left",
-          vertical: "center",
-        },
-      };
-    });
-
-    // Add and style rows below
-    const infoRowIndex = fullData.length - 1; // Index of the last row
-    worksheet[`A${infoRowIndex + 1}`] = {
-      v: `ข้อมูล ณ วันที่ ${dateInfoData?.day || "-"} / ${
-        dateInfoData?.month || "-"
-      } / ${dateInfoData?.year || "-"} เวลา 0${dateInfoData?.hour}:${
-        dateInfoData?.minute
-      }0 น.`,
-    };
-    worksheet[`A${infoRowIndex + 1}`].s = {
-      font: { sz: 12 },
-      alignment: {
-        horizontal: "left",
-        vertical: "center",
+    downloadXLSX({
+      data: dataMapTableFormatted, // Use raw unformatted data with location names transformed
+      headers,
+      fileName,
+      title: "ตารางจำนวน PO สั่งซื้อและมูลค่าจัดซื้อพัสดุสะสมตามหน่วยงานจัดซื้อ",
+      filters: [],
+      dateInfo: dateInfoData,
+      preserveRawNumbers: true,
+      columnTypes: {
+        0: "text",     // หน่วยงานจัดซื้อ
+        1: "number",   // จำนวน PO สั่งซื้อพัสดุสะสม
+        2: "number"    // มูลค่าจัดซื้อพัสดุสะสม (ล้านบาท)
       },
-    };
-
-    // Style headers
-    const headerRowIndex = extraRowsAbove.length;
-    for (let C = 0; C < headers.length; C++) {
-      const cellAddress = XLSX.utils.encode_cell({ r: headerRowIndex, c: C });
-      if (!worksheet[cellAddress]) {
-        worksheet[cellAddress] = { v: headers[C]?.label || "" };
+      columnAlignment: {
+        0: "center",
+        1: "right",
+        2: "right"
       }
-      worksheet[cellAddress].s = {
-        font: { bold: true },
-        alignment: {
-          horizontal: "center",
-          vertical: "center",
-          wrapText: true,
-        },
-        fill: { fgColor: { rgb: "D9D9D9" } },
-        border: {
-          top: { style: "thin", color: { rgb: "000000" } },
-          bottom: { style: "thin", color: { rgb: "000000" } },
-          left: { style: "thin", color: { rgb: "000000" } },
-          right: { style: "thin", color: { rgb: "000000" } },
-        },
-      };
-    }
-
-    // Style data cells
-    for (
-      let R = headerRowIndex + 1;
-      R < fullData.length - extraRowsBelow.length;
-      ++R
-    ) {
-      for (let C = 0; C < headers.length; ++C) {
-        const cellAddress = XLSX.utils.encode_cell({ r: R, c: C });
-        if (!worksheet[cellAddress]) continue;
-
-        const alignRight = C > 0; // Right-align for columns after the first
-        worksheet[cellAddress].s = {
-          alignment: {
-            horizontal: alignRight ? "right" : "center",
-            vertical: "center",
-            wrapText: true,
-          },
-          border: {
-            top: { style: "thin", color: { rgb: "000000" } },
-            bottom: { style: "thin", color: { rgb: "000000" } },
-            left: { style: "thin", color: { rgb: "000000" } },
-            right: { style: "thin", color: { rgb: "000000" } },
-          },
-        };
-      }
-    }
-
-    // Dynamically calculate column widths
-    const colWidths = headers.map((header) => {
-      const columnData = [
-        header.label,
-        ...formattedData.map((row) => row[header.label]?.toString() || ""),
-      ];
-      const maxLength = columnData.reduce(
-        (max, value) => Math.max(max, value.length),
-        0
-      );
-      return { wch: maxLength + 1 }; // Add a small buffer
     });
-    worksheet["!cols"] = colWidths;
-
-    // Append worksheet to workbook and trigger download
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-    const xlsxData = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-    const blob = new Blob([xlsxData], { type: "application/octet-stream" });
-    saveAs(blob, `${fileName}.xlsx`);
   };
 
   const datadate = 1;
@@ -956,8 +530,8 @@ const Dashboard1 = () => {
                 <button
                   onClick={() =>
                     downloadXLSX_price(
-                      csvTablePriceData, // Data
-                      csvTablePriceHeaders, // Headers
+                      dataTablePrice, // Data
+                      tablePriceHeaders, // Headers
                       `HQvsDistrictPriceComparison_${selectedYear}_${selectedCategory}`,
                       selectedYear, // File Name
                       selectedCategory,
@@ -990,8 +564,8 @@ const Dashboard1 = () => {
                 <button
                   onClick={() =>
                     downloadXLSX_value(
-                      csvTableValueData, // Data
-                      csvTableValueHeaders, // Headers
+                      dataTableValue, // Data
+                      tableValueHeaders, // Headers
                       `DistrictPOValueComparison_${selectedYear}`,
                       selectedYear, // File Name
                       dateInfoData // Date Info
@@ -1126,8 +700,8 @@ const Dashboard1 = () => {
               <button
                 onClick={() =>
                   downloadXLSX_map(
-                    csvMapData, // Data
-                    csvMapHeaders, // Headers
+                    dataMapTableFormatted, // Data
+                    mapHeaders, // Headers
                     `PurchaseUnitbyPONumAndValue_${selectedYear}`, // File Name
                     dateInfoData // Date Info
                   )

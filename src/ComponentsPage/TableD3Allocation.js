@@ -16,7 +16,6 @@ const TableD3Price = ({ title, data }) => {
 
   const formatValue = (value) =>
     new Intl.NumberFormat("en-US", {
-      style: "percent",
       minimumFractionDigits: 3,
       maximumFractionDigits: 3,
     }).format(value);
