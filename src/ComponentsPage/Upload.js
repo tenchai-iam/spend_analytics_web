@@ -53,6 +53,12 @@ const UploadPage = () => {
       filename: "ingot_data_template.xlsx",
     },
     {
+      title: "ข้อมูลพัสดุที่ต้องทำแผนจัดซื้อ",
+      endpoint: `${API_URL}/upload_and_update_plan_volume_allocation`,
+      downloadEndpoint: `${API_URL}/download_data_plan_volume_allocation`, // Add a download API
+      filename: "plan_allocation.xlsx",
+    },
+    {
       title: "ข้อมูล WBS plan งบ P&I และอื่นๆ",
       endpoint: `${API_URL}/upload_wbs_planpi_file`,
       downloadEndpoint: `${API_URL}/download_wbs_plan_pi`, // Add a download API
