@@ -6,6 +6,7 @@ import NavbarComponent from "../ComponentsPage/NavbarComponent";
 import D3BarGraphReV from "./D3BarGraphReV";
 import TableD3Price from "./TableD3Price";
 import TableD3Allocation from "./TableD3Allocation.js"
+import TableD3LastPrice from "./TableD3LastPrice.js"
 import Select from "react-select"; // Import react-select
 import { useQuery } from "@tanstack/react-query";
 import { getYears, getDateInfo } from "../services/api.js"; // Import your API service function
@@ -16,6 +17,7 @@ import {
   getD3CategoryPriceTable,
   getD3CategoryPriceTable12M,
   getD3PlanAllocation,
+  getD3LastPrice,
   getD3MaterialPriceGroupDistrict,
   getD3MaterialPriceByDistrict,
   getD3MaterialPriceGroupEKGRP,
@@ -212,7 +214,7 @@ const Dashboard3 = () => {
     });
   };
 
-    const {
+  const {
     data: planAllocation,
     isLoading: isLoadingPlanAllocation,
     isError: isErrorPlanAllocation,
@@ -235,6 +237,28 @@ const Dashboard3 = () => {
       budgetHQ: Number(item.hq_budget),
       budgetRegion: Number(item.district_budget),
       budgetTotal: Number(item.hq_budget+item.district_budget)
+    })) || [];
+  
+  const {
+    data: lastPrice,
+    isLoading: isLoadingLastPrice,
+    isError: isErrorLastPrice,
+    error: errorLastPrice,
+  } = useQuery({
+    queryKey: ["lastPrice", selectedCategory], // Unique query key for caching
+    queryFn: () => getD3LastPrice(selectedCategory), // API call to fetch data based on year and category are selected
+    // enabled: Boolean(selectedCategory), // Only run query if category are selected
+  });
+
+  const dataTableLastPrice =
+    lastPrice?.data?.map((item) => ({
+      date: item.aedat,
+      ekgrp: item.ekgrp,
+      matNR: item.matnr,
+      matName: item.matname,
+      lastPrice: Number(item.lastprice),
+      lastQty: Number(item.qty),
+      poNum: Number(item.po_number),
     })) || [];
 
   const {
@@ -471,6 +495,40 @@ const Dashboard3 = () => {
     });
   };
 
+  const downloadXLSX_lastPrice = (
+    data,
+    headers,
+    fileName,
+    selectedCategory,
+    dateInfoData
+  ) => {
+    downloadXLSX({
+      data: dataTableLastPrice, // Use raw unformatted data
+      headers,
+      fileName,
+      title: `ราคาจัดซื้อล่าสุดตามกลุ่มพัสดุและหน่วยงานจัดซื้อ`,
+      filters: [`กลุ่มพัสดุ : ${selectedCategory || "-"}`],
+      dateInfo: dateInfoData,
+      preserveRawNumbers: true,
+      columnTypes: {
+        0: "text",     // วันที่
+        1: "text",     // รหัสพัสดุ
+        2: "text", // ชื่อพัสดุ
+        3: "currency", // ราคาล่าสุด
+        4: "number",   // จำนวนล่าสุด
+        5: "text",   // เลขที่ PO
+      },
+      columnAlignment: {
+        0: "left",
+        1: "center",
+        2: "left",
+        3: "right",
+        4: "right",
+        5: "left",
+      }
+    });
+  };
+
   const handleButtonClick = (button) => {
     setSelectedButton(button); // Update the active button state
     setShowFirstChart(button === "first"); // Toggle the chart based on the button
@@ -616,6 +674,28 @@ const Dashboard3 = () => {
             <TableD3Allocation
             title={`เปรียบเทียบจำนวนจัดซื้อส่วนกลาง vs. กฟข. เพื่อจัดทำแผน (คำนวณจากราคาย้อนหลัง 24 เดือน)`}
             data={dataTablePlanAllocation}
+          />
+          </div>
+                  <div className="top-container">
+                  <div className="download-button">
+            <button
+              onClick={() =>
+                downloadXLSX_lastPrice(
+                  dataTableLastPrice, // Data
+                  lastOruceHeaders, // Headers
+                  `LastPrice_${selectedCategory}`,
+                  selectedCategory,
+                  dateInfoData // Date Info
+                )
+              }
+              style={getButtonStyle(false)} // Apply button style
+            >
+              Download XLSX
+            </button>
+          </div>
+            <TableD3LastPrice
+            title={`ราคาจัดซื้อล่าสุดตามกลุ่มพัสดุและหน่วยงานจัดซื้อ`}
+            data={dataTableLastPrice}
           />
           </div>
         <div className="bottom-container">
