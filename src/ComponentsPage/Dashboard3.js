@@ -247,19 +247,25 @@ const Dashboard3 = () => {
   } = useQuery({
     queryKey: ["lastPrice", selectedCategory], // Unique query key for caching
     queryFn: () => getD3LastPrice(selectedCategory), // API call to fetch data based on year and category are selected
-    // enabled: Boolean(selectedCategory), // Only run query if category are selected
+    enabled: Boolean(selectedCategory), // Only run query if category are selected
   });
 
+  // Debug logging to check the API response
+  console.log("lastPrice API response:", lastPrice);
+  
   const dataTableLastPrice =
-    lastPrice?.data?.map((item) => ({
+    lastPrice?.map((item) => ({
       date: item.aedat,
       ekgrp: item.ekgrp,
       matNR: item.matnr,
       matName: item.matname,
       lastPrice: Number(item.lastprice),
       lastQty: Number(item.qty),
-      poNum: Number(item.po_number),
+      poNum: item.po_number, // Keep as string for PO numbers
     })) || [];
+  
+  // Debug logging to check the transformed data
+  console.log("dataTableLastPrice:", dataTableLastPrice);
 
   const {
     data: materialPriceGroupDistrict,
@@ -451,6 +457,16 @@ const Dashboard3 = () => {
     { label: "งบประมาณส่วนกลาง", key: "budgetHQ" },
     { label: "งบประมาณ กฟข.", key: "budgetRegion" },
     { label: "งบประมาณรวม", key: "budgetTotal" }
+  ];
+
+  const lastPriceHeaders = [
+    { label: "วันที่จัดซื้อ", key: "date" },
+    { label: "หน่วยงานจัดซื้อ", key: "ekgrp" },
+    { label: "รหัสพัสดุ", key: "matNR" },
+    { label: "ชื่อพัสดุ", key: "matName" },
+    { label: "ราคาล่าสุด", key: "lastPrice" },
+    { label: "จำนวนล่าสุด", key: "lastQty" },
+    { label: "เลขที่ PO", key: "poNum" }
   ];
 
   const downloadXLSX_planAllocation = (
@@ -682,7 +698,7 @@ const Dashboard3 = () => {
               onClick={() =>
                 downloadXLSX_lastPrice(
                   dataTableLastPrice, // Data
-                  lastOruceHeaders, // Headers
+                  lastPriceHeaders, // Headers
                   `LastPrice_${selectedCategory}`,
                   selectedCategory,
                   dateInfoData // Date Info
