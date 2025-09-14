@@ -43,3 +43,15 @@ export const getUsers = async () => {
   const response = await axios.get(`${API_URL}/get_user_level_data`);
   return response.data; // Return the data received from the API
 };
+
+// Increment visitor count
+export const incrementVisitorCount = async () => {
+  const response = await axios.post(`${API_URL}/increment_visitor`, {}, { timeout: 5000 });
+  return response.data;
+};
+
+// Get visitor count
+export const getVisitorCount = async () => {
+  const response = await axios.get(`${API_URL}/get_visitor_count`);
+  return response.data;
+};

@@ -7,8 +7,8 @@ import D1 from "./pic/01 - Spend.png";
 import D2 from "./pic/02 - Supplier.png";
 import D3 from "./pic/03 - Price.png";
 import D4 from "./pic/04 - Procurement.png";
-import { useQuery } from "@tanstack/react-query";
-import { getHomeData, getYears, getDateInfo } from "./services/api.js"; // Import API service functions
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { getHomeData, getYears, getDateInfo, getVisitorCount, incrementVisitorCount } from "./services/api.js"; // Import API service functions
 
 const Dashboard = ({ selectedYear }) => {
   const { data, isLoading, isError, error } = useQuery({
@@ -50,12 +50,32 @@ const Home = () => {
     queryFn: getYears,
   });
 
+  // Get visitor count
+  const { data: visitorData, refetch: refetchVisitorCount } = useQuery({
+    queryKey: ["visitorCount"],
+    queryFn: getVisitorCount,
+    staleTime: 0,
+  });
+
+  // Increment visitor count mutation
+  const incrementMutation = useMutation({
+    mutationFn: incrementVisitorCount,
+    onSuccess: () => {
+      refetchVisitorCount();
+    },
+  });
+
   useEffect(() => {
     if (yearsData && yearsData.years.length > 0) {
       const mostRecentYear = Math.max(...yearsData.years);
       setSelectedYear(mostRecentYear.toString());
     }
   }, [yearsData]);
+
+  // Increment visitor count on component mount
+  useEffect(() => {
+    incrementMutation.mutate();
+  }, []);
 
   const datadate = 1;
 
@@ -75,11 +95,19 @@ const Home = () => {
       <NavbarComponent />
       <div className="text-dropdown-container">
         <h1 className="header-title">หน้าหลัก</h1>
-        <div className="year-dropdown-container">
-          <YearDropdown
-            onSelectYear={setSelectedYear}
-            selectedYear={selectedYear}
-          />
+        <div className="header-right-container">
+          <div className="visitor-counter">
+            <span className="visitor-text">จำนวนผู้ใช้งานสะสม: </span>
+            <span className="visitor-count">
+              {visitorData?.count ? visitorData.count.toLocaleString('th-TH') : '0'}
+            </span>
+          </div>
+          <div className="year-dropdown-container">
+            <YearDropdown
+              onSelectYear={setSelectedYear}
+              selectedYear={selectedYear}
+            />
+          </div>
         </div>
       </div>
       <Dashboard selectedYear={selectedYear} />
