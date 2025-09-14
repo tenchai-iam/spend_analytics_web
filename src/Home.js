@@ -97,7 +97,7 @@ const Home = () => {
         <h1 className="header-title">หน้าหลัก</h1>
         <div className="header-right-container">
           <div className="visitor-counter">
-            <span className="visitor-text">จำนวนผู้ใช้งานสะสม: </span>
+            <span className="visitor-text">จำนวนการใช้งานสะสม: </span>
             <span className="visitor-count">
               {visitorData?.count ? visitorData.count.toLocaleString('th-TH') : '0'}
             </span>
