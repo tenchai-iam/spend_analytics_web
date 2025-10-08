@@ -257,11 +257,14 @@ const Dashboard3 = () => {
     lastPrice?.map((item) => ({
       date: item.aedat,
       ekgrp: item.ekgrp,
+      werks: item.werks,
       matNR: item.matnr,
       matName: item.matname,
       lastPrice: Number(item.lastprice),
       lastQty: Number(item.qty),
+      netwr: Number(item.NETWR),
       poNum: item.po_number, // Keep as string for PO numbers
+      vName: item.VENDOR_NAME
     })) || [];
   
   // Debug logging to check the transformed data
