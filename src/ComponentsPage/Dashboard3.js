@@ -266,7 +266,7 @@ const Dashboard3 = () => {
 
   // Debug logging to check the API response
   console.log("lastPrice API response:", lastPrice);
-  
+
   const dataTableLastPrice =
     lastPrice?.map((item) => ({
       date: item.aedat,
@@ -280,9 +280,15 @@ const Dashboard3 = () => {
       poNum: item.po_number, // Keep as string for PO numbers
       vName: item.VENDOR_NAME
     })) || [];
-  
+
   // Debug logging to check the transformed data
   console.log("dataTableLastPrice:", dataTableLastPrice);
+
+  // Map werks data to options for react-select
+  const werksOptions = lastPriceWerksData?.werks?.map((werks) => ({
+    value: werks,
+    label: werks,
+  }));
 
   const {
     data: materialPriceGroupDistrict,
@@ -715,17 +721,18 @@ const Dashboard3 = () => {
                 {isLoadingLastPriceWerksData ? (
               <p>Loading werks...</p>
             ) : (
-              <select
-                value={selectedWerks}
-                onChange={(e) => setSelectedWerks(e.target.value)}
-              >
-                <option value="">-- เลือกคลังพัสดุ --</option>
-                {lastPriceWerksData?.map((werks, index) => (
-                  <option key={index} value={werks.werks}>
-                    {werks.werks}
-                  </option>
-                ))}
-              </select>
+              <Select
+                options={werksOptions}
+                value={werksOptions?.find(
+                  (option) => option.value === selectedWerks
+                )}
+                onChange={(selectedOption) => {
+                  setSelectedWerks(selectedOption?.value || "");
+                }}
+                placeholder="-- เลือกคลังพัสดุ --"
+                isClearable
+                isSearchable
+              />
             )}
               </div>
             <div className="download-button">
