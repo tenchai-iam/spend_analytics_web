@@ -103,13 +103,13 @@ const TableD3LastPrice = ({ title, data }) => {
                 จำนวนล่าสุด {renderSortArrow("lastQty")}
               </th>
               <th onClick={() => handleSort("netwr")}>
-                มูลค่า {renderSortArrow("netwr")}
+                มูลค่ารวม {renderSortArrow("netwr")}
               </th>             
               <th onClick={() => handleSort("poNum")}>
                 เลขที่ PO {renderSortArrow("poNum")}
               </th>
               <th onClick={() => handleSort("vName")}>
-                คู่ค้า {renderSortArrow("vName")}
+                ชื่อคู่ค้า {renderSortArrow("vName")}
               </th>
 
             </tr>

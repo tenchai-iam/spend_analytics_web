@@ -485,11 +485,14 @@ const Dashboard3 = () => {
   const lastPriceHeaders = [
     { label: "วันที่จัดซื้อ", key: "date" },
     { label: "หน่วยงานจัดซื้อ", key: "ekgrp" },
+    { label: "คลังพัสดุ", key: "werks" },
     { label: "รหัสพัสดุ", key: "matNR" },
     { label: "ชื่อพัสดุ", key: "matName" },
     { label: "ราคาล่าสุด", key: "lastPrice" },
     { label: "จำนวนล่าสุด", key: "lastQty" },
-    { label: "เลขที่ PO", key: "poNum" }
+    { label: "มูลค่ารวม", key: "netwr" },
+    { label: "เลขที่ PO", key: "poNum" },
+    { label: "ชื่อคู่ค้า", key: "vName" }
   ];
 
   const downloadXLSX_planAllocation = (
@@ -539,6 +542,7 @@ const Dashboard3 = () => {
     headers,
     fileName,
     selectedCategory,
+    selectedWerks,
     dateInfoData
   ) => {
     downloadXLSX({
@@ -546,24 +550,35 @@ const Dashboard3 = () => {
       headers,
       fileName,
       title: `ราคาจัดซื้อล่าสุดตามกลุ่มพัสดุและหน่วยงานจัดซื้อ`,
-      filters: [`กลุ่มพัสดุ : ${selectedCategory || "-"}`],
+      filters: [
+        `กลุ่มพัสดุ : ${selectedCategory || "-"}`,
+        `คลังพัสดุ : ${selectedWerks || "ทั้งหมด"}`
+      ],
       dateInfo: dateInfoData,
       preserveRawNumbers: true,
       columnTypes: {
-        0: "text",     // วันที่
-        1: "text",     // รหัสพัสดุ
-        2: "text", // ชื่อพัสดุ
-        3: "currency", // ราคาล่าสุด
-        4: "number",   // จำนวนล่าสุด
-        5: "text",   // เลขที่ PO
+        0: "text",     // วันที่จัดซื้อ
+        1: "text",     // หน่วยงานจัดซื้อ
+        2: "text",     // คลังพัสดุ
+        3: "text",     // รหัสพัสดุ
+        4: "text",     // ชื่อพัสดุ
+        5: "currency", // ราคาล่าสุด
+        6: "number",   // จำนวนล่าสุด
+        7: "currency", // มูลค่ารวม
+        8: "text",     // เลขที่ PO
+        9: "text"      // ชื่อผู้ขาย
       },
       columnAlignment: {
         0: "left",
         1: "center",
-        2: "left",
-        3: "right",
-        4: "right",
-        5: "left",
+        2: "center",
+        3: "center",
+        4: "left",
+        5: "right",
+        6: "right",
+        7: "right",
+        8: "left",
+        9: "left"
       }
     });
   };
@@ -741,8 +756,9 @@ const Dashboard3 = () => {
                   downloadXLSX_lastPrice(
                     dataTableLastPrice, // Data
                     lastPriceHeaders, // Headers
-                    `LastPrice_${selectedCategory}`,
+                    `LastPrice_${selectedCategory}_${selectedWerks || "All"}`,
                     selectedCategory,
+                    selectedWerks,
                     dateInfoData // Date Info
                   )
                 }
