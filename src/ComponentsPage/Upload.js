@@ -163,7 +163,6 @@ const UploadPage = () => {
                 <h1 className="upload-title">{section.title}</h1>
                 {section.downloadEndpoint && section.filename && (
                   <button
-                    className="download-button"
                     onClick={() =>
                       handleDownload(section.downloadEndpoint, section.filename)
                     }
