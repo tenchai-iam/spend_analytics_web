@@ -84,8 +84,11 @@ const TableD3LastPrice = ({ title, data }) => {
               <th onClick={() => handleSort("date")}>
                 วันที่จัดซื้อ {renderSortArrow("date")}
               </th>
+              <th onClick={() => handleSort("werks")}>
+                คลังพัสดุ {renderSortArrow("werks")}
+              </th>
               <th onClick={() => handleSort("ekgrp")}>
-                หน่วยงานจัดซื้อ {renderSortArrow("ekgrวันp")}
+                หน่วยงานจัดซื้อ {renderSortArrow("ekgrp")}
               </th>
               <th onClick={() => handleSort("matNR")}>
                 รหัสพัสดุ {renderSortArrow("matNR")}
@@ -99,15 +102,23 @@ const TableD3LastPrice = ({ title, data }) => {
               <th onClick={() => handleSort("lastQty")}>
                 จำนวนล่าสุด {renderSortArrow("lastQty")}
               </th>
+              <th onClick={() => handleSort("netwr")}>
+                มูลค่า {renderSortArrow("netwr")}
+              </th>             
               <th onClick={() => handleSort("poNum")}>
                 เลขที่ PO {renderSortArrow("poNum")}
               </th>
+              <th onClick={() => handleSort("vName")}>
+                คู่ค้า {renderSortArrow("vName")}
+              </th>
+
             </tr>
           </thead>
           <tbody>
             {sortedData.map((row, index) => (
               <tr key={index}>
                 <td>{row.date}</td>
+                <td>{row.werks}</td>
                 <td>{row.ekgrp}</td>
                 <td>
                   {specialMatNRs.includes(row.matNR)
@@ -121,8 +132,14 @@ const TableD3LastPrice = ({ title, data }) => {
                 <td className="number">
                     {formatQuantity(row.lastQty)}
                 </td>
+                <td className="number">
+                    {formatQuantity(row.netwr)}
+                </td>               
                 <td>
                     {row.poNum}
+                </td>
+                <td>
+                    {row.vName}
                 </td>
               </tr>
             ))}
