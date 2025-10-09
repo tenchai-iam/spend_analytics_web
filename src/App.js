@@ -47,8 +47,8 @@ export default function App() {
                 element={<ProtectedRoute element={Dashboard2} />}
               />
               {/* Restrict access to Dashboard3 and Dashboard4 for user_level "B" */}
-              {/* <Route path="/dashboard3" element={<Dashboard3 />} /> */}
-              <Route
+              <Route path="/dashboard3" element={<Dashboard3 />} />
+              {/* <Route
                 path="/dashboard3"
                 element={
                   <ProtectedRoute
@@ -56,7 +56,7 @@ export default function App() {
                     allowedLevels={["B", "C"]}
                   />
                 }
-              />
+              /> */}
               <Route
                 path="/dashboard4A"
                 element={

@@ -59,11 +59,12 @@ export const getD3PlanAllocation = async (category_id) => {
 };
 
 // Fetch last price data using a POST request
-export const getD3LastPrice = async (category_id) => {
+export const getD3LastPrice = async (category_id, werks) => {
   const response = await axios.post(
     `${API_URL}/lastprice`,
     {
       category_id: String(category_id), // Pass the category ID value in the request body
+      werks: String(werks), // Pass the werks value in the request body
     },
     { timeout: 5000 }
   );
