@@ -717,7 +717,7 @@ const Dashboard3 = () => {
           </div>
           <div className="top-container">
             <div className="dropdown-download-container">
-              <div>
+              <div className="last-price-dropdown">
                 {isLoadingLastPriceWerksData ? (
               <p>Loading werks...</p>
             ) : (

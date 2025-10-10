@@ -46,6 +46,10 @@
   max-width: 50%; /* Optional: Limit the maximum width */
 }
 
+.last-price-dropdown {
+  z-index: 99;
+}
+
 .dropdown-group label {
   font-weight: bold;
   margin-bottom: 5px;
