@@ -17,6 +17,8 @@ import {
   getD3CategoryPriceTable,
   getD3CategoryPriceTable12M,
   getD3PlanAllocation,
+  getD3LastPriceWerks,
+  getD3LastPriceMatnr,
   getD3LastPrice,
   getD3MaterialPriceGroupDistrict,
   getD3MaterialPriceByDistrict,
@@ -30,6 +32,8 @@ const Dashboard3 = () => {
   const [selectedCategory, setSelectedCategory] = useState(""); // State to hold the selected category
   const [selectedMaterial, setSelectedMaterial] = useState(""); // State to hold the selected material
   const [selectedDistrict, setSelectedDistrict] = useState(""); // State to hold the selected material
+  const [selectedWerks, setSelectedWerks] = useState(""); // State to hold the selected werks
+  const [selectedLPMatnr, setSelectedLPMatnr] = useState(""); // State to hold the selected werks
   const [showFirstChart, setShowFirstChart] = useState(true); // State to toggle between the charts
   const [selectedButton, setSelectedButton] = useState("first"); // Track selected button index
 
@@ -240,30 +244,67 @@ const Dashboard3 = () => {
     })) || [];
   
   const {
+    data: lastPriceWerksData,
+    isLoading: isLoadingLastPriceWerksData,
+    isError: isErrorLastPriceWerksData,
+    error: errorLastPriceWerksData,
+  } = useQuery({
+    queryKey: ["lastPriceWerks", selectedCategory], // Unique query key for caching
+    queryFn: () => getD3LastPriceWerks(selectedCategory), // API call to fetch data based on category
+    enabled: Boolean(selectedCategory), // Only run query if category is selected
+  });
+
+    // Map werks data to options for react-select
+  const werksOptions = lastPriceWerksData?.werks?.map((werks) => ({
+    value: werks,
+    label: werks,
+  }));
+
+  const {
+    data: lastPriceMatnrData,
+    isLoading: isLoadingLastPriceMatnrData,
+    isError: isErrorLastPriceMatnrData,
+    error: errorLastPriceMatnrData,
+  } = useQuery({
+    queryKey: ["lastPriceMatnr", selectedCategory], // Unique query key for caching
+    queryFn: () => getD3LastPriceMatnr(selectedCategory), // API call to fetch data based on category
+    enabled: Boolean(selectedCategory), // Only run query if category is selected
+  });
+
+    // Map matnr data to options for react-select
+  const matnrOptions = lastPriceMatnrData?.matnr?.map((matnr) => ({
+    value: matnr,
+    label: matnr,
+  }));
+
+  const {
     data: lastPrice,
     isLoading: isLoadingLastPrice,
     isError: isErrorLastPrice,
     error: errorLastPrice,
   } = useQuery({
-    queryKey: ["lastPrice", selectedCategory], // Unique query key for caching
-    queryFn: () => getD3LastPrice(selectedCategory), // API call to fetch data based on year and category are selected
+    queryKey: ["lastPrice", selectedCategory, selectedWerks, selectedLPMatnr], // Unique query key for caching
+    queryFn: () => getD3LastPrice(selectedCategory, selectedWerks, selectedLPMatnr), // API call to fetch data based on category and werks
     enabled: Boolean(selectedCategory), // Only run query if category are selected
   });
 
   // Debug logging to check the API response
   console.log("lastPrice API response:", lastPrice);
-  
+
   const dataTableLastPrice =
     lastPrice?.map((item) => ({
       date: item.aedat,
       ekgrp: item.ekgrp,
+      werks: item.werks,
       matNR: item.matnr,
       matName: item.matname,
       lastPrice: Number(item.lastprice),
       lastQty: Number(item.qty),
+      netwr: Number(item.NETWR),
       poNum: item.po_number, // Keep as string for PO numbers
+      vName: item.VENDOR_NAME
     })) || [];
-  
+
   // Debug logging to check the transformed data
   console.log("dataTableLastPrice:", dataTableLastPrice);
 
@@ -462,11 +503,14 @@ const Dashboard3 = () => {
   const lastPriceHeaders = [
     { label: "วันที่จัดซื้อ", key: "date" },
     { label: "หน่วยงานจัดซื้อ", key: "ekgrp" },
+    { label: "คลังพัสดุ", key: "werks" },
     { label: "รหัสพัสดุ", key: "matNR" },
     { label: "ชื่อพัสดุ", key: "matName" },
     { label: "ราคาล่าสุด", key: "lastPrice" },
     { label: "จำนวนล่าสุด", key: "lastQty" },
-    { label: "เลขที่ PO", key: "poNum" }
+    { label: "มูลค่ารวม", key: "netwr" },
+    { label: "เลขที่ PO", key: "poNum" },
+    { label: "ชื่อคู่ค้า", key: "vName" }
   ];
 
   const downloadXLSX_planAllocation = (
@@ -516,6 +560,7 @@ const Dashboard3 = () => {
     headers,
     fileName,
     selectedCategory,
+    selectedWerks,
     dateInfoData
   ) => {
     downloadXLSX({
@@ -523,24 +568,35 @@ const Dashboard3 = () => {
       headers,
       fileName,
       title: `ราคาจัดซื้อล่าสุดตามกลุ่มพัสดุและหน่วยงานจัดซื้อ`,
-      filters: [`กลุ่มพัสดุ : ${selectedCategory || "-"}`],
+      filters: [
+        `กลุ่มพัสดุ : ${selectedCategory || "-"}`,
+        `คลังพัสดุ : ${selectedWerks || "ทั้งหมด"}`
+      ],
       dateInfo: dateInfoData,
       preserveRawNumbers: true,
       columnTypes: {
-        0: "text",     // วันที่
-        1: "text",     // รหัสพัสดุ
-        2: "text", // ชื่อพัสดุ
-        3: "currency", // ราคาล่าสุด
-        4: "number",   // จำนวนล่าสุด
-        5: "text",   // เลขที่ PO
+        0: "text",     // วันที่จัดซื้อ
+        1: "text",     // หน่วยงานจัดซื้อ
+        2: "text",     // คลังพัสดุ
+        3: "text",     // รหัสพัสดุ
+        4: "text",     // ชื่อพัสดุ
+        5: "currency", // ราคาล่าสุด
+        6: "number",   // จำนวนล่าสุด
+        7: "currency", // มูลค่ารวม
+        8: "text",     // เลขที่ PO
+        9: "text"      // ชื่อผู้ขาย
       },
       columnAlignment: {
         0: "left",
         1: "center",
-        2: "left",
-        3: "right",
-        4: "right",
-        5: "left",
+        2: "center",
+        3: "center",
+        4: "left",
+        5: "right",
+        6: "right",
+        7: "right",
+        8: "left",
+        9: "left"
       }
     });
   };
@@ -671,7 +727,7 @@ const Dashboard3 = () => {
           </div>
         </div>
         <div className="top-container">
-                  <div className="download-button">
+          <div className="download-button">
             <button
               onClick={() =>
                 downloadXLSX_planAllocation(
@@ -692,27 +748,66 @@ const Dashboard3 = () => {
             data={dataTablePlanAllocation}
           />
           </div>
-                  <div className="top-container">
-                  <div className="download-button">
-            <button
-              onClick={() =>
-                downloadXLSX_lastPrice(
-                  dataTableLastPrice, // Data
-                  lastPriceHeaders, // Headers
-                  `LastPrice_${selectedCategory}`,
-                  selectedCategory,
-                  dateInfoData // Date Info
-                )
-              }
-              style={getButtonStyle(false)} // Apply button style
-            >
-              Download XLSX
-            </button>
+          <div className="top-container">
+            <div className="dropdown-download-container">
+              <div className="last-price-dropdown">
+                {isLoadingLastPriceWerksData ? (
+              <p>Loading werks...</p>
+            ) : (
+              <Select
+                options={werksOptions}
+                value={werksOptions?.find(
+                  (option) => option.value === selectedWerks
+                )}
+                onChange={(selectedOption) => {
+                  setSelectedWerks(selectedOption?.value || "");
+                }}
+                placeholder="-- เลือกคลังพัสดุ --"
+                isClearable
+                isSearchable
+              />
+            )}
+              </div>
+              <div className="last-price-dropdown">
+                {isLoadingLastPriceMatnrData ? (
+              <p>Loading Matnr...</p>
+            ) : (
+              <Select
+                options={matnrOptions}
+                value={matnrOptions?.find(
+                  (option) => option.value === selectedLPMatnr
+                )}
+                onChange={(selectedOption) => {
+                  setSelectedLPMatnr(selectedOption?.value || "");
+                }}
+                placeholder="-- เลือกพัสดุ --"
+                isClearable
+                isSearchable
+              />
+            )}
+              </div>
+            <div className="download-button">
+              <button
+                onClick={() =>
+                  downloadXLSX_lastPrice(
+                    dataTableLastPrice, // Data
+                    lastPriceHeaders, // Headers
+                    `LastPrice_${selectedCategory}_${selectedWerks || "All"}`,
+                    selectedCategory,
+                    selectedWerks,
+                    dateInfoData // Date Info
+                  )
+                }
+                style={getButtonStyle(false)} // Apply button style
+              >
+                Download XLSX
+              </button>
+            </div>
           </div>
             <TableD3LastPrice
             title={`ราคาจัดซื้อล่าสุดตามกลุ่มพัสดุและหน่วยงานจัดซื้อ`}
             data={dataTableLastPrice}
-          />
+            />
           </div>
         <div className="bottom-container">
           <h1 className="text-title">

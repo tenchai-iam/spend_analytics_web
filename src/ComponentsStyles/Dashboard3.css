@@ -39,11 +39,17 @@
   align-items: center; /* Align items vertically */
   font-size: 0.8rem;
   width: 100%;
+  gap:20px;
 }
 
 .D3-dropdown-cat-group {
   flex: 1; /* Allow the dropdown to take up available space */
   max-width: 50%; /* Optional: Limit the maximum width */
+}
+
+.last-price-dropdown {
+  z-index: 99;
+  min-width:200px;
 }
 
 .dropdown-group label {
