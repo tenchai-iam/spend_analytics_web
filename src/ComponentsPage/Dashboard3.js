@@ -18,6 +18,7 @@ import {
   getD3CategoryPriceTable12M,
   getD3PlanAllocation,
   getD3LastPriceWerks,
+  getD3LastPriceMatnr,
   getD3LastPrice,
   getD3MaterialPriceGroupDistrict,
   getD3MaterialPriceByDistrict,
@@ -32,6 +33,7 @@ const Dashboard3 = () => {
   const [selectedMaterial, setSelectedMaterial] = useState(""); // State to hold the selected material
   const [selectedDistrict, setSelectedDistrict] = useState(""); // State to hold the selected material
   const [selectedWerks, setSelectedWerks] = useState(""); // State to hold the selected werks
+  const [selectedLPMatnr, setSelectedLPMatnr] = useState(""); // State to hold the selected werks
   const [showFirstChart, setShowFirstChart] = useState(true); // State to toggle between the charts
   const [selectedButton, setSelectedButton] = useState("first"); // Track selected button index
 
@@ -252,6 +254,28 @@ const Dashboard3 = () => {
     enabled: Boolean(selectedCategory), // Only run query if category is selected
   });
 
+    // Map werks data to options for react-select
+  const werksOptions = lastPriceWerksData?.werks?.map((werks) => ({
+    value: werks,
+    label: werks,
+  }));
+
+  const {
+    data: lastPriceMatnrData,
+    isLoading: isLoadingLastPriceMatnrData,
+    isError: isErrorLastPriceMatnrData,
+    error: errorLastPriceMatnrData,
+  } = useQuery({
+    queryKey: ["lastPriceMatnr", selectedCategory], // Unique query key for caching
+    queryFn: () => getD3LastPriceMatnr(selectedCategory), // API call to fetch data based on category
+    enabled: Boolean(selectedCategory), // Only run query if category is selected
+  });
+
+    // Map matnr data to options for react-select
+  const matnrOptions = lastPriceMatnrData?.matnr?.map((matnr) => ({
+    value: matnr,
+    label: matnr,
+  }));
 
   const {
     data: lastPrice,
@@ -259,8 +283,8 @@ const Dashboard3 = () => {
     isError: isErrorLastPrice,
     error: errorLastPrice,
   } = useQuery({
-    queryKey: ["lastPrice", selectedCategory, selectedWerks], // Unique query key for caching
-    queryFn: () => getD3LastPrice(selectedCategory, selectedWerks), // API call to fetch data based on category and werks
+    queryKey: ["lastPrice", selectedCategory, selectedWerks, selectedLPMatnr], // Unique query key for caching
+    queryFn: () => getD3LastPrice(selectedCategory, selectedWerks, selectedLPMatnr), // API call to fetch data based on category and werks
     enabled: Boolean(selectedCategory), // Only run query if category are selected
   });
 
@@ -283,12 +307,6 @@ const Dashboard3 = () => {
 
   // Debug logging to check the transformed data
   console.log("dataTableLastPrice:", dataTableLastPrice);
-
-  // Map werks data to options for react-select
-  const werksOptions = lastPriceWerksData?.werks?.map((werks) => ({
-    value: werks,
-    label: werks,
-  }));
 
   const {
     data: materialPriceGroupDistrict,
@@ -730,6 +748,24 @@ const Dashboard3 = () => {
                   setSelectedWerks(selectedOption?.value || "");
                 }}
                 placeholder="-- เลือกคลังพัสดุ --"
+                isClearable
+                isSearchable
+              />
+            )}
+              </div>
+              <div className="last-price-dropdown">
+                {isLoadingLastPriceMatnrData ? (
+              <p>Loading Matnr...</p>
+            ) : (
+              <Select
+                options={matnrOptions}
+                value={matnrOptions?.find(
+                  (option) => option.value === selectedLPMatnr
+                )}
+                onChange={(selectedOption) => {
+                  setSelectedLPMatnr(selectedOption?.value || "");
+                }}
+                placeholder="-- เลือกพัสดุ --"
                 isClearable
                 isSearchable
               />
