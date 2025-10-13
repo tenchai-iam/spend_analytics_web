@@ -225,10 +225,10 @@ const Dashboard5B = () => {
           </div>
           <D5GroupBarRe
             title={`มูลค่า Stage 5 - Planned ในปี ${selectedYear} (ล้านบาท)`}
-            data={dataPlannedValue}
+            data={dataPlannedCValue}
             barKeys={["base", "normalized", "actual"]}
           />
-          <TableD5Value data={dataPlannedValueSummary} />
+          <TableD5Value data={dataPlannedCValueSummary} />
         </div>
         <div className="D6-bar-chart-container">
           <div className="download-container">
@@ -243,10 +243,10 @@ const Dashboard5B = () => {
           </div>
           <D5GroupBarRe
             title={`มูลค่า Stage 5 - Unplanned ในปี ${selectedYear} (ล้านบาท)`}
-            data={dataUnplannedValue}
+            data={dataUnplannedCValue}
             barKeys={["base", "normalized", "actual"]}
           />
-          <TableD5Value data={dataUnplannedValueSummary} />
+          <TableD5Value data={dataUnplannedCValueSummary} />
         </div>
         <div>
           <h1 className="data-date">
