@@ -56,9 +56,9 @@ function NavbarComponent() {
               <NavDropdown.Item as={Link} to="/dashboard5A">
                 ติดตามมูลค่า Stage 5 งบ P&I
               </NavDropdown.Item>
-              {/* <NavDropdown.Item as={Link} to="/dashboard5B">
+              <NavDropdown.Item as={Link} to="/dashboard5B">
                 ติดตามมูลค่า Stage 5 งบ C
-              </NavDropdown.Item> */}
+              </NavDropdown.Item>
               <NavDropdown.Item as={Link} to="/dashboard6">
                 ภาพรวมมูลค่าพัสดุคงคลัง
               </NavDropdown.Item>

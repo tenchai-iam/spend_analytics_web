@@ -21,9 +21,9 @@ export const getPlannedPIValue = async (year) => {
 };
 
 // Fetch baseline, normalized and actual value for planned from the API
-export const getPlannedPIValueSummary = async (year) => {
+export const getUnplannedPIValue = async (year) => {
   const response = await axios.post(
-    `${API_URL}/planned_PI_stage5_value_summary`,
+    `${API_URL}/unplanned_PI_stage5_value`,
     {
       year: year, // Pass the year value in the request body
     },
@@ -33,9 +33,9 @@ export const getPlannedPIValueSummary = async (year) => {
 };
 
 // Fetch baseline, normalized and actual value for planned from the API
-export const getUnplannedPIValue = async (year) => {
+export const getPlannedPIValueSummary = async (year) => {
   const response = await axios.post(
-    `${API_URL}/unplanned_PI_stage5_value`,
+    `${API_URL}/planned_PI_stage5_value_summary`,
     {
       year: year, // Pass the year value in the request body
     },
@@ -69,9 +69,9 @@ export const getPlannedCValue = async (year) => {
 };
 
 // Fetch baseline, normalized and actual value for planned from the API
-export const getPlannedCValueSummary = async (year) => {
+export const getUnplannedCValue = async (year) => {
   const response = await axios.post(
-    `${API_URL}/planned_C_stage5_value_summary`,
+    `${API_URL}/unplanned_C_stage5_value`,
     {
       year: year, // Pass the year value in the request body
     },
@@ -81,9 +81,9 @@ export const getPlannedCValueSummary = async (year) => {
 };
 
 // Fetch baseline, normalized and actual value for planned from the API
-export const getUnplannedCValue = async (year) => {
+export const getPlannedCValueSummary = async (year) => {
   const response = await axios.post(
-    `${API_URL}/unplanned_C_stage5_value`,
+    `${API_URL}/planned_C_stage5_value_summary`,
     {
       year: year, // Pass the year value in the request body
     },
