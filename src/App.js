@@ -85,8 +85,8 @@ export default function App() {
                   />
                 }
               />
-              <Route path="/dashboard5B" element={<Dashboard5B />} />
-              {/* <Route
+              {/* <Route path="/dashboard5B" element={<Dashboard5B />} /> */}
+              <Route
                 path="/dashboard5B"
                 element={
                   <ProtectedRoute
@@ -94,7 +94,7 @@ export default function App() {
                     allowedLevels={["B", "C"]}
                   />
                 }
-              /> */}
+              />
               {/* <Route path="/dashboard6" element={<Dashboard6 />} /> */}
               <Route
                 path="/dashboard6"

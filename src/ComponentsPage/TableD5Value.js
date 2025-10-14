@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../ComponentsStyles/table.css";
 
-const TableD5Value = ({ title, data }) => {
+const TableD5Value = ({ title, data = [] }) => {
   const [sortConfig, setSortConfig] = useState({
     key: null,
     direction: "ascending",
@@ -19,7 +19,7 @@ const TableD5Value = ({ title, data }) => {
       maximumFractionDigits: 3,
     }).format(value);
 
-  const sortedData = [...data].sort((a, b) => {
+  const sortedData = Array.isArray(data) ? [...data].sort((a, b) => {
     if (sortConfig.key) {
       const aValue = a[sortConfig.key];
       const bValue = b[sortConfig.key];
@@ -35,7 +35,7 @@ const TableD5Value = ({ title, data }) => {
       }
     }
     return 0;
-  });
+  }) : [];
 
   const handleSort = (key) => {
     let direction = "ascending";

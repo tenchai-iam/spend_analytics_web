@@ -40,9 +40,9 @@ const Dashboard5B = () => {
 
   const dataPlannedCValue = plannedCValue
     ? {
-        base: plannedCValue.BASE / 1000000, // Convert BASE to millions
-        normalized: plannedCValue.NORMALIZED / 1000000, // Convert NORMALIZED to millions
-        actual: plannedCValue.ACTUAL / 1000000, // Convert ACTUAL to millions
+        base: (plannedCValue.BASE || 0) / 1000000, // Convert BASE to millions
+        normalized: (plannedCValue.NORMALIZED || 0) / 1000000, // Convert NORMALIZED to millions
+        actual: (plannedCValue.ACTUAL || 0) / 1000000, // Convert ACTUAL to millions
       }
     : {}; // Default to an empty object if no data is fetched or available
 
@@ -58,13 +58,15 @@ const Dashboard5B = () => {
     enabled: Boolean(selectedYear), // Only run query if year are selected
   });
 
-  const dataPlannedCValueSummary = plannedCValueS
+  console.log("plannedCValueS:", plannedCValueS, "isArray:", Array.isArray(plannedCValueS));
+
+  const dataPlannedCValueSummary = Array.isArray(plannedCValueS)
     ? plannedCValueS.map((item) => ({
-        base: item.BASE / 1_000_000, // Convert BASE to millions
-        normalized: item.NORMALIZED / 1_000_000, // Convert NORMALIZED to millions
-        actual: item.ACTUAL / 1_000_000, // Convert ACTUAL to millions
-        diff_base_nor: item.DIFF_NORMALIZED_BASE / 1_000_000,
-        diff_actual_nor: item.DIFF_ACTUAL_NORMALIZED / 1_000_000,
+        base: (item.BASE || 0) / 1_000_000, // Convert BASE to millions
+        normalized: (item.NORMALIZED || 0) / 1_000_000, // Convert NORMALIZED to millions
+        actual: (item.ACTUAL || 0) / 1_000_000, // Convert ACTUAL to millions
+        diff_base_nor: (item.DIFF_NORMALIZED_BASE || 0) / 1_000_000,
+        diff_actual_nor: (item.DIFF_ACTUAL_NORMALIZED || 0) / 1_000_000,
         cat_group: item.cat_group,
       }))
     : []; // Default to an empty array if no data is available
@@ -83,9 +85,9 @@ const Dashboard5B = () => {
 
   const dataUnplannedCValue = unplannedCValue
     ? {
-        base: unplannedCValue.BASE / 1000000, // Convert BASE to millions
-        normalized: unplannedCValue.NORMALIZED / 1000000, // Convert NORMALIZED to millions
-        actual: unplannedCValue.ACTUAL / 1000000, // Convert ACTUAL to millions
+        base: (unplannedCValue.BASE || 0) / 1000000, // Convert BASE to millions
+        normalized: (unplannedCValue.NORMALIZED || 0) / 1000000, // Convert NORMALIZED to millions
+        actual: (unplannedCValue.ACTUAL || 0) / 1000000, // Convert ACTUAL to millions
       }
     : {}; // Default to an empty object if no data is fetched or available
 
@@ -105,11 +107,11 @@ const Dashboard5B = () => {
 
   const dataUnplannedCValueSummary = Array.isArray(unplannedCValueS)
     ? unplannedCValueS.map((item) => ({
-        base: item.BASE / 1_000_000,
-        normalized: item.NORMALIZED / 1_000_000,
-        actual: item.ACTUAL / 1_000_000,
-        diff_base_nor: item.DIFF_NORMALIZED_BASE / 1_000_000,
-        diff_actual_nor: item.DIFF_ACTUAL_NORMALIZED / 1_000_000,
+        base: (item.BASE || 0) / 1_000_000,
+        normalized: (item.NORMALIZED || 0) / 1_000_000,
+        actual: (item.ACTUAL || 0) / 1_000_000,
+        diff_base_nor: (item.DIFF_NORMALIZED_BASE || 0) / 1_000_000,
+        diff_actual_nor: (item.DIFF_ACTUAL_NORMALIZED || 0) / 1_000_000,
         cat_group: item.cat_group,
       }))
     : [];

@@ -41,6 +41,11 @@ export const getPlannedPIValueSummary = async (year) => {
     },
     { timeout: 5000 }
   );
+  // If the response contains an error message, return an empty array
+  if (response.data?.message) {
+    console.warn("API returned error:", response.data.message);
+    return [];
+  }
   return response.data;
 };
 
@@ -53,6 +58,11 @@ export const getUnplannedPIValueSummary = async (year) => {
     },
     { timeout: 5000 }
   );
+  // If the response contains an error message, return an empty array
+  if (response.data?.message) {
+    console.warn("API returned error:", response.data.message);
+    return [];
+  }
   return response.data;
 };
 
@@ -89,6 +99,11 @@ export const getPlannedCValueSummary = async (year) => {
     },
     { timeout: 5000 }
   );
+  // If the response contains an error message, return an empty array
+  if (response.data?.message) {
+    console.warn("API returned error:", response.data.message);
+    return [];
+  }
   return response.data;
 };
 
@@ -101,5 +116,10 @@ export const getUnplannedCValueSummary = async (year) => {
     },
     { timeout: 5000 }
   );
+  // If the response contains an error message, return an empty array
+  if (response.data?.message) {
+    console.warn("API returned error:", response.data.message);
+    return [];
+  }
   return response.data;
 };
