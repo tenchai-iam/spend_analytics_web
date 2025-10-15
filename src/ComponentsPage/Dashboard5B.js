@@ -28,88 +28,90 @@ const Dashboard5B = () => {
 
   // Fetch planned value data for selected year using React Query
   const {
-    data: plannedValue,
-    isLoading: isLoadingPlannedValue,
-    isError: isErrorPlannedValue,
-    error: errorPlannedValue,
+    data: plannedCValue,
+    isLoading: isLoadingPlannedCValue,
+    isError: isErrorPlannedCValue,
+    error: errorPlannedCValue,
   } = useQuery({
-    queryKey: ["plannedValue", selectedYear], // Unique query key for caching
+    queryKey: ["plannedCValue", selectedYear], // Unique query key for caching
     queryFn: () => getPlannedCValue(selectedYear), // API call to fetch data based on year selected
     enabled: Boolean(selectedYear), // Only run query if year are selected
   });
 
-  const dataPlannedValue = plannedValue
+  const dataPlannedCValue = plannedCValue
     ? {
-        base: plannedValue.BASE / 1000000, // Convert BASE to millions
-        normalized: plannedValue.NORMALIZED / 1000000, // Convert NORMALIZED to millions
-        actual: plannedValue.ACTUAL / 1000000, // Convert ACTUAL to millions
+        base: (plannedCValue.BASE || 0) / 1000000, // Convert BASE to millions
+        normalized: (plannedCValue.NORMALIZED || 0) / 1000000, // Convert NORMALIZED to millions
+        actual: (plannedCValue.ACTUAL || 0) / 1000000, // Convert ACTUAL to millions
       }
     : {}; // Default to an empty object if no data is fetched or available
 
   // Fetch planned value data for selected year using React Query
   const {
-    data: plannedValueS,
-    isLoading: isLoadingPlannedValueS,
-    isError: isErrorPlannedValueS,
-    error: errorPlannedValueS,
+    data: plannedCValueS,
+    isLoading: isLoadingPlannedCValueS,
+    isError: isErrorPlannedCValueS,
+    error: errorPlannedCValueS,
   } = useQuery({
-    queryKey: ["plannedValueS", selectedYear], // Unique query key for caching
+    queryKey: ["plannedCValueS", selectedYear], // Unique query key for caching
     queryFn: () => getPlannedCValueSummary(selectedYear), // API call to fetch data based on year selected
     enabled: Boolean(selectedYear), // Only run query if year are selected
   });
 
-  const dataPlannedValueSummary = plannedValueS
-    ? plannedValueS.map((item) => ({
-        base: item.BASE / 1_000_000, // Convert BASE to millions
-        normalized: item.NORMALIZED / 1_000_000, // Convert NORMALIZED to millions
-        actual: item.ACTUAL / 1_000_000, // Convert ACTUAL to millions
-        diff_base_nor: item.DIFF_NORMALIZED_BASE / 1_000_000,
-        diff_actual_nor: item.DIFF_ACTUAL_NORMALIZED / 1_000_000,
+  console.log("plannedCValueS:", plannedCValueS, "isArray:", Array.isArray(plannedCValueS));
+
+  const dataPlannedCValueSummary = Array.isArray(plannedCValueS)
+    ? plannedCValueS.map((item) => ({
+        base: (item.BASE || 0) / 1_000_000, // Convert BASE to millions
+        normalized: (item.NORMALIZED || 0) / 1_000_000, // Convert NORMALIZED to millions
+        actual: (item.ACTUAL || 0) / 1_000_000, // Convert ACTUAL to millions
+        diff_base_nor: (item.DIFF_NORMALIZED_BASE || 0) / 1_000_000,
+        diff_actual_nor: (item.DIFF_ACTUAL_NORMALIZED || 0) / 1_000_000,
         cat_group: item.cat_group,
       }))
     : []; // Default to an empty array if no data is available
 
   // Fetch planned value data for selected year using React Query
   const {
-    data: unplannedValue,
-    isLoading: isLoadingUnplannedValue,
-    isError: isErrorUnplannedValue,
-    error: errorUnplannedValue,
+    data: unplannedCValue,
+    isLoading: isLoadingUnplannedCValue,
+    isError: isErrorUnplannedCValue,
+    error: errorUnplannedCValue,
   } = useQuery({
-    queryKey: ["unplannedValue", selectedYear], // Unique query key for caching
+    queryKey: ["unplannedCValue", selectedYear], // Unique query key for caching
     queryFn: () => getUnplannedCValue(selectedYear), // API call to fetch data based on year selected
     enabled: Boolean(selectedYear), // Only run query if year are selected
   });
 
-  const dataUnplannedValue = unplannedValue
+  const dataUnplannedCValue = unplannedCValue
     ? {
-        base: unplannedValue.BASE / 1000000, // Convert BASE to millions
-        normalized: unplannedValue.NORMALIZED / 1000000, // Convert NORMALIZED to millions
-        actual: unplannedValue.ACTUAL / 1000000, // Convert ACTUAL to millions
+        base: (unplannedCValue.BASE || 0) / 1000000, // Convert BASE to millions
+        normalized: (unplannedCValue.NORMALIZED || 0) / 1000000, // Convert NORMALIZED to millions
+        actual: (unplannedCValue.ACTUAL || 0) / 1000000, // Convert ACTUAL to millions
       }
     : {}; // Default to an empty object if no data is fetched or available
 
   // Fetch planned value data for selected year using React Query
   const {
-    data: unplannedValueS,
-    isLoading: isLoadingUnplannedValueS,
-    isError: isErrorUnplannedValueS,
-    error: errorUnplannedValueS,
+    data: unplannedCValueS,
+    isLoading: isLoadingUnplannedCValueS,
+    isError: isErrorUnplannedCValueS,
+    error: errorUnplannedCValueS,
   } = useQuery({
-    queryKey: ["unplannedValueS", selectedYear], // Unique query key for caching
+    queryKey: ["unplannedCValueS", selectedYear], // Unique query key for caching
     queryFn: () => getUnplannedCValueSummary(selectedYear), // API call to fetch data based on year selected
     enabled: Boolean(selectedYear), // Only run query if year are selected
   });
 
-  console.log(unplannedValueS);
+  console.log(unplannedCValueS);
 
-  const dataUnplannedValueSummary = Array.isArray(unplannedValueS)
-    ? unplannedValueS.map((item) => ({
-        base: item.BASE / 1_000_000,
-        normalized: item.NORMALIZED / 1_000_000,
-        actual: item.ACTUAL / 1_000_000,
-        diff_base_nor: item.DIFF_NORMALIZED_BASE / 1_000_000,
-        diff_actual_nor: item.DIFF_ACTUAL_NORMALIZED / 1_000_000,
+  const dataUnplannedCValueSummary = Array.isArray(unplannedCValueS)
+    ? unplannedCValueS.map((item) => ({
+        base: (item.BASE || 0) / 1_000_000,
+        normalized: (item.NORMALIZED || 0) / 1_000_000,
+        actual: (item.ACTUAL || 0) / 1_000_000,
+        diff_base_nor: (item.DIFF_NORMALIZED_BASE || 0) / 1_000_000,
+        diff_actual_nor: (item.DIFF_ACTUAL_NORMALIZED || 0) / 1_000_000,
         cat_group: item.cat_group,
       }))
     : [];
@@ -225,10 +227,10 @@ const Dashboard5B = () => {
           </div>
           <D5GroupBarRe
             title={`มูลค่า Stage 5 - Planned ในปี ${selectedYear} (ล้านบาท)`}
-            data={dataPlannedValue}
+            data={dataPlannedCValue}
             barKeys={["base", "normalized", "actual"]}
           />
-          <TableD5Value data={dataPlannedValueSummary} />
+          <TableD5Value data={dataPlannedCValueSummary} />
         </div>
         <div className="D6-bar-chart-container">
           <div className="download-container">
@@ -243,10 +245,10 @@ const Dashboard5B = () => {
           </div>
           <D5GroupBarRe
             title={`มูลค่า Stage 5 - Unplanned ในปี ${selectedYear} (ล้านบาท)`}
-            data={dataUnplannedValue}
+            data={dataUnplannedCValue}
             barKeys={["base", "normalized", "actual"]}
           />
-          <TableD5Value data={dataUnplannedValueSummary} />
+          <TableD5Value data={dataUnplannedCValueSummary} />
         </div>
         <div>
           <h1 className="data-date">
