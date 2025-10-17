@@ -101,7 +101,6 @@ export default function App() {
                 element={
                   <ProtectedRoute
                     element={Dashboard6}
-                    allowedLevels={["B", "C"]}
                   />
                 }
               />
