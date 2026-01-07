@@ -130,6 +130,9 @@ podTemplate(cloud: cloudName, containers: [
                 ansiColor('xterm') {
                     script {
                         try {
+                            echo "🔍 [Security Check] Checking React and related packages... ([ตรวจสอบความปลอดภัย] กำลังตรวจสอบ React และแพ็กเกจที่เกี่ยวข้อง...)"
+                            //sh "npm list react"
+                            sh "npm list react react-server-dom-webpack react-server-dom-parcel react-server-dom-turbopack || true"
                             echo "📦 Installing dependencies... (กำลังติดตั้ง dependencies...)"
                             sh "npm install --verbose --force"
                             echo "✅ Dependencies installed (ติดตั้ง dependencies เสร็จแล้ว)"
