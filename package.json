@@ -36,9 +36,9 @@
     "typescript": "^5.7.0"
   },
   "overrides": {
-    "react": "$react",
-    "react-dom": "$react-dom",
-    "typescript": "$typescript"
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
+    "typescript": "^5.7.0"
   },
   "scripts": {
     "start": "react-scripts start",
