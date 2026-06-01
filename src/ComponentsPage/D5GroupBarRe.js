@@ -24,13 +24,9 @@ const D5GroupBarRe = ({
 }) => {
   const [aggregatedData, setAggregatedData] = useState([]);
 
-  // Define custom labels for each bar
   const barLabels = {
     baseValue: "Baseline",
-    normalizedDifference: "Normalization",
     normalizedValue: "Normalized Baseline",
-    actualDifferenceP: "Value Gain",
-    actualDifferenceN: "Value Loss",
     actualValue: "Actual",
   };
 
@@ -38,19 +34,10 @@ const D5GroupBarRe = ({
     if (data) {
       const { base, normalized, actual } = data;
 
-      // Calculate differences
-      const differenceN = normalized - base;
-      const differenceA = actual - normalized;
-
-      // Set aggregated data with valid placeholder values
       setAggregatedData([
         {
           baseValue: base,
-          normalizedPlaceholder: base, // Assign base value for placeholder
-          normalizedDifference: differenceN,
           normalizedValue: normalized,
-          actualPlaceholder: normalized, // Assign normalized value for placeholder
-          actualDifference: differenceA,
           actualValue: actual,
         },
       ]);
@@ -86,33 +73,6 @@ const D5GroupBarRe = ({
               offset={10}
             />
           </Bar>
-          {/* Normalized Placeholder and Difference */}
-          <Bar
-            dataKey="normalizedPlaceholder"
-            fill="transparent"
-            stackId="offsetNormalized"
-          />
-          <Bar
-            dataKey="normalizedDifference"
-            fill={
-              (aggregatedData[0]?.normalizedDifference || 0) >= 0
-                ? "#FD8A8A"
-                : "#ACE1AF"
-            }
-            stackId="offsetNormalized"
-            name="Normalized Difference"
-          >
-            <LabelList
-              dataKey="normalizedDifference"
-              position="top"
-              formatter={formatValue}
-            />
-            <LabelList
-              valueAccessor={() => barLabels["normalizedDifference"]}
-              position="center"
-            />
-          </Bar>
-
           {/* Normalized Value Bar */}
           <Bar
             dataKey="normalizedValue"
@@ -128,37 +88,6 @@ const D5GroupBarRe = ({
               valueAccessor={() => barLabels["normalizedValue"]}
               position="bottom"
               offset={10}
-            />
-          </Bar>
-          {/* Actual Placeholder and Difference */}
-          <Bar
-            dataKey="actualPlaceholder"
-            fill="transparent"
-            stackId="offsetActual"
-            name="Actual Placeholder"
-          />
-          <Bar
-            dataKey="actualDifference"
-            fill={
-              (aggregatedData[0]?.actualDifference || 0) >= 0
-                ? "#FD8A8A"
-                : "#ACE1AF"
-            }
-            stackId="offsetActual"
-            name="Actual Difference"
-          >
-            <LabelList
-              dataKey="actualDifference"
-              position="top"
-              formatter={formatValue}
-            />
-            <LabelList
-              valueAccessor={(entry) =>
-                entry.actualDifference >= 0
-                  ? barLabels["actualDifferenceN"]
-                  : barLabels["actualDifferenceP"]
-              }
-              position="center"
             />
           </Bar>
           {/* Actual Value Bar */}
